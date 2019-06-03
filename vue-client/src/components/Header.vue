@@ -1,7 +1,7 @@
 <template>
   <div>
   <v-toolbar>
-      <v-toolbar-title>Online Job Portal</v-toolbar-title>
+      <v-toolbar-title><v-btn  @click="navigateTo('home')" flat>Online Job Portal</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
       <v-menu offset-y v-if="!$store.state.isJobseekerLoggenIn">
@@ -18,13 +18,13 @@
         </template>
         <v-list>
           <v-list-tile v-if="!$store.state.isEmployerLoggenIn && !$store.state.isJobseekerLoggenIn">
-            <v-list-tile-title><a  href="javascript:void(0)" @click="navigateTo({name: 'employer.login'})">Employer Login</a></v-list-tile-title>
+            <v-list-tile-title><a  href="javascript:void(0)" @click="navigateTo('employer.login')">Employer Login</a></v-list-tile-title>
           </v-list-tile>
            <v-list-tile  v-if="!$store.state.isEmployerLoggenIn && !$store.state.isJobseekerLoggenIn">
-            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo({name: 'employer.registration'})">Employer Registration</a></v-list-tile-title>
+            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('employer.registration')">Employer Registration</a></v-list-tile-title>
           </v-list-tile>
            <v-list-tile  v-if="$store.state.isEmployerLoggenIn">
-            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo({name: ''})">Employer Profile</a></v-list-tile-title>
+            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('view.employer.profile', {employerId: $store.state.employer.id})">Employer Profile</a></v-list-tile-title>
           </v-list-tile>
 
         </v-list>
@@ -43,13 +43,13 @@
         </template>
         <v-list>
           <v-list-tile >
-            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo({name: 'jobseeker.login'})" v-if="!$store.state.isJobseekerLoggenIn">Jobseeker Login</a></v-list-tile-title>
+            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('jobseeker.login')" v-if="!$store.state.isJobseekerLoggenIn">Jobseeker Login</a></v-list-tile-title>
           </v-list-tile>
            <v-list-tile>
-            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo({name: 'jobseeker.registration'})" v-if="!$store.state.isJobseekerLoggenIn">Jobseeker Registration</a></v-list-tile-title>
+            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('jobseeker.registration')" v-if="!$store.state.isJobseekerLoggenIn">Jobseeker Registration</a></v-list-tile-title>
           </v-list-tile>
            <v-list-tile>
-            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo({name: ''})" v-if="$store.state.isJobseekerLoggenIn">Jobseeker Profile</a></v-list-tile-title>
+            <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('view.jobseeker.profile', {jobseekerId: $store.state.jobseeker.id})" v-if="$store.state.isJobseekerLoggenIn">Jobseeker Profile</a></v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -72,8 +72,13 @@ export default {
     }
   },
   methods: {
-    navigateTo(route){
-      this.$router.push(route);
+    navigateTo(route, param){
+      if (param) {
+        console.log(`The params are defined: ${JSON.stringify(param)}`)
+        this.$router.push({ name: route, params: param });
+      } else {
+         this.$router.push({name: route});
+      }
     },
 
     logout(employer, jobseeker) {

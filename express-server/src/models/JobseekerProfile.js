@@ -1,38 +1,38 @@
-//const Employer = require('../models/Employer');
+
 module.exports = (sequelize, DataTypes) =>{
-    const EmployerProfile = sequelize.define('EmployerProfile', {
-          company: {
+    const JobseekerProfile = sequelize.define('JobseekerProfile', {
+         photo: {
              type: DataTypes.STRING,
-          },
+         },
           address:{
             type: DataTypes.STRING,
           },
           phone: {
             type: DataTypes.STRING,
           },
-          website: {
+          gender: {
             type: DataTypes.STRING,
           },
-          logo: {
+          dob: {
             type: DataTypes.STRING,
           },
-          coverphoto: {
+          bio: {
             type: DataTypes.STRING,
           },
-          slogan: {
+          resume: {
             type: DataTypes.STRING,
           },
-          description: {
+          coverletter: {
             type: DataTypes.TEXT,
           },
-          employerId: {
+          jobseekerId: {
               type: DataTypes.INTEGER,
           }
     })
 
-    EmployerProfile.associate = function(models){
-        EmployerProfile.belongsTo(models.Employer)
+    JobseekerProfile.associate = function(models){
+        JobseekerProfile.belongsTo(models.Jobseeker)
     }
 
-    return EmployerProfile;
+    return JobseekerProfile;
 }

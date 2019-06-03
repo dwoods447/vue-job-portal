@@ -1,6 +1,14 @@
 <template>
       <v-container>
         <v-layout row wrap>
+              <v-flex xs12 justify-center v-if="hasMessage">
+              <v-alert
+                :value="hasMessage"
+                  type="success"
+                >
+              {{ message }}
+            </v-alert>
+              </v-flex>
                 <v-flex x12 justify-center>
                     <h2>Employer Registration</h2>
                     <v-card-actions class="justify-center">
@@ -100,13 +108,15 @@ export default {
     },
     data: function() {
         return {
-
+          hasMessage: false,
+          message: '',
           employerRegistration:{
             companyName: '',
             representative: '',
             email:'',
             password:'',
-            confirmPassword:''
+            confirmPassword:'',
+
           }
 
         }
@@ -122,11 +132,17 @@ export default {
                   password: this.employerRegistration.password
                 })
                 if (res.status === 200){
-                  this.$router.push('/employer/login');
-                }
+                    console.log(res.data);
+                    this.message = res.data.message;
+                    this.hasMessage = true;
+                    let $this = this;
+                    setTimeout(function(){
+                        $this.$router.push('/employer/login');
+                    }, 4300);
               } else {
                 confirm('Passwords Do not Match!')
               }
+            }
           }
         },
         clear: function(){},

@@ -34,7 +34,7 @@ const store = new Vuex.Store({
     setJobseekerMutation(state, jobseeker){
       state.jobseeker = jobseeker;
     },
-    ssetEmployerLogOutMutation(state){
+    setEmployerLogOutMutation(state){
       state.isEmployerLoggenIn = false;
       state.token = null;
     },

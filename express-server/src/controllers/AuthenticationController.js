@@ -1,5 +1,6 @@
 const {Employer} =  require('../models')
 const {Jobseeker} =  require('../models')
+const {EmployerProfile} = require('../models')
 const config = require('../config/config')
 const jwt   = require('jsonwebtoken')
 //Helper functions
@@ -20,27 +21,24 @@ function jwtSignJobSeeker(jobseeker){
 
 module.exports = {
     
-    
     async employerRegister(req, res) {
         try{
             console.log(`Employer email ${JSON.stringify(req.body)}\r\n\r\n`)
 
-
-            const employer = await Employer.create(req.body).then(employer => {
-                employer.createEmployerProfile({
-                    company: employer.company,
-                    employerId: employer.id,
-                }).then(() => console.log('Profile created\r\n'))
+            const employer = await Employer.create(req.body)
+            const emlProfile = await EmployerProfile.create({
+                company: employer.company,
+                employerId: employer.id
             })
-
-
-
             const employerJSON = employer.toJSON()
+            const  employerProfileJSON = emlProfile.toJSON()
             console.log(employerJSON.id)
-        
+            const status = "Registration Successful! Please login to complete your Profile."
            res.send({
             employer: employerJSON,
-            token: jwtSignEmployer(employerJSON)
+            token: jwtSignEmployer(employerJSON),
+            profile: employerProfileJSON,
+            message: status,
            })
         }catch(error){
             res.status(400).send({
