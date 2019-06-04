@@ -72,7 +72,7 @@
     </v-container>
 </template>
 <script>
-import Auth from '../../services/EmployerRegistration'
+import RegisterService from '../../services/RegistrationService'
 import { Validator } from 'vee-validate';
 const dict = {
         custom: {
@@ -125,7 +125,7 @@ export default {
         async submit() {
           if (this.employerRegistration.password && this.employerRegistration.confirmPassword){
               if (this.employerRegistration.password === this.employerRegistration.confirmPassword){
-                const res = await Auth.register({
+                const res = await RegisterService.employerRegister({
                   company: this.employerRegistration.companyName,
                   email: this.employerRegistration.email,
                   representative: this.employerRegistration.representative,

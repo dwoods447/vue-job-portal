@@ -71,6 +71,7 @@ export default {
       if (response.status === 200){
           console.log(response);
          confirm('You are logged in !!!!!');
+         this.$router.push({name: 'view.jobseeker.profile', params: {jobseekerId: this.$store.state.jobseeker.id}})
        }
     }
   },

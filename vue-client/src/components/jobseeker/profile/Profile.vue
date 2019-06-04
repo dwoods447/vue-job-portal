@@ -13,7 +13,7 @@
 
         <v-card-actions>
           <form action="">
-            <input type="file">
+            <input type="file" @change="photoUpload">
           <v-btn flat color="orange">Update</v-btn>
           </form>
         </v-card-actions>
@@ -25,7 +25,7 @@
         </v-toolbar>
         <v-card-actions>
           <form action="">
-            <input type="file">
+            <input type="file" @change="resumeUpload">
           <v-btn flat color="orange">Update</v-btn>
           </form>
         </v-card-actions>
@@ -37,7 +37,7 @@
         </v-toolbar>
         <v-card-actions>
           <form action="">
-            <input type="file">
+            <input type="file" @change="coverLetterUpload">
           <v-btn flat color="orange">Update</v-btn>
           </form>
         </v-card-actions>
@@ -49,17 +49,19 @@
     <v-flex xs-7 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-          Update Your Profile Information
+          Update Your Profile Information ID: <!--<span v-if="$store.state.jobseeker">{{ $store.state.jobseeker }}</span>-->
         </v-toolbar>
         <v-list two-line>
 
           <form action="" class="form">
             <v-flex xs12 d-flex>
-                <v-text-field label="Address" outline></v-text-field>
+                <v-text-field label="Address" outline v-model="address"></v-text-field>
+                {{ address }}
             </v-flex>
 
             <v-flex xs12 d-flex>
-               <v-text-field label="Phone" outline></v-text-field>
+               <v-text-field label="Phone" outline v-model="phone"></v-text-field>
+               {{ phone }}
             </v-flex>
 
             <v-flex xs12  d-flex>
@@ -67,19 +69,22 @@
                 :items="genders"
                 outline
                 label="Gender"
+                v-model="gender"
                 solo
                 >
                 </v-select>
+                {{ gender }}
             </v-flex>
              <v-flex xs12  d-flex>
                <v-textarea
                  outline
                  textarea
                  label="Bio"
+                 v-model="bio"
                  value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
                ></v-textarea>
              </v-flex>
-            <v-btn flat color="orange">Update</v-btn>
+            <v-btn flat color="orange" @click="updateProfile">Update</v-btn>
           </form>
         </v-list>
       </v-card>
@@ -175,15 +180,55 @@
   </v-container>
 </template>
 <script>
+import ProfileService from '../../../services/ProfileSerivce.js'
 export default {
   data: function(){
     return {
+      address: '',
+      phone: '',
+      gender:'',
+      bio: '',
+      photo: '',
+      resume:'',
+      coverletter: '',
+
       genders: [
         'male',
         'female'
       ],
       value: '50%',
     }
+  },
+
+  methods: {
+    updateProfile: function(){
+        let obj = {};
+        // console.log(`Updating jobseeker: ${this.$store.state.jobseeker}`)
+        // if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker
+        if (this.address !== '') {
+        obj.address = this.address;
+         console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
+        }
+        if (this.phone) obj.phone = this.phone
+        if (this.gender) obj.gender = this.gender
+        if (this.bio) obj.bio = this.bio
+        if (this.photo) obj.photo = this.photo
+        if (this.resume) obj.resume = this.resume
+        if (this.coverletter) obj.coverletter = this.coverletter
+         console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
+         ProfileService.updateJobSeekerProfile(obj)
+    },
+
+    photoUpload: (e) => {
+      this.photo = e.target.files || e.dataTransfer.files;
+    },
+    resumeUpload: (e) => {
+      this.resume = e.target.files || e.dataTransfer.files;
+    },
+    coverLetterUpload: (e) => {
+      this.coverletter = e.target.files || e.dataTransfer.files;
+    }
+
   }
 }
 </script>

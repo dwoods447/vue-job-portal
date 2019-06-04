@@ -1,6 +1,7 @@
 const {Employer} =  require('../models')
 const {Jobseeker} =  require('../models')
 const {EmployerProfile} = require('../models')
+const {JobseekerProfile} = require('../models')
 const config = require('../config/config')
 const jwt   = require('jsonwebtoken')
 //Helper functions
@@ -52,10 +53,17 @@ module.exports = {
         try{
             console.log(`Jobseeker email ${JSON.stringify(req.body)}`)
             const jobseeker = await Jobseeker.create(req.body)
+            const jobSeekProfile = await JobseekerProfile.create({
+                jobseekerId: jobseeker.id
+            })
+            const  jobSeekProfileJSON = jobSeekProfile.toJSON()
             const jobseekerJSON = jobseeker.toJSON()
+            const status = "Registration Successful! Please login to complete your Profile."
            res.send({
               jobseeker: jobseekerJSON,
-              token:   jwtSignJobSeeker(jobseekerJSON)
+              token:   jwtSignJobSeeker(jobseekerJSON),
+              profile: jobSeekProfileJSON,
+              message: status
            })
         }catch(error){
             res.status(400).send({
