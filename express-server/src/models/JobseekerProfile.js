@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, DataTypes) =>{
     const JobseekerProfile = sequelize.define('JobseekerProfile', {
          photo: {

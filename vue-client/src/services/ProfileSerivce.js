@@ -6,4 +6,7 @@ export default {
   updateEmployerProfile(info){
     return Api.post('/employer/profile', info)
   },
+  getJobseekerProfile(info){
+    return Api.get('/jobseeker/profile', info)
+  }
 }

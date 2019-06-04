@@ -49,20 +49,21 @@
     <v-flex xs-7 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-          Update Your Profile Information ID: <!--<span v-if="$store.state.jobseeker">{{ $store.state.jobseeker }}</span>-->
+          <span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}} Please  your profile information</span>
         </v-toolbar>
         <v-list two-line>
 
           <form action="" class="form">
             <v-flex xs12 d-flex>
-                <v-text-field label="Address" outline v-model="address"></v-text-field>
-                {{ address }}
+                <v-text-field label="Address" outline v-model="address" :value="address"></v-text-field>
             </v-flex>
 
             <v-flex xs12 d-flex>
-               <v-text-field label="Phone" outline v-model="phone"></v-text-field>
-               {{ phone }}
+               <v-text-field label="Phone" outline v-model="phone" :value="phone"></v-text-field>
+
             </v-flex>
+
+
 
             <v-flex xs12  d-flex>
                 <v-select
@@ -73,7 +74,37 @@
                 solo
                 >
                 </v-select>
-                {{ gender }}
+
+            </v-flex>
+             <v-flex xs12 d-flex>
+               <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              min-width="290px"
+              >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="dob"
+                  label="Birthday date"
+                  readonly
+                  outline
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                ref="picker"
+                v-model="dob"
+                :max="new Date().toISOString().substr(0, 10)"
+                min="1950-01-01"
+                @change="save"
+              ></v-date-picker>
+              </v-menu>
             </v-flex>
              <v-flex xs12  d-flex>
                <v-textarea
@@ -98,7 +129,7 @@
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Address: </v-list-tile-title>
+                <v-list-tile-title>Address: <span v-if="this.$store.state.currentJobSeeker.jobseeker.address">{{ this.$store.state.currentJobSeeker.jobseeker.address }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -106,7 +137,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Phone: </v-list-tile-title>
+                <v-list-tile-title>Phone: <span v-if="this.$store.state.currentJobSeeker.jobseeker.phone">{{ this.$store.state.currentJobSeeker.jobseeker.phone }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -115,7 +146,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Gender: </v-list-tile-title>
+                <v-list-tile-title>Gender: <span v-if="this.$store.state.currentJobSeeker.jobseeker.gender">{{ this.$store.state.currentJobSeeker.jobseeker.gender}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -125,14 +156,14 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: </v-list-tile-title>
+                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker.jobseeker.resume"><span >{{ this.$store.state.currentJobSeeker.jobseeker.resume }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: </v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker.jobseeker.coverletter"><span >{{ this.$store.state.currentJobSeeker.jobseeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -182,8 +213,21 @@
 <script>
 import ProfileService from '../../../services/ProfileSerivce.js'
 export default {
+  created(){
+
+  },
+  mounted(){
+        console.log(`Job Seeker in Mounted hook: ${JSON.stringify(this.$store.state.jobseeker)}`);
+        if (this.$store.state.jobseeker) {
+            this.getProfileInfo().then(function(info){
+                console.log(`Info in mount ${JSON.stringify(info)}`);
+            });
+        }
+  },
   data: function(){
     return {
+      date: null,
+      menu: false,
       address: '',
       phone: '',
       gender:'',
@@ -191,7 +235,7 @@ export default {
       photo: '',
       resume:'',
       coverletter: '',
-
+      dob: '',
       genders: [
         'male',
         'female'
@@ -203,8 +247,8 @@ export default {
   methods: {
     updateProfile: function(){
         let obj = {};
-        // console.log(`Updating jobseeker: ${this.$store.state.jobseeker}`)
-        // if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker
+        console.log(`Updating jobseeker: ${this.$store.state.jobseeker}`)
+       if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker.id
         if (this.address !== '') {
         obj.address = this.address;
          console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
@@ -217,6 +261,7 @@ export default {
         if (this.coverletter) obj.coverletter = this.coverletter
          console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
          ProfileService.updateJobSeekerProfile(obj)
+         this.getProfileInfo();
     },
 
     photoUpload: (e) => {
@@ -227,9 +272,27 @@ export default {
     },
     coverLetterUpload: (e) => {
       this.coverletter = e.target.files || e.dataTransfer.files;
-    }
+    },
+    save (date) {
+        this.$refs.menu.save(date)
+    },
 
-  }
+    async getProfileInfo() {
+      let $this = this;
+       console.log(`Getting profile info.`)
+       return ProfileService.getJobseekerProfile({
+             id: this.$store.state.jobseeker.id
+           }).then(function(data){
+              console.log(`Data: ${JSON.stringify(data.data)}`)
+              $this.$store.dispatch('setCurrentJobseekerAction', data.data)
+           })
+    }
+  },
+   watch: {
+      menu (val) {
+        val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+      }
+  },
 }
 </script>
 <style>

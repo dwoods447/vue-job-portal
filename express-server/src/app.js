@@ -19,10 +19,12 @@ require('../src/routes/routes.js')(app)
 app.set('port', process.env.PORT || config.port);
 
 
-
-sequelize.sync()
-.then(() =>{
-    app.listen(process.env.PORT || config.port, () => console.log(`App listening on port ${config.port}!`))
-})
+try{
+    sequelize.sync().then(() =>{
+        app.listen(process.env.PORT || config.port, () => console.log(`App listening on port ${config.port}!`))
+    })
+}catch(err){
+    console.log(`${err}`)
+}
 
 

@@ -1,6 +1,5 @@
 const Promise = require('bluebird')
 const bcrypt = Promise.promisifyAll(require('bcrypt')) 
-
 /**
  * Function that hashes the password
  * 
@@ -18,8 +17,6 @@ function hashPassword(jobseeker){
         jobseeker.setDataValue('password', hash)
     })
 }
-
-
 module.exports = (sequelize, DataTypes) =>{
     const Jobseeker  =  sequelize.define('Jobseeker', {
         name: {
@@ -39,7 +36,5 @@ module.exports = (sequelize, DataTypes) =>{
     Jobseeker.prototype.comparePassword = function(password){
         return bcrypt.compareAsync(password, this.password)
     }
-
-
     return Jobseeker;
 }
