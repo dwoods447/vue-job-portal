@@ -49,17 +49,17 @@
     <v-flex xs-7 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-          <span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}} Please  your profile information</span>
+          <span>Profile information</span>
         </v-toolbar>
         <v-list two-line>
 
           <form action="" class="form">
             <v-flex xs12 d-flex>
-                <v-text-field label="Address" outline v-model="address" :value="address"></v-text-field>
+                <v-text-field label="Address" outline v-model="address"></v-text-field>
             </v-flex>
 
             <v-flex xs12 d-flex>
-               <v-text-field label="Phone" outline v-model="phone" :value="phone"></v-text-field>
+               <v-text-field label="Phone" outline v-model="phone"></v-text-field>
 
             </v-flex>
 
@@ -129,7 +129,7 @@
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Address: <span v-if="this.$store.state.currentJobSeeker.jobseeker.address">{{ this.$store.state.currentJobSeeker.jobseeker.address }}</span></v-list-tile-title>
+                <v-list-tile-title>Address: <span v-if="joBSeeker.address">{{joBSeeker.address}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -137,7 +137,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Phone: <span v-if="this.$store.state.currentJobSeeker.jobseeker.phone">{{ this.$store.state.currentJobSeeker.jobseeker.phone }}</span></v-list-tile-title>
+                <v-list-tile-title>Phone: <span v-if="joBSeeker.phone">{{joBSeeker.phone}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -146,7 +146,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Gender: <span v-if="this.$store.state.currentJobSeeker.jobseeker.gender">{{ this.$store.state.currentJobSeeker.jobseeker.gender}}</span></v-list-tile-title>
+                <v-list-tile-title>Gender: <span v-if="joBSeeker.gender">{{ joBSeeker.gender }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -156,14 +156,14 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker.jobseeker.resume"><span >{{ this.$store.state.currentJobSeeker.jobseeker.resume }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="joBSeeker.resume"><span>{{ joBSeeker.resume }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker.jobseeker.coverletter"><span >{{ this.$store.state.currentJobSeeker.jobseeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="joBSeeker.coverletter"><span>{{ joBSeeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -214,15 +214,10 @@
 import ProfileService from '../../../services/ProfileSerivce.js'
 export default {
   created(){
-
+    this.getProfileInfo();
   },
   mounted(){
-        console.log(`Job Seeker in Mounted hook: ${JSON.stringify(this.$store.state.jobseeker)}`);
-        if (this.$store.state.jobseeker) {
-            this.getProfileInfo().then(function(info){
-                console.log(`Info in mount ${JSON.stringify(info)}`);
-            });
-        }
+
   },
   data: function(){
     return {
@@ -241,27 +236,27 @@ export default {
         'female'
       ],
       value: '50%',
+      joBSeeker: {},
     }
   },
 
   methods: {
-    updateProfile: function(){
+    async updateProfile(){
         let obj = {};
-        console.log(`Updating jobseeker: ${this.$store.state.jobseeker}`)
-       if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker.id
-        if (this.address !== '') {
-        obj.address = this.address;
-         console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
-        }
+        console.log(`Sending data: ${this.$store.state.jobseeker}`)
+        if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker.id
+        if (this.address !== '')obj.address = this.address
         if (this.phone) obj.phone = this.phone
         if (this.gender) obj.gender = this.gender
         if (this.bio) obj.bio = this.bio
         if (this.photo) obj.photo = this.photo
         if (this.resume) obj.resume = this.resume
         if (this.coverletter) obj.coverletter = this.coverletter
-         console.log(`Jobseeker Object: ${JSON.stringify(obj)}`);
-         ProfileService.updateJobSeekerProfile(obj)
-         this.getProfileInfo();
+         const update = await ProfileService.updateJobSeekerProfile(obj);
+         if (update) {
+            this.getProfileInfo();
+         }
+         // window.location.reload(true);
     },
 
     photoUpload: (e) => {
@@ -276,16 +271,12 @@ export default {
     save (date) {
         this.$refs.menu.save(date)
     },
-
     async getProfileInfo() {
-      let $this = this;
-       console.log(`Getting profile info.`)
-       return ProfileService.getJobseekerProfile({
-             id: this.$store.state.jobseeker.id
-           }).then(function(data){
-              console.log(`Data: ${JSON.stringify(data.data)}`)
-              $this.$store.dispatch('setCurrentJobseekerAction', data.data)
-           })
+       this.joBSeeker = {};
+      const seekerId = this.$store.state.route.params.jobseekerId;
+       let seeker = await ProfileService.getJobseekerProfile({id: seekerId});
+       this.joBSeeker = seeker.data.jobseeker;
+       console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
     }
   },
    watch: {
