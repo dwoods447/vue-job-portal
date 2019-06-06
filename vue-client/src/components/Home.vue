@@ -37,7 +37,7 @@
                               </div>
                                 <v-layout justify-end>
                                   <v-card-actions justify-right>
-                                        <v-btn color="success">Apply</v-btn>
+                                      <router-link v-bind:to="{name:'view.job.detail', params: {jobId: props.item.id}}"><v-btn color="success">Apply</v-btn></router-link>
                                     </v-card-actions>
                                 </v-layout>
                                 </v-card>
@@ -51,17 +51,15 @@
     </v-container>
 </template>
 <script>
-import data from '../data'
-import JobService from '../services/JobService'
+// import data from '../data'
+ import JobService from '../services/JobService'
 export default {
-  created () {
-     // console.log(JSON.stringify(data.data[0]));
-     this.jobs = data.data;
+  async created () {
+     this.jobs = (await JobService.viewAllJobs()).data.data;
+    console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
   },
-  async mounted () {
+  mounted () {
     console.log('Component Mounted')
-    this.jobs = (await JobService.viewAllJobs()).data;
-    console.log(`Jobs returned: ${this.jobs}`);
   },
   data: function () {
     return {
@@ -70,7 +68,7 @@ export default {
       pagination: {
         rowsPerPage: 10
       },
-      jobs: null,
+      jobs: [],
     }
   },
   methods: {

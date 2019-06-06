@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) =>{
             type: DataTypes.STRING,
           },
           website: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
           },
           logo: {
             type: DataTypes.STRING,
