@@ -7,8 +7,8 @@
           Update Your Profile Photo
         </v-toolbar>
         <v-img
-          src="https://placehold.it/300x300"
-          aspect-ratio="2.75"
+          src="https://placehold.it/900x900"
+          aspect-ratio="3.57"
         ></v-img>
 
         <v-card-actions>
@@ -49,17 +49,17 @@
     <v-flex xs-7 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-          <span>Profile information</span>
+         Update Your Profile Information
         </v-toolbar>
         <v-list two-line>
 
           <form action="" class="form">
             <v-flex xs12 d-flex>
-                <v-text-field label="Address" outline v-model="address"></v-text-field>
+                <v-text-field label="Address" outline v-model="joBSeeker.address" @change="inputChange(joBSeeker.address)"></v-text-field>
             </v-flex>
 
             <v-flex xs12 d-flex>
-               <v-text-field label="Phone" outline v-model="phone"></v-text-field>
+               <v-text-field label="Phone" outline v-model="joBSeeker.phone" @change="inputChange(joBSeeker.phone)"></v-text-field>
 
             </v-flex>
 
@@ -70,7 +70,8 @@
                 :items="genders"
                 outline
                 label="Gender"
-                v-model="gender"
+                v-model="joBSeeker.gender"
+                @change="inputChange(joBSeeker.gender)"
                 solo
                 >
                 </v-select>
@@ -90,7 +91,8 @@
               >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="dob"
+                  v-model="joBSeeker.dob"
+                  @change="inputChange(joBSeeker.dob)"
                   label="Birthday date"
                   readonly
                   outline
@@ -99,7 +101,7 @@
               </template>
               <v-date-picker
                 ref="picker"
-                v-model="dob"
+                v-model="joBSeeker.dob"
                 :max="new Date().toISOString().substr(0, 10)"
                 min="1950-01-01"
                 @change="save"
@@ -111,11 +113,12 @@
                  outline
                  textarea
                  label="Bio"
-                 v-model="bio"
+                 v-model="joBSeeker.bio"
                  value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
                ></v-textarea>
              </v-flex>
-            <v-btn flat color="orange" @click="updateProfile">Update</v-btn>
+             <span v-if="alertSubmit"><strong style="color: red;">Please submit your information</strong></span>
+            <v-btn flat color="orange" @click="updateProfile" ref="submit">Update</v-btn>
           </form>
         </v-list>
       </v-card>
@@ -125,11 +128,11 @@
     <v-flex xs-3 class="section-container">
           <v-card>
             <v-toolbar>
-            Your Profile Information
+             <span v-if="$store.state.jobseeker">{{$store.state.jobseeker.name}}'s Profile information</span>
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Address: <span v-if="joBSeeker.address">{{joBSeeker.address}}</span></v-list-tile-title>
+                <v-list-tile-title>Address: <span v-if="joBSeeker">{{joBSeeker.address}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -137,16 +140,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Phone: <span v-if="joBSeeker.phone">{{joBSeeker.phone}}</span></v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
-
-
-
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Gender: <span v-if="joBSeeker.gender">{{ joBSeeker.gender }}</span></v-list-tile-title>
+                <v-list-tile-title>Phone: <span v-if="joBSeeker">{{joBSeeker.phone}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -156,14 +150,31 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="joBSeeker.resume"><span>{{ joBSeeker.resume }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Gender: <span v-if="joBSeeker">{{ joBSeeker.gender }}</span></v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+
+
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>Birthdate: <span v-if="joBSeeker">{{ joBSeeker.dob }}</span></v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+
+
+
+            <v-list-tile>
+              <v-list-tile-content>
+                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="joBSeeker"><span>{{ joBSeeker.resume }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="joBSeeker.coverletter"><span>{{ joBSeeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="joBSeeker"><span>{{ joBSeeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -181,28 +192,25 @@
                 :rotate="-90"
                 :size="100"
                 :width="15"
-                :value="value"
+                :value="progressStatus"
                 color="primary"
               >
-                {{ value }}
+                {{ progressStatus.toFixed(0) }}%
               </v-progress-circular>
               </div>
             </v-flex>
 
-              <v-flex xs9 justify-center>
-            <h2>Steps:</h2>
+          <v-flex xs9 justify-center>
+            <h2>Steps to Complete:</h2>
+            <div v-for="step in stepsToComplete" :key="step">
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Upload Resume </v-list-tile-title>
+                <v-list-tile-title>{{ step }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
-           <v-list-tile>
-              <v-list-tile-content>
-                <v-list-tile-title>Upload Cover Letter </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-divider></v-divider>
+            </div>
+
             </v-flex>
             </v-layout>
           </v-card>
@@ -217,66 +225,131 @@ export default {
     this.getProfileInfo();
   },
   mounted(){
-
   },
   data: function(){
     return {
+      alertSubmit: false,
       date: null,
       menu: false,
-      address: '',
-      phone: '',
-      gender:'',
-      bio: '',
-      photo: '',
-      resume:'',
-      coverletter: '',
-      dob: '',
       genders: [
         'male',
         'female'
       ],
+      progressStatus: 1,
       value: '50%',
-      joBSeeker: {},
+      stepsToComplete: [],
+      joBSeeker: {
+        address: '',
+        phone: '',
+        gender:'',
+        bio: '',
+        photo: '',
+        resume:'',
+        coverletter: '',
+        dob: '',
+
+      },
     }
   },
-
+  filters: {
+    capitalize(word){
+       return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+  },
   methods: {
+    inputChange: function(input){
+      if (input) {
+        this.alertSubmit = true;
+        this.$refs.submit.focus();
+      }
+    },
     async updateProfile(){
         let obj = {};
         console.log(`Sending data: ${this.$store.state.jobseeker}`)
-        if (this.$store.state.jobseeker) obj.id = this.$store.state.jobseeker.id
-        if (this.address !== '')obj.address = this.address
-        if (this.phone) obj.phone = this.phone
-        if (this.gender) obj.gender = this.gender
-        if (this.bio) obj.bio = this.bio
-        if (this.photo) obj.photo = this.photo
-        if (this.resume) obj.resume = this.resume
-        if (this.coverletter) obj.coverletter = this.coverletter
-         const update = await ProfileService.updateJobSeekerProfile(obj);
-         if (update) {
+        if (this.$store.state.jobseeker) obj.id = this.$store.state.route.params.jobseekerId
+        if (this.joBSeeker.address)obj.address = this.joBSeeker.address
+        if (this.joBSeeker.phone) obj.phone = this.joBSeeker.phone
+        if (this.joBSeeker.gender) obj.gender = this.joBSeeker.gender
+        if (this.joBSeeker.bio) obj.bio = this.joBSeeker.bio
+         if (this.joBSeeker.dob) obj.dob = this.joBSeeker.dob
+        if (this.joBSeeker.photo) obj.photo = this.joBSeeker.photo
+        if (this.joBSeeker.resume) obj.resume = this.joBSeeker.resume
+        if (this.joBSeeker.coverletter) obj.coverletter = this.joBSeeker.coverletter
+         const updated = await ProfileService.updateJobSeekerProfile(obj);
+         if (updated) {
+            this.alertSubmit = false;
             this.getProfileInfo();
          }
          // window.location.reload(true);
     },
 
     photoUpload: (e) => {
-      this.photo = e.target.files || e.dataTransfer.files;
+      this.joBSeeker.photo = e.target.files || e.dataTransfer.files;
     },
     resumeUpload: (e) => {
-      this.resume = e.target.files || e.dataTransfer.files;
+      this.joBSeeker.resume = e.target.files || e.dataTransfer.files;
     },
     coverLetterUpload: (e) => {
-      this.coverletter = e.target.files || e.dataTransfer.files;
+      this.joBSeeker.coverletter = e.target.files || e.dataTransfer.files;
     },
     save (date) {
         this.$refs.menu.save(date)
+        this.inputChange(this.joBSeeker.dob);
     },
     async getProfileInfo() {
        this.joBSeeker = {};
-      const seekerId = this.$store.state.route.params.jobseekerId;
-       let seeker = await ProfileService.getJobseekerProfile({id: seekerId});
+       const seekerId = this.$store.state.route.params.jobseekerId;
+       console.log(`Route params: ${seekerId}`);
+       let seeker = await ProfileService.getJobseekerProfile(seekerId);
+       console.log(JSON.stringify(seeker))
        this.joBSeeker = seeker.data.jobseeker;
-       console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
+       console.log(`Setting Current Jobseeker in store state : ${JSON.stringify(this.joBSeeker)}`)
+       this.$store.dispatch('setCurrentJobseekerAction', this.joBSeeker)
+       // console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
+       this.updateProgressStatus(this.joBSeeker);
+    },
+    updateProgressStatus(joBSeeker){
+      // console.log(`Getting progress status`);
+     // console.log(JSON.stringify(joBSeeker))
+     this.stepsToComplete = [];
+     this.progressStatus = 1;
+      let requireValues = joBSeeker;
+      for (var key in requireValues) {
+         // console.log(`Key ${key} value: ${requireValues[key]}`);
+           if (key !== 'jobseekerId' || key !== 'createdAt' || key !== 'updatedAt'){
+              if (requireValues[key] !== null) {
+                this.progressStatus = this.progressStatus + 8.29;
+                if (this.progressStatus > 100) {
+                  this.this.progressStatus = 100;
+                }
+              } else {
+                    if (key === 'address') {
+                        this.stepsToComplete.push('Enter your Address');
+                    }
+                    if (key === 'phone') {
+                         this.stepsToComplete.push('Enter your Phone Number');
+                     }
+                    if (key === 'gender') {
+                        this.stepsToComplete.push('Enter your Gender');
+                     }
+                    if (key === 'dob') {
+                        this.stepsToComplete.push('Enter your Birthdate');
+                     }
+                    if (key === 'bio') {
+                        this.stepsToComplete.push('Enter your Bio');
+                     }
+                    if (key === 'photo') {
+                        this.stepsToComplete.push('Upload your Photo');
+                    }
+                    if (key === 'resume') {
+                        this.stepsToComplete.push('Upload your Resume');
+                     }
+                    if (key === 'coverletter') {
+                        this.stepsToComplete.push('Upload your Cover Letter');
+                    }
+              }
+         }
+      }
     }
   },
    watch: {

@@ -1,6 +1,5 @@
-
 module.exports = (sequelize, DataTypes) =>{
-    const JobApplicants = sequelize.define('JobApplicants', {
+    const Favorite = sequelize.define('Favorite', {
           jobId: {
              type: DataTypes.INTEGER,
           },
@@ -9,5 +8,5 @@ module.exports = (sequelize, DataTypes) =>{
           }
     })
 
-    return JobApplicants;
+    return Favorite;
 }

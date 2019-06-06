@@ -13,7 +13,7 @@
             flat
           >
             <span v-if="!$store.state.isEmployerLoggenIn">Employer</span>
-            <span  v-if="$store.state.isEmployerLoggenIn">{{$store.state.employer.company}}</span>
+            <span  v-if="$store.state.isEmployerLoggenIn && $store.state.employer">{{$store.state.employer.company}}</span>
           </v-btn>
         </template>
         <v-list>
@@ -38,7 +38,7 @@
             flat
           >
           <span v-if="!$store.state.isJobseekerLoggenIn">Jobseeker</span>
-          <span  v-if="$store.state.isJobseekerLoggenIn">{{$store.state.jobseeker.name}}</span>
+          <span  v-if="$store.state.isJobseekerLoggenIn && $store.state.jobseeker">{{$store.state.jobseeker.name}}</span>
           </v-btn>
         </template>
         <v-list>

@@ -33,6 +33,12 @@ module.exports = (sequelize, DataTypes) =>{
         }
     })
 
+     Jobseeker.associate = function(models){
+         Jobseeker.hasOne(models.JobseekerProfile)
+         Jobseeker.belongsToMany(models.Job, {through: 'JobApplicants'})
+         Jobseeker.belongsToMany(models.Job, {through: 'Favorites'})
+     }
+
     Jobseeker.prototype.comparePassword = function(password){
         return bcrypt.compareAsync(password, this.password)
     }

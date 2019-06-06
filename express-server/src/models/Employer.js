@@ -35,9 +35,9 @@ module.exports = (sequelize, DataTypes) =>{
         }
     })
 
-
     Employer.associate = function(models){
-        Employer.hasOne(models.EmployerProfile, {foreignKey: 'employerId'})
+        Employer.hasOne(models.EmployerProfile)
+        Employer.hasMany(models.Job)
     }
 
     Employer.prototype.comparePassword = function(password){

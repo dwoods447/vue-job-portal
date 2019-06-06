@@ -23,14 +23,12 @@ module.exports = (sequelize, DataTypes) =>{
           },
           description: {
             type: DataTypes.TEXT,
-          },
-          employerId: {
-              type: DataTypes.INTEGER,
           }
+
     })
 
     EmployerProfile.associate = function(models){
-        EmployerProfile.belongsTo(models.Employer)
+      EmployerProfile.belongsTo(models.Employer)
     }
 
     return EmployerProfile;

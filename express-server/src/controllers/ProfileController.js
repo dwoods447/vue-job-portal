@@ -69,8 +69,10 @@ module.exports = {
 
     async getProfileInfo (req, res){
         try{
+           
+            console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.jobseekerId)}`)
             const jobSeeker = await JobseekerProfile.findOne({
-                jobseekerId: req.body.id
+                where: {jobseekerId: req.params.jobseekerId}
             })
             console.log(`Job Seeker that was found${JSON.stringify(jobSeeker)}`);
             res.send({

@@ -23,9 +23,6 @@ module.exports = (sequelize, DataTypes) =>{
           },
           coverletter: {
             type: DataTypes.TEXT,
-          },
-          jobseekerId: {
-              type: DataTypes.INTEGER,
           }
     })
 

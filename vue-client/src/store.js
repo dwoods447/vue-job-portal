@@ -9,6 +9,7 @@ const store = new Vuex.Store({
     employer: null,
     jobseeker: null,
     currentJobSeeker: null,
+    currentEmployer: null,
     isEmployerLoggenIn: false,
     isJobseekerLoggenIn: false,
   },
@@ -40,11 +41,15 @@ const store = new Vuex.Store({
     },
     setEmployerLogOutMutation(state){
       state.isEmployerLoggenIn = false;
+      state.currentEmployer = null;
+      state.employer = null;
       state.token = null;
     },
     setJobseekerLogOutMutation(state){
       state.isJobseekerLoggenIn = false;
+      state.jobseeker = null;
       state.token = null;
+      state.currentJobSeeker = null;
     }
   },
   getters: {
