@@ -10,6 +10,7 @@ const store = new Vuex.Store({
     jobseeker: null,
     currentJobSeeker: null,
     currentEmployer: null,
+    job: null,
     isEmployerLoggenIn: false,
     isJobseekerLoggenIn: false,
   },
@@ -76,7 +77,7 @@ const store = new Vuex.Store({
     },
     setJobseekerLogOutAction(context){
       context.commit('setJobseekerLogOutMutation');
-    }
+    },
   }
 
 })

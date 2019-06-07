@@ -10,12 +10,14 @@ import {sync} from 'vuex-router-sync'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+
+
 Vue.use(Vuetify, {
   iconfont: 'mdi'
 })
 Vue.use(VeeValidate)
-Vue.config.productionTip = false
 
+Vue.config.productionTip = false
 sync(store, router) // done. Returns an unsync callback fn
 
 /* eslint-disable no-new */

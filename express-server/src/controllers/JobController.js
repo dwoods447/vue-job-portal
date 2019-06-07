@@ -1,7 +1,36 @@
 const {Job} = require('../models')
+const {Employer} = require('../models')
 // const { Op } = require('sequelize')
 // import {Jobseeker} = require('../models')
 module.exports = {
+    async employerJob(req, res){
+      const employer = await Employer.findOne({
+        where: {
+          id: req.params.employerId
+        }
+      })
+      console.log(`Employer returned: ${employer}`)
+      const employerJSON  = employer.toJSON();
+       console.log(`Employer JSON: ${employerJSON}`)
+       res.send({
+        data: employerJSON,
+    })
+    },
+    async viewJob(req, res){
+        try{
+            const job = await Job.findOne({where:{id: req.params.jobId}})
+            // console.log(`Job Found: ${JSON.stringify(job)}`);
+            let jobJSON = job.toJSON();
+            // console.log(`Job JSON: ${JSON.stringify(jobJSON)}`);
+            res.send({
+                data: jobJSON,
+            })
+        } catch(err){
+            res.send({
+                error:  `There was an error: ${err}`
+            })
+        }
+    },
     async viewAllJobs(req, res){
         try{
              console.log('Getting All jobs...');

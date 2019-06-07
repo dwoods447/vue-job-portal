@@ -15,4 +15,6 @@ module.exports = (app)  =>{
     app.post('/jobseeker/profile/', ProfileController.updateJobseekerProfile)
     app.get('/jobs/all', JobController.viewAllJobs)
     app.get('/job/search/:value', JobController.searchJob)
+    app.get('/job/:jobId/detail', JobController.viewJob)
+    app.get('/employer/job/:employerId/detail', JobController.employerJob)
 }
