@@ -40,6 +40,9 @@ const store = new Vuex.Store({
     setCurrentJobseekerMutation(state, jobseeker){
       state.currentJobSeeker = jobseeker;
     },
+    setCurrentEmployerMutation(state, employer){
+      state.currentEmployer = employer;
+    },
     setEmployerLogOutMutation(state){
       state.isEmployerLoggenIn = false;
       state.currentEmployer = null;
@@ -71,6 +74,9 @@ const store = new Vuex.Store({
     },
     setCurrentJobseekerAction(context, jobseeker){
       context.commit('setCurrentJobseekerMutation', jobseeker)
+    },
+    setCurrentEmployerAction(context, employer){
+      context.commit('setCurrentEmployerMutation', employer)
     },
     setEmployerLogOutAction(context){
       context.commit('setEmployerLogOutMutation');

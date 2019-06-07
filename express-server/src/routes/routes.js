@@ -6,15 +6,41 @@ module.exports = (app)  =>{
         res.send('This is the server start page')
     })
 
-    app.get('/jobseeker/:jobseekerId/profile', ProfileController.getProfileInfo)
-    app.post('/employer/login', AuthenticationController.employerLogin)
-    app.post('/jobseeker/login', AuthenticationController.jobseekerLogin)
-    app.post('/employer/register', AuthenticationController.employerRegister)
-    app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
-    app.post('/employer/profile/', ProfileController.updateEmployerProfile)
+
+
+ /**** Job Seeker ****/
+    // Get employer profile info
+    app.get('/jobseeker/:jobseekerId/profile', ProfileController.getJobSeekerProfileInfo)
+    // Update jobseeker profile info 
     app.post('/jobseeker/profile/', ProfileController.updateJobseekerProfile)
+    // Send employer login credentials
+    app.post('/jobseeker/login', AuthenticationController.jobseekerLogin)
+    // Send jobseeker registration info
+    app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
+
+
+    
+ /**** Employer ****/
+    // Get employer profile info
+    app.get('/employer/:employerId/profile', ProfileController.getEmployerProfileInfo)
+    // Send employer login credentials
+    app.post('/employer/login', AuthenticationController.employerLogin)
+    // Send employer registration info
+    app.post('/employer/register', AuthenticationController.employerRegister)
+    // Update employer profile info
+    app.post('/employer/profile/', ProfileController.updateEmployerProfile)
+  
+
+
+    /***** Job ****/   
+    // Get all jobs
     app.get('/jobs/all', JobController.viewAllJobs)
+    // Search for specific job
     app.get('/job/search/:value', JobController.searchJob)
+    // Get individual job details, 
     app.get('/job/:jobId/detail', JobController.viewJob)
+    // Get individual company details
     app.get('/employer/job/:employerId/detail', JobController.employerJob)
+
+    
 }

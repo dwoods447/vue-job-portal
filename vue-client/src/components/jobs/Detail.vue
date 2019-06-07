@@ -24,7 +24,7 @@
                 </v-toolbar>
                   <v-list-tile>
                   <v-list-tile-content>
-                    <v-list-tile-title>Company: <router-link :to="{name:'view.employer.detail', params: {employerId: company.id}}" v-if="company.id"><span>{{company.company}}</span></router-link></v-list-tile-title>
+                    <v-list-tile-title><router-link :to="{name:'view.employer.detail', params: {employerId: company.id}}" v-if="company.id"><span>Visit Company Page</span></router-link></v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
@@ -66,6 +66,19 @@
                 <v-divider></v-divider>
 
 
+
+
+                 <v-list-tile v-if="!this.$store.state.isJobseekerLoggenIn">
+                  <v-list-tile-content>
+                    <v-list-tile-title><span style="color: red;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider></v-divider>
+
+                <div v-if="this.$store.state.isJobseekerLoggenIn">
+                  <router-link to="" style="text-decoration: none;"><v-btn color="success" style="min-width: 200px;">Apply</v-btn></router-link>
+                </div>
+                <v-divider></v-divider>
                 </v-card>
            </v-flex>
          </v-layout>

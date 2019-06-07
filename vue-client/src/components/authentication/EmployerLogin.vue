@@ -62,16 +62,24 @@ export default {
   },
   methods: {
     async login(){
-      const response = await AuthenticationSerivce.employerLogin({
-        email: this.email,
-        password: this.password
-      })
-      this.$store.dispatch('setEmployerTokenAction', response.data.token)
-       this.$store.dispatch('setEmployerAction', response.data.employer)
-      if (response.status === 200){
-          console.log(response);
-         confirm('You are logged in !!!!!');
-       }
+    if (this.email && this.password) {
+    const response = await AuthenticationSerivce.employerLogin({
+            email: this.email,
+            password: this.password
+          })
+          this.$store.dispatch('setEmployerTokenAction', response.data.token)
+          this.$store.dispatch('setEmployerAction', response.data.employer)
+          if (response.status === 200) {
+              console.log(response);
+            confirm('You are logged in !!!!!');
+              this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
+          }
+          if (response.statu === 403) {
+            confirm('Invalid email or password!')
+          }
+      } else {
+        confirm('Please enter an email and password')
+      }
     }
   },
   computed: {

@@ -112,13 +112,18 @@
                <v-textarea
                  outline
                  textarea
-                 label="Bio"
+                 label="Short Bio"
                  v-model="joBSeeker.bio"
                  value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
                ></v-textarea>
              </v-flex>
-             <span v-if="alertSubmit"><strong style="color: red;">Please submit your information</strong></span>
-            <v-btn flat color="orange" @click="updateProfile" ref="submit">Update</v-btn>
+             <v-flex 12>
+                <v-btn flat color="orange" @click="updateProfile" ref="updateJobSeeker">Update</v-btn>
+             </v-flex>
+
+              <v-flex xs12>
+                 <span v-if="alertSubmit"><strong style="color: red;">Please submit your information</strong></span>
+              </v-flex>
           </form>
         </v-list>
       </v-card>
@@ -128,11 +133,11 @@
     <v-flex xs-3 class="section-container">
           <v-card>
             <v-toolbar>
-             <span v-if="$store.state.jobseeker">{{$store.state.jobseeker.name}}'s Profile information</span>
+             <span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}}'s Profile information</span>
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Address: <span v-if="joBSeeker">{{joBSeeker.address}}</span></v-list-tile-title>
+                <v-list-tile-title>Address: <span v-if="this.$store.state.currentJobSeeker">{{this.$store.state.currentJobSeeker.address}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -140,7 +145,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Phone: <span v-if="joBSeeker">{{joBSeeker.phone}}</span></v-list-tile-title>
+                <v-list-tile-title>Phone: <span v-if="this.$store.state.currentJobSeeker">{{this.$store.state.currentJobSeeker.phone}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -150,7 +155,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Gender: <span v-if="joBSeeker">{{ joBSeeker.gender }}</span></v-list-tile-title>
+                <v-list-tile-title>Gender: <span v-if="this.$store.state.currentJobSeeker">{{ this.$store.state.currentJobSeeker.gender }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -158,7 +163,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Birthdate: <span v-if="joBSeeker">{{ joBSeeker.dob }}</span></v-list-tile-title>
+                <v-list-tile-title>Birthdate: <span v-if="this.$store.state.currentJobSeeker">{{ this.$store.state.currentJobSeeker.dob }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -167,17 +172,28 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="joBSeeker"><span>{{ joBSeeker.resume }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.resume }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="joBSeeker"><span>{{ joBSeeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobseeker"><span>{{ this.$store.state.currentJobseeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+
+
+             <div style="padding: 0.3em;">
+               <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Bio:</v-list-tile-title>
+                     </v-list-tile-content>
+                </v-list-tile>
+                    <p v-if="this.$store.state.currentJobSeeker" style="padding: 1em;"> {{this.$store.state.currentJobSeeker.bio}}</p>
+             </div>
+
 
           </v-card>
           <br/>
@@ -220,6 +236,7 @@
 </template>
 <script>
 import ProfileService from '../../../services/ProfileSerivce.js'
+import { setTimeout } from 'timers';
 export default {
   created(){
     this.getProfileInfo();
@@ -238,17 +255,7 @@ export default {
       progressStatus: 1,
       value: '50%',
       stepsToComplete: [],
-      joBSeeker: {
-        address: '',
-        phone: '',
-        gender:'',
-        bio: '',
-        photo: '',
-        resume:'',
-        coverletter: '',
-        dob: '',
-
-      },
+      joBSeeker: {},
     }
   },
   filters: {
@@ -258,14 +265,13 @@ export default {
   },
   methods: {
     inputChange: function(input){
-      if (input) {
+      if (input && !this.alertSubmit) {
         this.alertSubmit = true;
-        this.$refs.submit.focus();
       }
     },
     async updateProfile(){
         let obj = {};
-        console.log(`Sending data: ${this.$store.state.jobseeker}`)
+
         if (this.$store.state.jobseeker) obj.id = this.$store.state.route.params.jobseekerId
         if (this.joBSeeker.address)obj.address = this.joBSeeker.address
         if (this.joBSeeker.phone) obj.phone = this.joBSeeker.phone
@@ -275,8 +281,12 @@ export default {
         if (this.joBSeeker.photo) obj.photo = this.joBSeeker.photo
         if (this.joBSeeker.resume) obj.resume = this.joBSeeker.resume
         if (this.joBSeeker.coverletter) obj.coverletter = this.joBSeeker.coverletter
+         console.log(`Sending data: ${JSON.stringify(obj)}`)
          const updated = await ProfileService.updateJobSeekerProfile(obj);
          if (updated) {
+            console.log(JSON.stringify(updated));
+            console.log('Info has been updated.... Retriveing It')
+
             this.alertSubmit = false;
             this.getProfileInfo();
          }
@@ -300,19 +310,26 @@ export default {
        this.joBSeeker = {};
        const seekerId = this.$store.state.route.params.jobseekerId;
        console.log(`Route params: ${seekerId}`);
-       let seeker = await ProfileService.getJobseekerProfile(seekerId);
+       let seeker = (await ProfileService.getJobseekerProfile(seekerId)).data.jobseeker;
+       if (seeker === null) {
+         this.joBSeeker = {};
+       } else {
+        this.joBSeeker = seeker;
+       }
        console.log(JSON.stringify(seeker))
-       this.joBSeeker = seeker.data.jobseeker;
+
        console.log(`Setting Current Jobseeker in store state : ${JSON.stringify(this.joBSeeker)}`)
        this.$store.dispatch('setCurrentJobseekerAction', this.joBSeeker)
+       console.log(`Current Job Seeker in STATE: ${JSON.stringify(this.$store.state.currentJobSeeker)}`)
        // console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
        this.updateProgressStatus(this.joBSeeker);
     },
     updateProgressStatus(joBSeeker){
-      // console.log(`Getting progress status`);
-     // console.log(JSON.stringify(joBSeeker))
+       console.log(`Getting progress status`);
+      console.log(JSON.stringify(joBSeeker))
      this.stepsToComplete = [];
      this.progressStatus = 1;
+     if (joBSeeker) {
       let requireValues = joBSeeker;
       for (var key in requireValues) {
          // console.log(`Key ${key} value: ${requireValues[key]}`);
@@ -350,6 +367,17 @@ export default {
               }
          }
       }
+     } else {
+         this.stepsToComplete = [];
+         this.stepsToComplete.push('Enter your Address');
+         this.stepsToComplete.push('Enter your Phone Number');
+         this.stepsToComplete.push('Enter your Gender');
+         this.stepsToComplete.push('Enter your Birthdate');
+         this.stepsToComplete.push('Enter your Bio');
+         this.stepsToComplete.push('Upload your Photo');
+         this.stepsToComplete.push('Upload your Resume');
+         this.stepsToComplete.push('Upload your Cover Letter');
+     }
     }
   },
    watch: {

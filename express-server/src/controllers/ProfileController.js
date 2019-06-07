@@ -67,14 +67,14 @@ module.exports = {
     },
 
 
-    async getProfileInfo (req, res){
+    async getJobSeekerProfileInfo (req, res){
         try{
            
             console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.jobseekerId)}`)
             const jobSeeker = await JobseekerProfile.findOne({
                 where: {jobseekerId: req.params.jobseekerId}
             })
-            console.log(`Job Seeker that was found${JSON.stringify(jobSeeker)}`);
+            console.log(`Job Seeker that was found ${JSON.stringify(jobSeeker)}`);
             res.send({
                 jobseeker: jobSeeker
             })
@@ -83,7 +83,25 @@ module.exports = {
                 error:  `There was an error: ${err}`
             })
         }
-    }
+    },
+
+    async getEmployerProfileInfo(req, res){
+    try{
+        console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.employerId)}`)
+        const employer = await EmployerProfile.findOne({
+            where: {employerId: req.params.employerId}
+        })
+
+        console.log(`Employer that was found ${JSON.stringify(employer)}`);
+        res.send({
+            data: employer
+        })
+    } catch(err){
+            res.send({
+                error:  `There was an error: ${err}`
+            })
+        }
+    },
 
 
 }

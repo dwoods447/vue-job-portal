@@ -6,8 +6,11 @@ module.exports = {
     async employerJob(req, res){
       const employer = await Employer.findOne({
         where: {
-          id: req.params.employerId
-        }
+          id: req.params.employerId,
+        },
+        include: [
+           {model: Job} 
+        ]
       })
       console.log(`Employer returned: ${employer}`)
       const employerJSON  = employer.toJSON();

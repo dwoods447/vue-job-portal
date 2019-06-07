@@ -8,5 +8,8 @@ export default {
   },
   getJobseekerProfile(info){
     return Api.get('/jobseeker/' + info + '/profile', info)
+  },
+  getEmployerProfile(id){
+    return Api.get('/employer/' + id + '/profile', id)
   }
 }

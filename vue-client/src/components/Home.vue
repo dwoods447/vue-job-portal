@@ -1,5 +1,5 @@
 <template>
-      <v-container fluid grid-list-md>
+      <v-container fluid grid-list-md style="max-width: 1200px;">
         <v-layout row wrap>
                 <v-flex x12 justify-center>
                    <h2>Search Jobs</h2>
@@ -33,7 +33,7 @@
                               </v-toolbar>
                                 <v-card>
                               <div style="padding: 1em;">
-                                <span >{{props.item.description}}</span>
+                                <span >{{props.item.description.substring(0, (props.item.description.length/4))}}...</span>
                               </div>
                                 <v-layout justify-end>
                                   <v-card-actions justify-right>
