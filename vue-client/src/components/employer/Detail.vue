@@ -2,6 +2,11 @@
   <div>
       <v-container>
          <v-card>
+           <v-toolbar color="primary">
+                <h2><span class="white--text">Company Profile</span></h2>
+                <v-spacer></v-spacer>
+               <h2><router-link :to="{name: 'home'}" class="white--text"> Back to Job List</router-link></h2>
+           </v-toolbar>
          <v-layout row wrap>
            <v-flex xs7 class="detail-container">
                 <v-list-tile>
@@ -35,7 +40,9 @@
                 <v-divider></v-divider>
            </v-flex>
            <v-flex xs4 class="detail-container">
-             <img src="http://placehold.it/200x200">
+             <div style="height: 230px;">
+                  <img src="http://placehold.it/230x230" style="display: block; margin: 0 auto;">
+             </div>
            </v-flex>
            <v-flex xs12>
              <div style="padding: 1em;">
@@ -46,25 +53,24 @@
             <v-flex xs12>
                  <div style="padding: 1em;">
                  <h2>Active Jobs</h2>
-                 <table>
-                   <thead>
-                    <tr>
-                     <th></th>
-                     <th></th>
-                     <th></th>
-                   </tr>
-                   </thead>
-                   <tbody>
-                     <tr v-for="job in company.Jobs" :key="job.id">
-                       <td>
-                         {{job.jobTitle}}<br/>
-                          {{job.type}}
-                       </td>
-                       <td>{{job.location}}</td>
-                       <td>{{job.createdAt}}</td>
-                     </tr>
-                   </tbody>
-                 </table>
+                   <div>
+                  <v-data-table
+                    :headers="tableHeaders"
+                    :items=" company.Jobs"
+                    hide-actions
+                    :pagination.sync="pagination"
+                    class="elevation-1"
+                  >
+                    <template v-slot:items="props">
+                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+                       <td>{{ props.item.location }}</td>
+                        <td>{{ props.item.createdAt | formateDate }}</td>
+                    </template>
+                  </v-data-table>
+                  <!-- <div class="text-xs-center pt-2">
+                    <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+                  </div> -->
+                </div>
              </div>
             </v-flex>
          </v-layout>
@@ -88,6 +94,14 @@ export default {
       job: {},
       company: {},
       employer: {},
+      pagination: {
+        pages: 1
+      },
+      tableHeaders: [
+        {text: 'Position/Type'},
+        {text: 'Location'},
+        {text: 'Date Posted'},
+      ]
     }
   },
   methods: {
@@ -104,7 +118,13 @@ export default {
     }
   },
   computed: {
+        pages () {
+        if (this.pagination.rowsPerPage == null ||
+          this.pagination.totalItems == null
+        ) return 0
 
+        return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+      }
   },
 
   filters: {
