@@ -19,7 +19,7 @@ const routes = [
   {path: '/jobseeker/:jobseekerId/profile/', component: JobseekerProfile, name: 'view.jobseeker.profile'},
   {path: '/job/:jobId/detail', component: JobDetail, name:'view.job.detail'},
   {path: '/employer/:employerId/detail', component: EmployerDetail, name:'view.employer.detail'},
-  {path: '/employer/create/job', component:  EmployerPostJob, name:'employer.post.job'}
+  {path: '/employer/:employerId/create/job', component:  EmployerPostJob, name:'employer.post.job'}
 ]
 
 export default routes

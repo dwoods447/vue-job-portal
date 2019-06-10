@@ -26,8 +26,8 @@
            <v-list-tile  v-if="$store.state.isEmployerLoggenIn">
             <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('view.employer.profile', {employerId: $store.state.employer.id})">Employer Profile</a></v-list-tile-title>
           </v-list-tile>
-           <v-list-tile >
-            <v-list-tile-title><a href="javascript:void(0)"  @click="navigateTo('employer.post.job')">Post a Job</a></v-list-tile-title>
+           <v-list-tile v-if="$store.state.isEmployerLoggenIn">
+            <v-list-tile-title><a href="javascript:void(0)"  @click="navigateTo('employer.post.job', {employerId: $store.state.employer.id})">Post a Job</a></v-list-tile-title>
           </v-list-tile>
 
         </v-list>
@@ -88,10 +88,12 @@ export default {
       if (employer) {
         this.$store.dispatch('setEmployerLogOutAction');
         this.$router.push('/')
+        localStorage.clear();
       }
       if (jobseeker) {
         this.$store.dispatch('setJobseekerLogOutAction');
         this.$router.push('/')
+        localStorage.clear();
       }
     }
   }

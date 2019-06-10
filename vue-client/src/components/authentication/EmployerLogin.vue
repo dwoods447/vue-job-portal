@@ -67,9 +67,9 @@ export default {
             email: this.email,
             password: this.password
           })
-          this.$store.dispatch('setEmployerTokenAction', response.data.token)
-          this.$store.dispatch('setEmployerAction', response.data.employer)
           if (response.status === 200) {
+                this.$store.dispatch('setEmployerTokenAction', response.data.token);
+                this.$store.dispatch('setEmployerAction', response.data.employer);
               console.log(response);
             confirm('You are logged in !!!!!');
               this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})

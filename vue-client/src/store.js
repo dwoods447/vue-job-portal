@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,9 @@ const store = new Vuex.Store({
     job: null,
     isEmployerLoggenIn: false,
     isJobseekerLoggenIn: false,
+    createdJob: null,
   },
+  plugins: [createPersistedState()],
   mutations: {
     setEmployerTokenMutation(state, token){
       state.token = token;
@@ -54,6 +57,9 @@ const store = new Vuex.Store({
       state.jobseeker = null;
       state.token = null;
       state.currentJobSeeker = null;
+    },
+    setCreatedJobMutation(state, job){
+      state.createdJob = job;
     }
   },
   getters: {
@@ -84,6 +90,9 @@ const store = new Vuex.Store({
     setJobseekerLogOutAction(context){
       context.commit('setJobseekerLogOutMutation');
     },
+    setCreatedJobAction(context, job){
+      context.commit('setCreatedJobMutation', job)
+    }
   }
 
 })

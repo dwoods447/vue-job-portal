@@ -66,10 +66,11 @@ export default {
         email: this.email,
         password: this.password
       })
-      this.$store.dispatch('setJobseekerTokenAction', response.data.token)
-       this.$store.dispatch('setJobseekerAction', response.data.jobseeker)
+
       if (response.status === 200){
           console.log(response);
+            this.$store.dispatch('setJobseekerTokenAction', response.data.token)
+            this.$store.dispatch('setJobseekerAction', response.data.jobseeker)
          confirm('You are logged in !!!!!');
          this.$router.push({name: 'view.jobseeker.profile', params: {jobseekerId: this.$store.state.jobseeker.id}})
        }

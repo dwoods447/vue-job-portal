@@ -239,7 +239,7 @@ export default {
         // Loop through employer object ignoring keys with null values and foreach key increase the progress status by 6.999
          for (let key in reqValuesObj) {
            if (reqValuesObj[key] !== null) {
-              this.progressStatus = this.progressStatus + 8.29
+              this.progressStatus = this.progressStatus + 8.99
               // Check if progress status is greater than 100 if so set it to 100
               if (this.progressStatus > 100) {
                   this.progressStatus = 100;

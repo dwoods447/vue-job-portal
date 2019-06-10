@@ -75,8 +75,8 @@
                 </v-list-tile>
                 <v-divider></v-divider>
 
-                <div v-if="this.$store.state.isJobseekerLoggenIn">
-                  <router-link to="" style="text-decoration: none;"><v-btn color="success" style="min-width: 200px;">Apply</v-btn></router-link>
+                <div v-if="this.$store.state.isJobseekerLoggenIn" class="justify-center text-xs-center">
+                  <router-link to="" style="text-decoration: none;" justify-center><v-btn color="success" style="min-width: 200px;">Apply</v-btn></router-link>
                 </div>
                 <v-divider></v-divider>
                 </v-card>
