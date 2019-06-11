@@ -1,6 +1,7 @@
 const AuthenticationController = require('../controllers/AuthenticationController');
 const ProfileController = require('../controllers/ProfileController');
 const JobController = require('../controllers/JobController');
+const EmployerController = require('../controllers/EmployerController')
 module.exports = (app)  =>{
     app.get('/', (req, res)=>{
         res.send('This is the server start page')
@@ -29,7 +30,11 @@ module.exports = (app)  =>{
     app.post('/employer/register', AuthenticationController.employerRegister)
     // Update employer profile info
     app.post('/employer/profile/', ProfileController.updateEmployerProfile)
-  
+    
+    app.get('/job/categories', EmployerController.getCategories)
+    app.get('/job/types', EmployerController.getJobTypes)
+    app.post('/employer/create/job', EmployerController.createJob)
+    app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
 
 
     /***** Job ****/   

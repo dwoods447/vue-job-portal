@@ -9,5 +9,8 @@ export default {
  },
  createJob(jobInfo){
   return Api.post('/employer/create/job', jobInfo)
+ },
+ getEmployerJobs(employerId){
+   return Api.get('/employer/' + employerId + '/jobs')
  }
 }

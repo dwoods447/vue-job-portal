@@ -8,6 +8,8 @@ import JobseekerProfile from '../components/jobseeker/profile/Profile'
 import JobDetail from '../components/jobs/Detail.vue'
 import EmployerDetail from '../components/employer/Detail'
 import EmployerPostJob from '../components/employer/CreateJob'
+import EditEmployerJob from '../components/employer/EditJob'
+
 
 const routes = [
   {path: '/', component: Home, name:'home'},
@@ -19,7 +21,9 @@ const routes = [
   {path: '/jobseeker/:jobseekerId/profile/', component: JobseekerProfile, name: 'view.jobseeker.profile'},
   {path: '/job/:jobId/detail', component: JobDetail, name:'view.job.detail'},
   {path: '/employer/:employerId/detail', component: EmployerDetail, name:'view.employer.detail'},
-  {path: '/employer/:employerId/create/job', component:  EmployerPostJob, name:'employer.post.job'}
+  {path: '/employer/:employerId/create/job', component:  EmployerPostJob, name:'employer.post.job'},
+  {path: '/employer/:employerId/edit/job', component:  EditEmployerJob, name:'edit.employer.job'},
+  {path: '/employer/:employerId/delete/job', name:'delete.employer.job'}
 ]
 
 export default routes

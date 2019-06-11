@@ -75,39 +75,31 @@
            </div>
          </v-flex> <!--  end of form flex-->
 
-         <v-flex xs6>
-            <h2 v-if="this.$store.state.createdJob">Job Created! Please Review</h2>
-             <v-list-tile v-if="this.$store.state.createdJob">
-                  <v-list-tile-content>
-                    <v-list-tile-title><span><strong>{{this.$store.state.createdJob.jobTitle}}</strong></span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-                 <v-list-tile v-if="this.$store.state.createdJob">
-                  <v-list-tile-content>
-                    <v-list-tile-title><span><strong>{{this.$store.state.createdJob.type}}</strong></span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-                 <v-list-tile v-if="this.$store.state.createdJob">
-                  <v-list-tile-content>
-                    <v-list-tile-title><span><strong>{{this.$store.state.createdJob.location}}</strong></span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-                  <v-list-tile v-if="this.$store.state.createdJob">
-                  <v-list-tile-content>
-                    <v-list-tile-title><span><strong>{{this.$store.state.createdJob.description}}</strong></span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-                 <v-divider></v-divider>
-                  <v-list-tile v-if="this.$store.state.createdJob">
-                  <v-list-tile-content>
-                    <v-list-tile-title><span><strong>{{this.$store.state.createdJob.job_ending }}</strong></span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
+         <v-flex xs6 v-if="employersJobs">
+
+                 <div style="padding: 1em;">
+                 <h2>Active Jobs</h2>
+                   <div>
+                  <v-data-table
+                    :headers="tableHeaders"
+                    :items="employersJobs"
+                    hide-actions
+                    :pagination.sync="pagination"
+                    class="elevation-1"
+                  >
+                    <template v-slot:items="props">
+                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+                       <td>{{ props.item.location }}</td>
+                        <td>{{ props.item.createdAt | formateDate }}</td>
+                        <td><router-link :to="{name:'edit.employer.job', params:{jobId: props.item.id} }"><v-btn>Edit</v-btn></router-link></td>
+                          <td><router-link :to="{name:'delete.employer.job', params:{jobId: props.item.id} }"><v-btn>Remove</v-btn></router-link></td>
+                    </template>
+                  </v-data-table>
+                  <!-- <div class="text-xs-center pt-2">
+                    <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+                  </div> -->
+                </div>
+             </div>
          </v-flex>
       </v-layout>
       </v-card>
@@ -116,11 +108,12 @@
 </template>
 <script>
 import EmployerService from '../../services/EmployerService'
-
+import moment from 'moment'
 export default {
   created(){
     this.getCategories();
     this.getJobTypes();
+    this.getEmployerJobs(this.$store.state.route.params.employerId);
   },
   mounted(){
 
@@ -141,6 +134,20 @@ export default {
       categoryChosen: '',
       status: '',
       description: '',
+      employersJobs: [],
+      tableHeaders: [
+        {text: 'Position/Type', value:'Position/Type'},
+        {text: 'Location', value: 'Location'},
+        {text: 'Date Posted', value:'Date Posted'},
+      ],
+       pagination: {
+        pages: 1
+      },
+    }
+  },
+  filters: {
+    formateDate(date){
+      return moment(date).format('MMMM Do YYYY');
     }
   },
   methods: {
@@ -168,6 +175,7 @@ export default {
             console.log(`Created a Job ${JSON.stringify(jobObj)}`)
             console.log(`Sending created job to store.`)
           this.$store.dispatch('setCreatedJobAction', jobObj)
+          this.getEmployerJobs(this.$store.state.route.params.employerId);
         }
         console.log(JSON.stringify(jobObj))
     },
@@ -181,6 +189,12 @@ export default {
         this.jobTypes = jobTypes.data.data[0];
         console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
     },
+
+    async getEmployerJobs(employerId){
+      const employerJobs = (await EmployerService.getEmployerJobs(employerId)).data.data;
+      this.employersJobs = employerJobs;
+      console.log(`Employers Jobs ${JSON.stringify(this.employersJobs)}`);
+    }
   }
 }
 </script>

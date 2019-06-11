@@ -1,8 +1,5 @@
 module.exports = (sequelize, DataTypes) =>{
     const EmployerProfile = sequelize.define('EmployerProfile', {
-          company: {
-             type: DataTypes.STRING,
-          },
           address:{
             type: DataTypes.STRING,
           },
