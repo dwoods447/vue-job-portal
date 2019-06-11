@@ -10,6 +10,9 @@ export default {
  createJob(jobInfo){
   return Api.post('/employer/create/job', jobInfo)
  },
+ updateJob(jobInfo){
+  return Api.post('/employer/update/job', jobInfo)
+ },
  getEmployerJobs(employerId){
    return Api.get('/employer/' + employerId + '/jobs')
  }

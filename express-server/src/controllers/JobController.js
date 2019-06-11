@@ -1,7 +1,7 @@
 const {Job} = require('../models')
 const {Employer} = require('../models')
-// const { Op } = require('sequelize')
-// import {Jobseeker} = require('../models')
+ const { Op } = require('sequelize')
+const {JobApplicant} = require('../models')
 module.exports = {
     async employerJob(req, res){
       const employer = await Employer.findOne({
@@ -51,21 +51,43 @@ module.exports = {
         }
     },
 
-    async searchJob(req, res){
-        // const search = req.params.search;
-        
-        const job = await Job.findAll({
-            // where:{
-            //   [Op.or]: ['jobTitle','description', 'location' ].map(key => ({
-            //       [key]: {
-            //         [Op.like]: `%${search}%`
-            //       }
-            //     }))
-            // }
-        })
-        const jobJSON = job.toJSON();
-        res.send({
-            job: jobJSON
-        })
+    async searchJob(req, res){ 
+        console.log(`Request Body ${JSON.stringify(req.params)}`)
+        // console.log(`Request Query ${JSON.stringify(req.query)}`)
+        try{
+            const job = await Job.findAll({
+                where:{
+                  [Op.or]: ['jobTitle','description', 'location' ].map(key => ({
+                      [key]: {
+                        [Op.like]: `%${req.params.search}%`
+                      }
+                    }))
+                }
+            })
+            res.send({
+                data: job
+            })
+        }catch(err){
+            '${err}'
+        }
+       
+       
+    },
+
+    async applyforJob(req, res){
+        console.log(`Request Params Jobseeker ID ${JSON.stringify(req.params.jobseekerId)}`)
+        console.log(`Request Params Job ID ${JSON.stringify(req.params.jobId)}`)
+        console.log(`Request Body ${JSON.stringify(req.body)}`)
+        try{
+            const applicationSent = await JobApplicant.create({
+                JobId: req.params.jobId,
+                JobseekerId:req.params.jobseekerId
+            });
+            res.send({
+                data: applicationSent
+            })
+        } catch (error){
+            '${error}'
+        }
     }
 }

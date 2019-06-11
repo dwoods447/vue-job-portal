@@ -118,6 +118,17 @@ export default {
       const company = (await JobService.employerJob(employerID)).data.data
       this.company = company;
       // console.log(JSON.stringify(company))
+    },
+
+    async applyForJob(){
+      let jobseekerId = this.$store.state.jobseeker.id;
+      let jobId = this.$store.state.route.params.jobId;
+      const applied = (await JobService.applyForJob(jobseekerId, jobId))
+          if (applied) {
+              console.log(`Application sent successfully: ${applied}`)
+          } else {
+              console.log(`Application was not sent: ${applied}`)
+          }
     }
   },
   computed: {

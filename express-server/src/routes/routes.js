@@ -2,12 +2,14 @@ const AuthenticationController = require('../controllers/AuthenticationControlle
 const ProfileController = require('../controllers/ProfileController');
 const JobController = require('../controllers/JobController');
 const EmployerController = require('../controllers/EmployerController')
+
+
 module.exports = (app)  =>{
+   
+   
     app.get('/', (req, res)=>{
         res.send('This is the server start page')
     })
-
-
 
  /**** Job Seeker ****/
     // Get employer profile info
@@ -18,7 +20,7 @@ module.exports = (app)  =>{
     app.post('/jobseeker/login', AuthenticationController.jobseekerLogin)
     // Send jobseeker registration info
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
-
+    app.post('/jobseeker/:jobseekerId/job/:jobId/apply', JobController.applyforJob)
 
     
  /**** Employer ****/
@@ -34,6 +36,7 @@ module.exports = (app)  =>{
     app.get('/job/categories', EmployerController.getCategories)
     app.get('/job/types', EmployerController.getJobTypes)
     app.post('/employer/create/job', EmployerController.createJob)
+    app.post('/employer/update/job', EmployerController.updateJob)
     app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
 
 
@@ -41,7 +44,7 @@ module.exports = (app)  =>{
     // Get all jobs
     app.get('/jobs/all', JobController.viewAllJobs)
     // Search for specific job
-    app.get('/job/search/:value', JobController.searchJob)
+    app.get('/job/search/:search', JobController.searchJob)
     // Get individual job details, 
     app.get('/job/:jobId/detail', JobController.viewJob)
     // Get individual company details

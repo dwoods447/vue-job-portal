@@ -10,7 +10,7 @@
       <v-layout row wrap >
          <v-flex xs6>
            <div style="padding: 0.25em; margin: 0 auto; width: 70%;">
-              <form action="">
+              <form action="" v-if="!contentStillLoading">
                <v-layout row wrap>
                   <v-flex xs6 pa-1>
                     <v-text-field  label="Job Title" outline v-model="employersJob.jobTitle"></v-text-field>
@@ -29,7 +29,35 @@
 
                 <v-layout row wrap>
                   <v-flex xs12>
-
+                       <v-flex xs12>
+                           <v-menu
+                              ref="menu"
+                              v-model="menu"
+                              :close-on-content-click="false"
+                              :nudge-right="40"
+                              :return-value.sync="employersJob.apply_date"
+                              lazy
+                              transition="scale-transition"
+                              offset-y
+                              full-width
+                              min-width="290px"
+                            >
+                              <template v-slot:activator="{ on }">
+                                <v-text-field
+                                  v-model="employersJob.apply_date"
+                                  label="Last Date To Apply"
+                                  readonly
+                                  outline
+                                  v-on="on"
+                                ></v-text-field>
+                              </template>
+                              <v-date-picker v-model="employersJob.apply_date" no-title scrollable>
+                                <v-spacer></v-spacer>
+                                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                                <v-btn flat color="primary" @click="$refs.menu.save(employersJob.apply_date)">OK</v-btn>
+                              </v-date-picker>
+                            </v-menu>
+                  </v-flex>
                   </v-flex>
                 </v-layout>
 
@@ -49,27 +77,11 @@
            </div>
          </v-flex> <!--  end of form flex-->
 
-         <v-flex xs6>
-
-                 <!-- <div style="padding: 1em;">
-                 <h2>Active Jobs</h2>
-                   <div>
-                  <v-data-table
-                    :headers="tableHeaders"
-                    :items="employersJobs"
-                    hide-actions
-                    :pagination.sync="pagination"
-                    class="elevation-1"
-                  >
-                    <template v-slot:items="props">
-                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
-                       <td>{{ props.item.location }}</td>
-                        <td>{{ props.item.createdAt | formateDate }}</td>
-                    </template>
-                  </v-data-table>
-
-                </div>
-             </div> -->
+         <v-flex xs6 v-if="updated">
+            <div justify-center>
+              <h2 style="text-align:center; margin: 5% auto;"><span style="color: green;">Job Updated!</span></h2>
+             <router-link :to="{name:'employer.post.job', params:{employerId: $store.state.employer.id}}" style="display: block; text-align:center; margin: 5% auto;">Back to Post a Job</router-link>
+            </div>
          </v-flex>
       </v-layout>
       </v-card>
@@ -81,7 +93,9 @@ import JobSerivce from '../../services/JobService'
 import EmployerService from '../../services/EmployerService'
 export default {
   created(){
-    this.getJobInfo();
+     this.getJobInfo();
+  },
+  mounted(){
     this.getCategories();
     this.getJobTypes();
   },
@@ -89,11 +103,14 @@ export default {
     return {
       categoryChosen: '',
       type: '',
-
+      updated: false,
+      menu: false,
+      contentStillLoading: false,
       employersJob: {
         jobTitle: '',
         location:'',
         description: '',
+        apply_date: new Date().toISOString().substr(0, 10),
       },
       categories: [],
       statuses: [
@@ -101,6 +118,7 @@ export default {
         'Draft'
       ],
       jobTypes: [],
+      jobID: '',
     }
   },
   methods: {
@@ -109,56 +127,57 @@ export default {
         console.log(`Getting Job info from server...`)
         // Get employer job ID from router parameter
         let jobId = this.$store.state.route.params.jobId;
-        console.log(`Job ID: ${jobId}`);
+        this.jobID = jobId;
+       console.log(`Job ID: ${this.jobID}`);
         // Make request to JobService sending job :id
         let job = (await JobSerivce.viewJob(jobId)).data.data
-        console.log(`Job Returned: ${JSON.stringify(job)}`);
-        // Get response and check if employer object is returned and store that in the employer object if null is returned then empty employer object
+       // console.log(`Job Returned: ${JSON.stringify(job)}`);
+        // Get response and check if job object is returned and store that in the job object if null is returned then empty job object
         if (job === null) {
             this.employersJob = {}
         } else {
             this.employersJob = job;
+            this.contentStillLoading = false;
             // Update the vuex store with the currentEmployer object
-             // this.$store.dispatch('setCurrentEmployerAction', this.employer)
+            this.$store.dispatch('setJobCurrentlyBeingEditedAction', this.employersJob)
         }
     },
 
     async getCategories(){
        const catsReturned = await EmployerService.getJobCategories();
         this.categories = catsReturned.data.data;
-        console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
+        // console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
     },
     async getJobTypes(){
         const jobTypes = await EmployerService.getJobTypes()
         this.jobTypes = jobTypes.data.data[0];
-        console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
+        // console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
     },
 
      async updateJob(){
       // declare empty object to hold job values
          let jobObj = {};
         // Check for required values and store them in job object
-        if (this.employersJob.jobTitle) jobObj.jobTitle = this.jobTitle;
-        if (this.employersJob.location) jobObj.location = this.location;
+        if (this.employersJob.jobTitle) jobObj.jobTitle = this.employersJob.jobTitle;
+        if (this.employersJob.location) jobObj.location = this.employersJob.location;
         if (this.type)jobObj.type = this.type;
         if (this.status) jobObj.active = this.status;
-        if (this.employersJob.description) jobObj.description = this.description;
-        if (this.employersJob.apply_date) jobObj.job_ending = this.apply_date;
+        if (this.employersJob.description) jobObj.description = this.employersJob.description;
+        if (this.employersJob.apply_date) jobObj.job_ending = this.employersJob.apply_date;
         let employerId = this.$store.state.route.params.employerId;
         if (employerId) jobObj.EmployerId = employerId;
         for (var cat in this.categories) {
-            console.log(cat + ' ' + JSON.stringify(this.categories[cat]))
+            // console.log(cat + ' ' + JSON.stringify(this.categories[cat]))
              if (this.categories[cat].name === this.categoryChosen) {
                     jobObj.JobCategoryId = this.categories[cat].id;
              }
         }
-       const createdJob = await EmployerService.createJob(jobObj);
-       console.log(`Created Job: ${createdJob}`);
-        if (createdJob) {
-            console.log(`Created a Job ${JSON.stringify(jobObj)}`)
-            console.log(`Sending created job to store.`)
-          this.$store.dispatch('setCreatedJobAction', jobObj)
-          this.getEmployerJobs(this.$store.state.route.params.employerId);
+       console.log(`Job Object: ${JSON.stringify(jobObj)}`);
+       const updatedJob = await EmployerService.updateJob(jobObj);
+       console.log(`Created Job: ${JSON.stringify(updatedJob)}`);
+        if (updatedJob) {
+           this.updated = true;
+           // this.getEmployerJobs(this.$store.state.route.params.employerId);
         }
         console.log(JSON.stringify(jobObj))
     },

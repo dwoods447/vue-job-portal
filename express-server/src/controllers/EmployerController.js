@@ -40,9 +40,27 @@ const db = require('../models')
         }catch(err){
           `${err}`
         }
-        res.send({
-            data: 'Creating Job...'
-        })
+     },
+
+     async updateJob(req, res){
+        try {
+            let updateObj = {};
+             if(req.body.jobTitle)updateObj.jobTitle = req.body.jobTitle;
+             if(req.body.location)updateObj.location = req.body.location;
+             if(req.body.type)updateObj.type = req.body.type;
+             if(req.body.description)updateObj.description = req.body.description;
+             if(req.body.active)updateObj.active = req.body.active;
+             if(req.body.job_ending)updateObj.job_ending = req.body.job_ending;
+             if(req.body.JobCategoryId)updateObj.JobCategoryId = req.body.JobCategoryId;
+             const whereObj = {where:{EmployerId: req.body.EmployerId}}    
+             const job = Job.update(updateObj, whereObj)
+                console.log(`Job updated: ${JSON.stringify(job)}`);
+                res.send({
+                    data: job
+                })
+        }catch(err){
+          `${err}`
+        }
      },
 
      async getEmployerJobs(req, res){

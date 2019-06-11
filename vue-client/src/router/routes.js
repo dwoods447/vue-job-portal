@@ -22,7 +22,7 @@ const routes = [
   {path: '/job/:jobId/detail', component: JobDetail, name:'view.job.detail'},
   {path: '/employer/:employerId/detail', component: EmployerDetail, name:'view.employer.detail'},
   {path: '/employer/:employerId/create/job', component:  EmployerPostJob, name:'employer.post.job'},
-  {path: '/employer/:employerId/edit/job', component:  EditEmployerJob, name:'edit.employer.job'},
+  {path: '/employer/:employerId/edit/:jobId/job', component:  EditEmployerJob, name:'edit.employer.job'},
   {path: '/employer/:employerId/delete/job', name:'delete.employer.job'}
 ]
 

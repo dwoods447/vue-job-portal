@@ -13,7 +13,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 
 Vue.use(Vuetify, {
-  iconfont: 'mdi'
+  iconfont: 'md, mdi, fa, fa4'
 })
 Vue.use(VeeValidate)
 

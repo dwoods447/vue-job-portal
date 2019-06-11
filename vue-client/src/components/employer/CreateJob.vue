@@ -172,9 +172,9 @@ export default {
        const createdJob = await EmployerService.createJob(jobObj);
        console.log(`Created Job: ${createdJob}`);
         if (createdJob) {
-            console.log(`Created a Job ${JSON.stringify(jobObj)}`)
-            console.log(`Sending created job to store.`)
-          this.$store.dispatch('setCreatedJobAction', jobObj)
+           // console.log(`Created a Job ${JSON.stringify(jobObj)}`)
+           // console.log(`Sending created job to store.`)
+       //   this.$store.dispatch('setCreatedJobAction', jobObj)
           this.getEmployerJobs(this.$store.state.route.params.employerId);
         }
         console.log(JSON.stringify(jobObj))
@@ -182,18 +182,18 @@ export default {
     async getCategories(){
        const catsReturned = await EmployerService.getJobCategories();
         this.categories = catsReturned.data.data;
-        console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
+       // console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
     },
     async getJobTypes(){
         const jobTypes = await EmployerService.getJobTypes()
         this.jobTypes = jobTypes.data.data[0];
-        console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
+       // console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
     },
 
     async getEmployerJobs(employerId){
       const employerJobs = (await EmployerService.getEmployerJobs(employerId)).data.data;
       this.employersJobs = employerJobs;
-      console.log(`Employers Jobs ${JSON.stringify(this.employersJobs)}`);
+      // console.log(`Employers Jobs ${JSON.stringify(this.employersJobs)}`);
     }
   }
 }

@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     isEmployerLoggenIn: false,
     isJobseekerLoggenIn: false,
     createdJob: null,
+    currentlyBeingEdited: null,
   },
   plugins: [createPersistedState()],
   mutations: {
@@ -60,6 +61,10 @@ const store = new Vuex.Store({
     },
     setCreatedJobMutation(state, job){
       state.createdJob = job;
+    },
+
+    setJobCurrentlyBeingEditedMutation(state, job){
+      state.currentlyBeingEdited = job;
     }
   },
   getters: {
@@ -92,6 +97,9 @@ const store = new Vuex.Store({
     },
     setCreatedJobAction(context, job){
       context.commit('setCreatedJobMutation', job)
+    },
+    setJobCurrentlyBeingEditedAction(context, job){
+      context.commit('setJobCurrentlyBeingEditedMutation', job)
     }
   }
 

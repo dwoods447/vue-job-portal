@@ -96,7 +96,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer">{{this.$store.state.currentEmployer.slogan}}</span></v-list-tile-title>
+                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer">{{this.$store.state.currentEmployer.slogan | shortenString}}...</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -107,7 +107,7 @@
                       <v-list-tile-title>Company Description:</v-list-tile-title>
                      </v-list-tile-content>
                 </v-list-tile>
-                    <p v-if="this.$store.state.currentEmployer" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}</p>
+                    <p v-if="this.$store.state.currentEmployer" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}...</p>
              </div>
           </v-card>
           <br/>
@@ -191,6 +191,7 @@ export default {
         // Get employer profile ID from router parameter
         let employerId = this.$store.state.route.params.employerId;
         // Make request to ProfileService sending employer :id
+        console.log(`EmployerID: ${employerId}`);
         let employer = (await ProfileSerivce.getEmployerProfile(employerId)).data.data
         // Get response and check if employer object is returned and store that in the employer object if null is returned then empty employer object
         if (employer === null) {
