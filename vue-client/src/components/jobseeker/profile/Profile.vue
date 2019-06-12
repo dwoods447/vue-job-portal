@@ -244,7 +244,9 @@
                   >
                     <template v-slot:items="props">
                       <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
-
+                         <td>{{ props.item.location }}</td>
+                         <td>{{ props.item.date_posted | formateDate}}</td>
+                          <td>{{ props.item.date_applied | formateDate }}</td>
                     </template>
                   </v-data-table>
           </v-card>
@@ -255,6 +257,7 @@
 <script>
 import ProfileService from '../../../services/ProfileSerivce.js'
 import { setTimeout } from 'timers';
+import moment from 'moment'
 export default {
   created(){
     this.getProfileInfo();
@@ -280,6 +283,7 @@ export default {
         {text: 'Position/Type', value:'Position/Type'},
         {text: 'Location', value: 'Location'},
         {text: 'Date Posted', value:'Date Posted'},
+         {text: 'Date Applied', value:'Date Applied'},
       ],
        pagination: {
         pages: 1
@@ -289,6 +293,9 @@ export default {
   filters: {
     capitalize(word){
        return word.charAt(0).toUpperCase() + word.slice(1);
+    },
+     formateDate(date){
+      return moment(date).format('MMMM Do YYYY');
     }
   },
   methods: {

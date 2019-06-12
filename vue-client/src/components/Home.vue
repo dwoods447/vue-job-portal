@@ -1,5 +1,5 @@
 <template>
-      <v-container fluid grid-list-md style="max-width: 1200px;" ref="formContainer">
+      <v-container fluid grid-list-md  ref="formContainer">
         <v-layout row wrap>
               <v-flex xs12>
                           <h2>Search Jobs</h2>
@@ -7,7 +7,7 @@
                               @input="searchJobs" v-model="search">
                             </v-text-field>
               </v-flex>
-               <v-flex x12 justify-center>
+               <v-flex x12 justify-center style="max-width: 1200px; margin: 0 auto;">
                   <v-data-iterator
                     :items="jobs"
                     :rows-per-page-items="rowsPerPageItems"
@@ -21,7 +21,7 @@
                               <v-toolbar color="primary">
                                 <div>
                                   <h2><span class="white--text">{{ props.item.jobTitle}}</span></h2>
-                                  <div class="white--text">at {{props.item.company}} - {{props.item.location}}</div>
+                                  <div class="white--text">at {{props.item.Employer.company}} - near {{props.item.location}}</div>
                                 </div>
                                 <v-spacer style="width: 50%;"></v-spacer>
                                   <span class="yellow--text"><strong>{{props.item.type}}</strong></span>
@@ -41,6 +41,93 @@
                       </v-data-iterator>
                </v-flex>
 
+                <v-flex xs12>
+                        <h2>Featured Companies</h2>
+                        <v-layout row wrap>
+                            <v-flex xs4>
+                                <v-card>
+                                  <v-img
+                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                                    aspect-ratio="2.75"
+                                  ></v-img>
+
+                                  <v-card-title primary-title>
+                                    <div>
+                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                                      <div> {{ card_text }} </div>
+                                    </div>
+                                  </v-card-title>
+
+                                  <v-card-actions>
+                                    <v-btn flat color="orange">Share</v-btn>
+                                    <v-btn flat color="orange">Explore</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                            </v-flex>
+                            <v-flex xs4>
+                                 <v-card>
+                                  <v-img
+                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                                    aspect-ratio="2.75"
+                                  ></v-img>
+
+                                  <v-card-title primary-title>
+                                    <div>
+                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                                      <div> {{ card_text }} </div>
+                                    </div>
+                                  </v-card-title>
+
+                                  <v-card-actions>
+                                    <v-btn flat color="orange">Share</v-btn>
+                                    <v-btn flat color="orange">Explore</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                            </v-flex>
+                            <v-flex xs4>
+                                 <v-card>
+                                  <v-img
+                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                                    aspect-ratio="2.75"
+                                  ></v-img>
+
+                                  <v-card-title primary-title>
+                                    <div>
+                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                                      <div> {{ card_text }} </div>
+                                    </div>
+                                  </v-card-title>
+
+                                  <v-card-actions>
+                                    <v-btn flat color="orange">Share</v-btn>
+                                    <v-btn flat color="orange">Explore</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                </v-flex><!--  end of companies-->
+                <v-flex xs12>
+                      <v-layout row wrap>
+                          <v-flex style="max-width: 1200px; margin: 0 auto;" justify-center>
+                            <h2>Subscribe to our newsletter</h2>
+                             <h4>Get the best of our listings into your inbox. Issued weekly.</h4>
+                              <v-flex xs6 sm6 md6>
+                                  <v-text-field
+                                    label="Outline"
+                                    placeholder="Placeholder"
+                                    outline
+                                  ></v-text-field>
+                                </v-flex>
+                                 <v-flex xs6 sm6 md6>
+                                  <v-text-field
+                                    label="Outline"
+                                    placeholder="Placeholder"
+                                    outline
+                                  ></v-text-field>
+                                </v-flex>
+                          </v-flex>
+                      </v-layout>
+                </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -67,13 +154,14 @@ export default {
         rowsPerPage: 8
       },
       jobs: [],
+      card_text: 'Sample Text'
     }
   },
   methods: {
     async getAllJobs(){
           this.jobs = [];
           this.jobs = (await JobService.viewAllJobs()).data.data;
-         // console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
+          console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
     },
     async searchJobs () {
       console.log('Searching jobs....');

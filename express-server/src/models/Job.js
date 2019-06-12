@@ -22,9 +22,7 @@ module.exports = (sequelize, DataTypes) =>{
 
     Job.associate = function(models){
         Job.belongsTo(models.Employer)
-        Job.belongsTo(models.JobCategory) 
-        Job.belongsToMany(models.Jobseeker, {through: 'JobApplicants'})
-        Job.belongsToMany(models.Jobseeker, {through: 'Favorites'})
+        Job.belongsTo(models.JobCategory)
      }
    
     return Job;

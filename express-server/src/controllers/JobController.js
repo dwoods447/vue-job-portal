@@ -37,7 +37,9 @@ module.exports = {
     async viewAllJobs(req, res){
         try{
              console.log('Getting All jobs...');
-             const allJobs = await Job.findAll();
+             const allJobs = await Job.findAll({
+                include: [{ all: true }]
+             });
              // console.log('Converting to JSON...');
              // let allJobsJSON = allJobs.toJSON();
              console.log('Sending JSON back to receipeint...');
@@ -62,7 +64,8 @@ module.exports = {
                         [Op.like]: `%${req.params.search}%`
                       }
                     }))
-                }
+                },
+                include: [{ all: true }]
             })
             res.send({
                 data: job
@@ -81,10 +84,15 @@ module.exports = {
         try{
             const applicationSent = await JobApplicant.create({
                 JobId: req.params.jobId,
-                JobseekerId:req.params.jobseekerId
+                JobseekerId:req.params.jobseekerId,
+                
             });
+            console.log(`Result: ${JSON.stringify(applicationSent)}`)
+            // const updatedJobApplicantID = await JobApplicant.update({
+            //     where:{JobApplicantId: applicationSent.id}
+            // })
             res.send({
-                data: applicationSent
+                data: applicationSent,
             })
         } catch (error){
             '${error}'

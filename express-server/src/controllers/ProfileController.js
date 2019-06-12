@@ -1,7 +1,8 @@
 const {EmployerProfile} = require('../models')
  const {JobseekerProfile} = require('../models')
- const {JobApplicant} = require('../models')
- const {Job} = require('../models')
+//  const {JobApplicant} = require('../models')
+ const db = require('../models')
+
 module.exports = {
     async updateEmployerProfile(req, res){
         try{
@@ -22,7 +23,7 @@ module.exports = {
 
     async updateJobseekerProfile(req, res){
         try{
-            console.log(`Profile info received at first ${JSON.stringify(req.body)}`);
+            // console.log(`Profile info received at first ${JSON.stringify(req.body)}`);
             let updateObj = {};
             
             if (req.body.photo) {
@@ -52,9 +53,9 @@ module.exports = {
             
             let whereObj = {where:{ jobseekerId: req.body.id}}
             
-            console.log(`*** Object to be inserted: ${JSON.stringify(updateObj)}`)
+           // console.log(`*** Object to be inserted: ${JSON.stringify(updateObj)}`)
             const profile = await JobseekerProfile.update(updateObj, whereObj)
-            console.log(`Profile info sending back from update ${JSON.stringify(profile)}`);
+            // console.log(`Profile info sending back from update ${JSON.stringify(profile)}`);
             res.send({
                 profile: profile
             })
@@ -70,11 +71,11 @@ module.exports = {
     async getJobSeekerProfileInfo (req, res){
         try{
            
-            console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.jobseekerId)}`)
+            // console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.jobseekerId)}`)
             const jobSeeker = await JobseekerProfile.findOne({
                 where: {jobseekerId: req.params.jobseekerId}
             })
-            console.log(`Job Seeker that was found ${JSON.stringify(jobSeeker)}`);
+            // console.log(`Job Seeker that was found ${JSON.stringify(jobSeeker)}`);
             res.send({
                 jobseeker: jobSeeker
             })
@@ -87,12 +88,12 @@ module.exports = {
 
     async getEmployerProfileInfo(req, res){
     try{
-        console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.employerId)}`)
+        // console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.employerId)}`)
         const employer = await EmployerProfile.findOne({
             where: {employerId: req.params.employerId}
         })
 
-        console.log(`Employer that was found ${JSON.stringify(employer)}`);
+        // console.log(`Employer that was found ${JSON.stringify(employer)}`);
         res.send({
             data: employer
         })
@@ -105,16 +106,23 @@ module.exports = {
 
     async getJobAppliedFor(req, res){
       try{
-        console.log(`ID that was passed in: ${JSON.stringify(req.params.jobseekerId)}`)
-        const applications = await JobApplicant.findAll({
-            include: [{
-                model: Job,
-                through: {
-                  where: { jobseekerId: req.params.jobseekerId }
-                }
-              }]
-          });
-        console.log(`Jobs FOUND!!! ${JSON.stringify(applications)}`);
+         
+         console.log(`ID that was passed in: ${JSON.stringify(req.params.jobseekerId)}`)
+         console.log('\r\n\r\n')
+         console.log('\r\n\r\n')
+         const applications = await db.sequelize.query(`
+         SELECT jobapplicants.id as applicant_id, jobs.id as jobs_id, jobs.jobTitle, jobs.location, jobs.type, jobs.description, jobs.createdAt as 'date_posted', jobapplicants.createdAt as 'date_applied'
+         FROM jobapplicants
+         INNER JOIN jobs ON jobapplicants.JobId = jobs.id
+         INNER JOIN jobseekers ON jobapplicants.JobseekerId = jobseekers.id
+         WHERE jobapplicants.JobseekerId = ${req.params.jobseekerId}
+         `, { type: db.sequelize.QueryTypes.SELECT });
+        // const applications = await JobApplicant.findAll({
+        //     include: [{ all: true }]
+        //   });
+          console.log('\r\n\r\n')
+          console.log('\r\n\r\n')
+          console.log(`Getting Jobs Applied FOR!!!: ${JSON.stringify(applications)}`)
         res.send({
           data: applications
         })
