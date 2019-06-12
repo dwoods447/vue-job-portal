@@ -89,5 +89,22 @@ module.exports = {
         } catch (error){
             '${error}'
         }
+    },
+
+    async checkJobSeekerApplication(req, res){
+      console.log('Checking Application Server Side...');
+      console.log(`Request Params Jobseeker ID ${JSON.stringify(req.params.jobseekerId)}`)
+      console.log(`Request Params Job ID ${JSON.stringify(req.params.jobId)}`)
+      try{
+        const applicationSent = await JobApplicant.findOne({
+          where: {JobId: req.params.jobId, JobseekerId: req.params.jobseekerId }
+        });
+        console.log(`Application Status: ${JSON.stringify(applicationSent)}`)
+        res.send({
+            data: applicationSent
+        })
+      } catch (error){
+          '${error}'
+      }
     }
 }

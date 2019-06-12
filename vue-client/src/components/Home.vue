@@ -94,7 +94,7 @@ export default {
               loader.hide()
           }
       }
-      if (this.search.length < 2) {
+      if (this.search.length < 4) {
           this.getAllJobs();
       }
     }

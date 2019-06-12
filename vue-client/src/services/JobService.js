@@ -16,6 +16,9 @@ export default {
     },
     applyForJob(jobseekerId, jobId){
       return Api.post('/jobseeker/' + jobseekerId + '/job/' + jobId + '/apply')
+    },
+    checkJobApplication(jobseekerId, jobId){
+      return Api.get('/check/jobseeker/' + jobseekerId + '/job/' + jobId + '/application')
     }
 }
 

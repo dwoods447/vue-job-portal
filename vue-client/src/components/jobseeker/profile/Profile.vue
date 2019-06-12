@@ -1,10 +1,10 @@
 <template>
   <v-container>
-     <v-layout>
+     <v-layout row wrap>
     <v-flex xs3 class="section-container">
       <v-card>
         <v-toolbar>
-          Update Your Profile Photo
+          <h2>Update Your Profile Photo</h2>
         </v-toolbar>
         <v-img
           src="https://placehold.it/900x900"
@@ -21,7 +21,7 @@
       <br/>
        <v-card>
         <v-toolbar>
-          Update Your Resume
+          <h2>Update Your Resume</h2>
         </v-toolbar>
         <v-card-actions>
           <form action="">
@@ -33,7 +33,7 @@
       <br/>
        <v-card>
         <v-toolbar>
-          Update Your Cover Letter
+          <h2>Update Your Cover Letter</h2>
         </v-toolbar>
         <v-card-actions>
           <form action="">
@@ -49,7 +49,7 @@
     <v-flex xs-7 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-         Update Your Profile Information
+         <h2>Update Your Profile Information</h2>
         </v-toolbar>
         <v-list two-line>
 
@@ -130,10 +130,10 @@
     </v-flex>
 
 
-    <v-flex xs-3 class="section-container">
+    <v-flex xs-3 class="section-container" style="max-width: 650px;">
           <v-card>
             <v-toolbar>
-             <span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}}'s Profile information</span>
+              <h2><span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}}'s Profile information</span></h2>
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
@@ -193,13 +193,11 @@
                 </v-list-tile>
                     <p v-if="this.$store.state.currentJobSeeker" style="padding: 1em;"> {{this.$store.state.currentJobSeeker.bio}}</p>
              </div>
-
-
           </v-card>
           <br/>
           <v-card>
           <v-toolbar>
-           Profile Completion Status
+            <h2>Profile Completion Status</h2>
           </v-toolbar>
             <v-layout row wrap>
             <v-flex xs3 >
@@ -217,7 +215,7 @@
             </v-flex>
 
           <v-flex xs9 justify-center>
-            <h2>Steps to Complete:</h2>
+            <h3>Steps to Complete:</h3>
             <div v-for="step in stepsToComplete" :key="step">
             <v-list-tile>
               <v-list-tile-content>
@@ -226,9 +224,29 @@
             </v-list-tile>
             <v-divider></v-divider>
             </div>
-
             </v-flex>
             </v-layout>
+          </v-card>
+        </v-flex>
+        <br/>
+        <br/>
+        <v-flex xs12 class="section-container">
+          <v-card>
+              <v-toolbar>
+                <h2>Jobs You've Applied To</h2>
+              </v-toolbar>
+                  <v-data-table
+                    :headers="tableHeaders"
+                    :items="jobApplications"
+                    hide-actions
+                    :pagination.sync="pagination"
+                    class="elevation-1"
+                  >
+                    <template v-slot:items="props">
+                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+
+                    </template>
+                  </v-data-table>
           </v-card>
         </v-flex>
     </v-layout>
@@ -240,6 +258,7 @@ import { setTimeout } from 'timers';
 export default {
   created(){
     this.getProfileInfo();
+    this.checkJobsAppliedTo();
   },
   mounted(){
   },
@@ -256,6 +275,15 @@ export default {
       value: '50%',
       stepsToComplete: [],
       joBSeeker: {},
+      jobApplications: [],
+        tableHeaders: [
+        {text: 'Position/Type', value:'Position/Type'},
+        {text: 'Location', value: 'Location'},
+        {text: 'Date Posted', value:'Date Posted'},
+      ],
+       pagination: {
+        pages: 1
+      },
     }
   },
   filters: {
@@ -378,6 +406,20 @@ export default {
          this.stepsToComplete.push('Upload your Resume');
          this.stepsToComplete.push('Upload your Cover Letter');
      }
+    },
+
+    async checkJobsAppliedTo(){
+      if (this.$store.state.route.params) {
+        let jobseekerId = this.$store.state.route.params.jobseekerId;
+        if (jobseekerId) {
+           const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
+           console.log(`Job Apps: ${JSON.stringify(applications)}`)
+           if (applications) {
+             this.jobApplications = applications;
+           }
+            console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
+        }
+      }
     }
   },
    watch: {

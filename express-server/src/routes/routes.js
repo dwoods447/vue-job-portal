@@ -21,6 +21,8 @@ module.exports = (app)  =>{
     // Send jobseeker registration info
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
     app.post('/jobseeker/:jobseekerId/job/:jobId/apply', JobController.applyforJob)
+    app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
+    app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
 
     
  /**** Employer ****/

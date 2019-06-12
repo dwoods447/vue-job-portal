@@ -11,5 +11,8 @@ export default {
   },
   getEmployerProfile(id){
     return Api.get('/employer/' + id + '/profile', id)
+  },
+  checkJobsAppliedTo(jobseekerId){
+    return Api.get(`/jobseeker/${jobseekerId}/profile/applications`)
   }
 }

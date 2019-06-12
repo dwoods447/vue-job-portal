@@ -75,9 +75,25 @@
                 </v-list-tile>
                 <v-divider></v-divider>
 
-                <div v-if="this.$store.state.isJobseekerLoggenIn" class="justify-center text-xs-center">
-                  <router-link to="" style="text-decoration: none;" justify-center><v-btn color="success" style="min-width: 200px;">Apply</v-btn></router-link>
+                <div v-if="this.$store.state.isJobseekerLoggenIn && !alreadyApplied">
+                 <v-list-tile>
+                    <v-list-tile-content>
+                        <div  class="justify-center text-xs-center">
+                          <a href="javascript:void(0);" style="text-decoration: none;" justify-center @click="applyForJob"><v-btn color="success" style="min-width: 200px;">Apply</v-btn></a>
+                        </div>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-divider></v-divider>
                 </div>
+
+
+                 <v-list-tile v-if="this.$store.state.isJobseekerLoggenIn && alreadyApplied">
+                  <v-list-tile-content>
+                    <div class="green--text">
+                       <v-list-tile-title class="text-xs-center"><strong><span>You've Already Applied</span></strong></v-list-tile-title>
+                    </div>
+                  </v-list-tile-content>
+                </v-list-tile>
                 <v-divider></v-divider>
                 </v-card>
            </v-flex>
@@ -91,6 +107,7 @@ import moment from 'moment'
 export default {
   created(){
     this.getJobInfo();
+    this.checkExisitingJobApplication();
   },
   mounted(){
 
@@ -99,6 +116,7 @@ export default {
     return {
       job: {},
       company: {},
+      alreadyApplied: false,
     }
   },
   methods: {
@@ -129,6 +147,21 @@ export default {
           } else {
               console.log(`Application was not sent: ${applied}`)
           }
+          this.checkExisitingJobApplication();
+    },
+    async checkExisitingJobApplication(){
+      console.log(`Checking for application...`)
+      let jobId = this.$store.state.route.params.jobId;
+      if (this.$store.state.jobseeker) {
+       let jobseekerId = this.$store.state.jobseeker.id;
+       const applied = (await JobService.checkJobApplication(jobseekerId, jobId)).data.data
+          if (applied && applied !== null) {
+              console.log(`You have already applied to this job: ${JSON.stringify(applied)}`)
+              this.alreadyApplied = true;
+          } else {
+              console.log(`You have never applied to this job: ${JSON.stringify(applied)}`)
+          }
+      }
     }
   },
   computed: {

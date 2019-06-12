@@ -1,7 +1,7 @@
 const {EmployerProfile} = require('../models')
  const {JobseekerProfile} = require('../models')
-
-
+ const {JobApplicant} = require('../models')
+ const {Job} = require('../models')
 module.exports = {
     async updateEmployerProfile(req, res){
         try{
@@ -102,6 +102,29 @@ module.exports = {
             })
         }
     },
+
+    async getJobAppliedFor(req, res){
+      try{
+        console.log(`ID that was passed in: ${JSON.stringify(req.params.jobseekerId)}`)
+        const applications = await JobApplicant.findAll({
+            include: [{
+                model: Job,
+                through: {
+                  where: { jobseekerId: req.params.jobseekerId }
+                }
+              }]
+          });
+        console.log(`Jobs FOUND!!! ${JSON.stringify(applications)}`);
+        res.send({
+          data: applications
+        })
+      } catch(err){
+        res.send({
+          error:  `There was an error: ${err}`
+        })
+      }
+     
+    }
 
 
 }
