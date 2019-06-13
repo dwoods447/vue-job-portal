@@ -1,8 +1,16 @@
 const AuthenticationController = require('../controllers/AuthenticationController');
 const ProfileController = require('../controllers/ProfileController');
 const JobController = require('../controllers/JobController');
-const EmployerController = require('../controllers/EmployerController')
+const EmployerController = require('../controllers/EmployerController');
+// const { EmployerProfile } = require('../models')
+const multer = require('multer');
+const jobseeker = multer({
+    dest: '../uploads/jobseeker/'
+})
 
+const employer = multer({
+    dest: '../uploads/employer/'
+})
 
 module.exports = (app)  =>{
    
@@ -53,5 +61,38 @@ module.exports = (app)  =>{
     // Get individual company details
     app.get('/employer/job/:employerId/detail', JobController.employerJob)
 
-    
+    // Uploads
+        app.post('/jobseeker/:jobseekerId/resume/upload', jobseeker.single('file'), function(req, res){
+                res.send({
+                    file: req.file
+                })
+        })
+        
+        app.post('/jobseeker/:jobseekerId/coverletter/upload', jobseeker.single('file'), function(req,  res){ 
+            res.send({
+             data: 'Cover Letter uploaded',
+             file: req.body   
+            })
+        })
+        app.post('/employer/:employerId/company/photo/upload', employer.single('file'), function(req,  res){ 
+            res.send({
+                data: 'Photo uploaded',
+                file: req.body 
+                })
+        })
+        app.post('/employer/:employerId/company/logo/upload', employer.single('file') ,function(req,  res){ 
+            let regex = /([a-zA-Z0-9\s_\\.\-\(\):])+(.doc|.docx|.pdf|.txt)$/i
+            let originalFilename = req.file.originalname;
+            let position = originalFilename.search(regex)
+            let ext = originalFilename.substr(0, position)
+            // const logoSaved = EmployerProfile.update({
+            //     logo: req.file.destination +  req.file.filename
+            // })
+            console.log(`Original File name: ${JSON.stringify(originalFilename)}`);
+            console.log(`Position: ${JSON.stringify(position)}`)
+            console.log(`Extension: ${JSON.stringify(ext)}`)
+            res.json({
+                file: ext
+           })  
+        })
 }

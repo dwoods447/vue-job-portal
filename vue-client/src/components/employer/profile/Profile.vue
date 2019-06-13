@@ -2,7 +2,10 @@
   <v-container>
      <v-layout>
     <v-flex xs3 class="section-container">
-      <v-card>
+      <file-upload upload_header="Upload Company Logo" file_type=".jpg|.png" upload_label="Choose Logo" upload_name="company_logo"></file-upload>
+      <br/>
+      <file-upload upload_header="Upload Company Photo" file_type=".jpg|.png" upload_label="Choose Photo" upload_name="company_photo"></file-upload>
+      <!-- <v-card>
         <v-toolbar>
           Update Company Logo
         </v-toolbar>
@@ -34,7 +37,7 @@
           <v-btn flat color="orange" @change="companyPhotoUpload">Update</v-btn>
           </form>
         </v-card-actions>
-      </v-card>
+      </v-card> -->
     </v-flex>
 
 
@@ -150,7 +153,11 @@
 </template>
 <script>
 import ProfileSerivce from '../../../services/ProfileSerivce';
+import FileUpload from '../../fileupload/FileUpload'
 export default {
+  components: {
+    'file-upload': FileUpload
+  },
   created(){
     this.getProfileInfo();
   },

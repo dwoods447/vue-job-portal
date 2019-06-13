@@ -14,5 +14,19 @@ export default {
   },
   checkJobsAppliedTo(jobseekerId){
     return Api.get(`/jobseeker/${jobseekerId}/profile/applications`)
-  }
+  },
+  uploadResume(jobseekerId, resume){
+     return Api.post(`/jobseeker/${jobseekerId}/resume/upload`, resume)
+  },
+  uploadCoverLetter(jobseekerId, coverletter){
+    return Api.post(`/jobseeker/${jobseekerId}/coverletter/upload`, coverletter)
+  },
+  uploadCompanyPhoto(employerId, photo){
+    return Api.post(`/employer/${employerId}/company/photo/upload`, photo)
+  },
+  uploadCompanyLogo(employerId, logo){
+    const formData = new FormData();
+    formData.append('file', logo, logo.name)
+    return Api.post(`/employer/${employerId}/company/logo/upload`, formData)
+  },
 }

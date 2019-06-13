@@ -14,6 +14,7 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "no-useless-escape": "off"
     }
 };

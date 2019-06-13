@@ -26,6 +26,9 @@
            <v-list-tile  v-if="$store.state.isEmployerLoggenIn">
             <v-list-tile-title><a href="javascript:void(0)" @click="navigateTo('view.employer.profile', {employerId: $store.state.employer.id})">Employer Profile</a></v-list-tile-title>
           </v-list-tile>
+          <v-list-tile v-if="$store.state.isEmployerLoggenIn">
+            <v-list-tile-title><a href="javascript:void(0)"  @click="navigateTo('view.job.applicants', {employerId: $store.state.employer.id})">View Job Applicants</a></v-list-tile-title>
+          </v-list-tile>
            <v-list-tile v-if="$store.state.isEmployerLoggenIn">
             <v-list-tile-title><a href="javascript:void(0)"  @click="navigateTo('employer.post.job', {employerId: $store.state.employer.id})">Post a Job</a></v-list-tile-title>
           </v-list-tile>
