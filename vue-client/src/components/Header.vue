@@ -1,7 +1,7 @@
 <template>
   <div>
-  <v-toolbar>
-      <v-toolbar-title><v-btn  @click="navigateTo('home')" flat>Online Job Portal</v-btn></v-toolbar-title>
+  <v-toolbar color="primary">
+      <v-toolbar-title><v-btn  @click="navigateTo('home')" flat dark>Online Job Portal</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
       <v-menu offset-y v-if="!$store.state.isJobseekerLoggenIn">
@@ -12,8 +12,8 @@
             v-on="on"
             flat
           >
-            <span v-if="!$store.state.isEmployerLoggenIn">Employer</span>
-            <span  v-if="$store.state.isEmployerLoggenIn && $store.state.employer">{{$store.state.employer.company}}</span>
+            <span v-if="!$store.state.isEmployerLoggenIn" style="color: #fff;">Employer</span>
+            <span  v-if="$store.state.isEmployerLoggenIn && $store.state.employer" style="color: #fff;">{{$store.state.employer.company}}</span>
           </v-btn>
         </template>
         <v-list>
@@ -40,8 +40,8 @@
             v-on="on"
             flat
           >
-          <span v-if="!$store.state.isJobseekerLoggenIn">Jobseeker</span>
-          <span  v-if="$store.state.isJobseekerLoggenIn && $store.state.jobseeker">{{$store.state.jobseeker.name}}</span>
+          <span v-if="!$store.state.isJobseekerLoggenIn" style="color: #fff;">Jobseeker</span>
+          <span  v-if="$store.state.isJobseekerLoggenIn && $store.state.jobseeker" style="color: #fff;">{{$store.state.jobseeker.name}}</span>
           </v-btn>
         </template>
         <v-list>
@@ -57,7 +57,6 @@
         </v-list>
       </v-menu>
         <v-btn
-            color="primary"
             dark
             flat
            v-if="$store.state.isEmployerLoggenIn || $store.state.isJobseekerLoggenIn" @click="logout($store.state.isEmployerLoggenIn, $store.state.isJobseekerLoggenIn)">

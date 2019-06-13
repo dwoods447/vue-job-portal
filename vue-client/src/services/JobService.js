@@ -19,6 +19,9 @@ export default {
     },
     checkJobApplication(jobseekerId, jobId){
       return Api.get('/check/jobseeker/' + jobseekerId + '/job/' + jobId + '/application')
+    },
+    getEmployerJobApplicants(employerId){
+      return Api.get(`/employer/${employerId}/job/applicants`)
     }
 }
 

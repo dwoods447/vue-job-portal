@@ -23,7 +23,7 @@ module.exports = (app)  =>{
     app.post('/jobseeker/:jobseekerId/job/:jobId/apply', JobController.applyforJob)
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
     app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
-
+   
     
  /**** Employer ****/
     // Get employer profile info
@@ -40,7 +40,8 @@ module.exports = (app)  =>{
     app.post('/employer/create/job', EmployerController.createJob)
     app.post('/employer/update/job', EmployerController.updateJob)
     app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
-
+    app.get('/employer/featured/companies', EmployerController.getFeaturedCompanies)  
+    app.get(`/employer/:employerId/job/applicants`, EmployerController.getJobApplicants)
 
     /***** Job ****/   
     // Get all jobs

@@ -4,7 +4,7 @@
               <v-flex xs12>
                           <h2>Search Jobs</h2>
                             <v-text-field outline label="Search..." append-icon ="search"
-                              @input="searchJobs" v-model="search">
+                              @keyup="searchJobs" v-model="search">
                             </v-text-field>
               </v-flex>
                <v-flex x12 justify-center style="max-width: 1200px; margin: 0 auto;">
@@ -44,69 +44,28 @@
                 <v-flex xs12>
                         <h2>Featured Companies</h2>
                         <v-layout row wrap>
-                            <v-flex xs4>
+                            <v-flex xs4 v-for="company in featured_companies" :key="company.id">
                                 <v-card>
                                   <v-img
-                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                                    :src="company.coverphoto"
                                     aspect-ratio="2.75"
                                   ></v-img>
 
                                   <v-card-title primary-title>
                                     <div>
-                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                      <div> {{ card_text }} </div>
+                                      <h3 class="headline mb-0">{{company.company}}</h3>
                                     </div>
                                   </v-card-title>
 
                                   <v-card-actions>
-                                    <v-btn flat color="orange">Share</v-btn>
-                                    <v-btn flat color="orange">Explore</v-btn>
+                                    <router-link :to="{name:'view.employer.detail', params:{employerId: company.id}}"><v-btn flat color="orange">View Company</v-btn></router-link>
                                   </v-card-actions>
                                 </v-card>
                             </v-flex>
-                            <v-flex xs4>
-                                 <v-card>
-                                  <v-img
-                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-                                    aspect-ratio="2.75"
-                                  ></v-img>
 
-                                  <v-card-title primary-title>
-                                    <div>
-                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                      <div> {{ card_text }} </div>
-                                    </div>
-                                  </v-card-title>
-
-                                  <v-card-actions>
-                                    <v-btn flat color="orange">Share</v-btn>
-                                    <v-btn flat color="orange">Explore</v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                            </v-flex>
-                            <v-flex xs4>
-                                 <v-card>
-                                  <v-img
-                                    src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-                                    aspect-ratio="2.75"
-                                  ></v-img>
-
-                                  <v-card-title primary-title>
-                                    <div>
-                                      <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
-                                      <div> {{ card_text }} </div>
-                                    </div>
-                                  </v-card-title>
-
-                                  <v-card-actions>
-                                    <v-btn flat color="orange">Share</v-btn>
-                                    <v-btn flat color="orange">Explore</v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                            </v-flex>
                         </v-layout>
                 </v-flex><!--  end of companies-->
-                <v-flex xs12>
+                <!-- <v-flex xs12>
                       <v-layout row wrap>
                           <v-flex style="max-width: 1200px; margin: 0 auto;" justify-center>
                             <h2>Subscribe to our newsletter</h2>
@@ -127,7 +86,7 @@
                                 </v-flex>
                           </v-flex>
                       </v-layout>
-                </v-flex>
+                </v-flex> -->
         </v-layout>
     </v-container>
 </template>
@@ -135,11 +94,13 @@
 // import data from '../data'
 import Vue from 'vue'
 import JobService from '../services/JobService'
+import EmployerService from '../services/EmployerService'
 import LoadingOverlay from 'vue-loading-overlay'
 Vue.use(LoadingOverlay)
 export default {
   created () {
     this.getAllJobs();
+    this.getFeaturedCompanies();
   },
   mounted () {
     console.log('Component Mounted')
@@ -154,14 +115,20 @@ export default {
         rowsPerPage: 8
       },
       jobs: [],
-      card_text: 'Sample Text'
+      card_text: 'Sample Text',
+      featured_companies: [],
     }
   },
   methods: {
+    async getFeaturedCompanies(){
+       this.featured_companies = [];
+       this.featured_companies = (await EmployerService.getFeaturedCompanies()).data.data
+       console.log(`JCompanies returned: ${JSON.stringify(this.featured_companies)}`);
+    },
     async getAllJobs(){
           this.jobs = [];
           this.jobs = (await JobService.viewAllJobs()).data.data;
-          console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
+         // console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
     },
     async searchJobs () {
       console.log('Searching jobs....');
@@ -176,9 +143,9 @@ export default {
           this.jobs = (await JobService.searchJob(this.search)).data.data
           if (this.jobs) {
              loader.hide()
-            console.log(JSON.stringify(`Jobs returned: ${JSON.stringify(this.jobs)}`))
+           // console.log(JSON.stringify(`Jobs returned: ${JSON.stringify(this.jobs)}`))
           } else {
-             console.log(JSON.stringify(`No jobs returned: ${JSON.stringify(this.jobs)}`))
+            // console.log(JSON.stringify(`No jobs returned: ${JSON.stringify(this.jobs)}`))
               loader.hide()
           }
       }

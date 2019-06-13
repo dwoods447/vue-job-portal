@@ -78,5 +78,50 @@ const db = require('../models')
             `${err}`
          }
        
+     },
+     async getFeaturedCompanies(req, res){
+         try{
+            const featuredCompanies = await  db.sequelize.query(`
+            SELECT employers.id, employers.company, employerprofiles.website, employerprofiles.coverphoto,
+            employerprofiles.description
+            FROM  employerprofiles INNER JOIN employers ON employers.id = employerprofiles.EmployerId
+            ORDER BY RAND() LIMIT 3
+        `, { type: db.sequelize.QueryTypes.SELECT })
+        console.log('\r\n\r\n');
+        console.log('\r\n\r\n');
+         res.send({
+            data: featuredCompanies
+          })
+         } catch(err) {
+            res.send({
+                error:  `There was an error: ${err}`
+              })
+         }
+            
+     },
+
+     async getJobApplicants(req, res){
+        try{
+            const jobApplicants = await  db.sequelize.query(`
+            SELECT jobs.id, jobseekerprofiles.photo, jobseekerprofiles.address, jobseekerprofiles.phone, jobseekerprofiles.gender,
+            jobseekerprofiles.dob, jobseekerprofiles.bio, jobseekerprofiles.resume, jobseekerprofiles.coverletter,
+            jobseekers.name, jobseekers.email, jobs.jobTitle, jobs.type, jobs.EmployerId
+            FROM jobseekerprofiles 
+            INNER JOIN jobseekers ON jobseekerprofiles.JobseekerId = jobseekers.id
+            INNER JOIN jobapplicants ON jobseekers.id = jobapplicants.JobseekerId
+            INNER JOIN jobs ON jobapplicants.JobId = jobs.id
+            INNER JOIN employers ON employers.id = jobs.EmployerId
+            WHERE jobs.EmployerId = ${req.params.employerId}
+        `, { type: db.sequelize.QueryTypes.SELECT })
+        console.log('\r\n\r\n');
+        console.log('\r\n\r\n');
+         res.send({
+            data: jobApplicants
+          })
+         } catch(err) {
+            res.send({
+                error:  `There was an error: ${err}`
+              })
+         } 
      }
  }

@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) =>{
       }
     })
 
-    JobApplicant.associate = function(models){
-      JobApplicant.belongsToMany(models.Job, {through: JobApplicant})
-      JobApplicant.belongsToMany(models.Jobseeker, {through: JobApplicant})
-  }
+  //   JobApplicant.associate = function(models){
+  //     JobApplicant.belongsToMany(models.Job, {through: JobApplicant})
+  //     JobApplicant.belongsToMany(models.Jobseeker, {through: JobApplicant})
+  // }
 
     return JobApplicant;
 }	  

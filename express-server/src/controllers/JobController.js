@@ -2,6 +2,7 @@ const {Job} = require('../models')
 const {Employer} = require('../models')
  const { Op } = require('sequelize')
 const {JobApplicant} = require('../models')
+// const db = require('../models')
 module.exports = {
     async employerJob(req, res){
       const employer = await Employer.findOne({
@@ -82,6 +83,10 @@ module.exports = {
         console.log(`Request Params Job ID ${JSON.stringify(req.params.jobId)}`)
         console.log(`Request Body ${JSON.stringify(req.body)}`)
         try{
+        //     const applicationSent = await  db.sequelize.query(`
+        //     INSERT INTO jobapplicants (JobId, JobseekerId) VALUES (${req.params.jobId}, ${req.params.jobseekerId})
+        // `, { type: db.sequelize.QueryTypes.SELECT })
+
             const applicationSent = await JobApplicant.create({
                 JobId: req.params.jobId,
                 JobseekerId:req.params.jobseekerId,
@@ -95,7 +100,9 @@ module.exports = {
                 data: applicationSent,
             })
         } catch (error){
-            '${error}'
+            res.send({
+                data: error
+            })
         }
     },
 
@@ -112,7 +119,9 @@ module.exports = {
             data: applicationSent
         })
       } catch (error){
-          '${error}'
+        res.send({
+            data: error
+        })
       }
     }
 }
