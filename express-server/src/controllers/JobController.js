@@ -1,5 +1,6 @@
 const {Job} = require('../models')
 const {Employer} = require('../models')
+const { EmployerProfile } = require('../models')
  const { Op } = require('sequelize')
 const {JobApplicant} = require('../models')
 // const db = require('../models')
@@ -39,7 +40,10 @@ module.exports = {
         try{
              console.log('Getting All jobs...');
              const allJobs = await Job.findAll({
-                include: [{ all: true }]
+                include: [{ model: Employer, include: [
+                  {model: EmployerProfile}
+                ] }],
+                where: {active: 1}
              });
              // console.log('Converting to JSON...');
              // let allJobsJSON = allJobs.toJSON();
@@ -64,7 +68,8 @@ module.exports = {
                       [key]: {
                         [Op.like]: `%${req.params.search}%`
                       }
-                    }))
+                    })),
+                  active : 1  
                 },
                 include: [{ all: true }]
             })

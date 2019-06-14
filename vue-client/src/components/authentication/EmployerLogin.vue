@@ -1,6 +1,4 @@
 <template>
-<v-app id="inspire">
-    <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
@@ -18,9 +16,6 @@
                 </v-tooltip>
                 <v-tooltip right>
                   <template v-slot:activator="{ on }">
-                    <v-btn icon large href="https://codepen.io/johnjleider/pen/wyYVVj" target="_blank" v-on="on">
-                      <v-icon large>mdi-codepen</v-icon>
-                    </v-btn>
                   </template>
                   <span>Codepen</span>
                 </v-tooltip>
@@ -32,6 +27,8 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <div v-if="this.$store.state.successMessage"><strong><span style="color: green;">{{ this.$store.state.successMessage}}</span></strong></div>
+                <div style="padding: 1em;" v-if="invalidPassword"><strong><span style="color: red;">Incorrect Username and/or Password</span></strong></div>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="login">Login</v-btn>
               </v-card-actions>
@@ -39,8 +36,6 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-content>
-  </v-app>
 </template>
 <script>
 import AuthenticationSerivce from '../../services/AuthtenicationService'
@@ -58,6 +53,8 @@ export default {
     return {
       email:'',
       password:'',
+      invalidPassword: false,
+      emptyCredentials: false,
     }
   },
   methods: {
@@ -70,16 +67,33 @@ export default {
           if (response.status === 200) {
                 this.$store.dispatch('setEmployerTokenAction', response.data.token);
                 this.$store.dispatch('setEmployerAction', response.data.employer);
-              console.log(response);
-            confirm('You are logged in !!!!!');
-              this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
+                this.$store.dispatch('setSuccessMessageAction', null)
+                console.log(response);
+                confirm('You are logged in !!!!!');
+                this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
           }
-          if (response.statu === 403) {
-            confirm('Invalid email or password!')
+           if (response.status === 403) {
+              console.log(response);
+              this.$store.dispatch('setSuccessMessageAction', null)
+                this.invalidPassword = true;
+                 this.email = '';
+                 this.password = '';
           }
       } else {
-        confirm('Please enter an email and password')
+         this.$store.dispatch('setSuccessMessageAction', null)
+          this.invalidPassword = true;
+          this.email = '';
+          this.password = '';
       }
+    },
+
+    clearInvalid(){
+        this.invalidPassword = false;
+        this.$store.dispatch('setSuccessMessageAction', null)
+    },
+    resetForm(){
+      this.email = '';
+      this.password = '';
     }
   },
   computed: {

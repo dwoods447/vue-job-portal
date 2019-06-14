@@ -23,7 +23,7 @@ module.exports = {
 
     async updateJobseekerProfile(req, res){
         try{
-            // console.log(`Profile info received at first ${JSON.stringify(req.body)}`);
+             console.log(`Profile info received at first ${JSON.stringify(req.body)}`);
             let updateObj = {};
             
             if (req.body.photo) {

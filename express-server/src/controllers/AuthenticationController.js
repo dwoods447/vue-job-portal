@@ -29,7 +29,7 @@ module.exports = {
             const employer = await Employer.create(req.body)
             const emlProfile = await EmployerProfile.create({
                 company: employer.company,
-                employerId: employer.id
+                EmployerId: employer.id
             })
             const employerJSON = employer.toJSON()
             const  employerProfileJSON = emlProfile.toJSON()
@@ -51,10 +51,11 @@ module.exports = {
     },
     async jobseekerRegister(req, res) {
         try{
-            console.log(`Jobseeker email ${JSON.stringify(req.body)}`)
+            console.log(`Request Body ${JSON.stringify(req.body)}`)
+            console.log(`Jobseeker email ${JSON.stringify(req.body.email)}`)
             const jobseeker = await Jobseeker.create(req.body)
             const jobSeekProfile = await JobseekerProfile.create({
-                jobseekerId: jobseeker.id
+                JobseekerId: jobseeker.id
             })
             const  jobSeekProfileJSON = jobSeekProfile.toJSON()
             const jobseekerJSON = jobseeker.toJSON()

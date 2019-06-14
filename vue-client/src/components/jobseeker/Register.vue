@@ -107,15 +107,22 @@ export default {
                   email: this.jobSeekerRegistration.email,
                   password: this.jobSeekerRegistration.password
                 })
+                console.log(`Result of registration: ${JSON.stringify(res)}`);
+                console.log(`Message: ${JSON.stringify(res.data.message)}`);
                 if (res.status === 200){
-                  this.$router.push('/jobseeker/login');
+                   this.$store.dispatch('setSuccessMessageAction', res.data.message)
+                   this.$router.push({name: 'jobseeker.login'});
                 }
-              } else {
-                confirm('Passwords Do not Match!')
+                if (res.status === 403){
+                    confirm('You are unauthorized to peform this action');
+                }
+                if (res.status === 500){
+                   confirm('There was an error trying to perform this action');
+                }
               }
           }
         },
-        clear: function(){},
+
     },
     computed: {
 

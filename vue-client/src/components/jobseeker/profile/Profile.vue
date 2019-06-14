@@ -319,9 +319,8 @@ export default {
          console.log(`Sending data: ${JSON.stringify(obj)}`)
          const updated = await ProfileService.updateJobSeekerProfile(obj);
          if (updated) {
-            console.log(JSON.stringify(updated));
             console.log('Info has been updated.... Retriveing It')
-
+            console.log(JSON.stringify(updated));
             this.alertSubmit = false;
             this.getProfileInfo();
          }

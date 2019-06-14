@@ -1,11 +1,26 @@
 <template>
+     <div>
+      <v-parallax src="https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80">
+      <v-layout
+      align-left
+      column
+      justify-center
+      style="margin-top: -150px;"
+    >
+      <h1 class="display-2 font-weight-thin mb-3 blue--text"><strong>Online Job Portal</strong></h1>
+      <h4 class="subheading blue--text"><strong>Applicants Post your resume, and Submit your application today!</strong></h4>
+        <h4 class="subheading blue--text"><strong>Employers, Post a job, Find the perfect Applicant</strong></h4>
+    </v-layout>
+      </v-parallax>
+      <a style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px" href="https://unsplash.com/@anthonydelanoix?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Anthony DELANOIX"><span style="display:inline-block;padding:2px 3px"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-2px;fill:white" viewBox="0 0 32 32"><title>unsplash-logo</title><path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z"></path></svg></span><span style="display:inline-block;padding:2px 3px">Anthony DELANOIX</span></a>
       <v-container fluid grid-list-md  ref="formContainer">
+
         <v-layout row wrap>
-              <v-flex xs12>
-                          <h2>Search Jobs</h2>
-                            <v-text-field outline label="Search..." append-icon ="search"
-                              @keyup="searchJobs" v-model="search">
-                            </v-text-field>
+              <v-flex xs12 style="max-width: 1200px; margin: 0 auto;">
+                <h2>Search Jobs</h2>
+                <v-text-field outline label="Search..." append-icon ="search"
+                 @keyup="searchJobs" v-model="search">
+                </v-text-field>
               </v-flex>
                <v-flex x12 justify-center style="max-width: 1200px; margin: 0 auto;">
                   <v-data-iterator
@@ -19,6 +34,9 @@
                       <template v-slot:item="props">
                           <v-flex xs12  class="job-container">
                               <v-toolbar color="primary">
+                                <div>
+                                  <img :src="props.item.Employer.EmployerProfile.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
+                                </div>
                                 <div>
                                   <h2><span class="white--text">{{ props.item.jobTitle}}</span></h2>
                                   <div class="white--text">at {{props.item.Employer.company}} - near {{props.item.location}}</div>
@@ -46,10 +64,19 @@
                         <v-layout row wrap>
                             <v-flex xs4 v-for="company in featured_companies" :key="company.id">
                                 <v-card>
-                                  <v-img
+                                  <div v-if="company.coverphoto">
+                                    <v-img
                                     :src="company.coverphoto"
                                     aspect-ratio="2.75"
                                   ></v-img>
+                                  </div>
+                                  <div v-else>
+                                    <v-img
+                                    src="http://placehold.it/450x450"
+                                    aspect-ratio="2.75"
+                                  ></v-img>
+                                  </div>
+
 
                                   <v-card-title primary-title>
                                     <div>
@@ -89,6 +116,7 @@
                 </v-flex> -->
         </v-layout>
     </v-container>
+    </div>
 </template>
 <script>
 // import data from '../data'
@@ -123,12 +151,12 @@ export default {
     async getFeaturedCompanies(){
        this.featured_companies = [];
        this.featured_companies = (await EmployerService.getFeaturedCompanies()).data.data
-       console.log(`JCompanies returned: ${JSON.stringify(this.featured_companies)}`);
+       // console.log(`Featured Companies returned: ${JSON.stringify(this.featured_companies)}`);
     },
     async getAllJobs(){
           this.jobs = [];
           this.jobs = (await JobService.viewAllJobs()).data.data;
-         // console.log(`Jobs returned: ${JSON.stringify(this.jobs)}`);
+          // console.log(`Jobs returned: ${JSON.stringify(this.jobs, null, 2)}`);
     },
     async searchJobs () {
       console.log('Searching jobs....');

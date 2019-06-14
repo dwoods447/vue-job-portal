@@ -1,14 +1,6 @@
 <template>
       <v-container>
         <v-layout row wrap>
-              <v-flex xs12 justify-center v-if="hasMessage">
-              <v-alert
-                :value="hasMessage"
-                  type="success"
-                >
-              {{ message }}
-            </v-alert>
-              </v-flex>
                 <v-flex x12 justify-center>
                     <h2>Employer Registration</h2>
                     <v-card-actions class="justify-center">
@@ -108,8 +100,6 @@ export default {
     },
     data: function() {
         return {
-          hasMessage: false,
-          message: '',
           employerRegistration:{
             companyName: '',
             representative: '',
@@ -131,21 +121,21 @@ export default {
                   representative: this.employerRegistration.representative,
                   password: this.employerRegistration.password
                 })
+               console.log(`Message: ${JSON.stringify(res.data.message)}`);
                 if (res.status === 200){
-                    console.log(res.data);
-                    this.message = res.data.message;
-                    this.hasMessage = true;
-                    let $this = this;
-                    setTimeout(function(){
-                        $this.$router.push('/employer/login');
-                    }, 4300);
-              } else {
-                confirm('Passwords Do not Match!')
-              }
+                      this.$store.dispatch('setSuccessMessageAction', res.data.message)
+                      this.$router.push({name: 'employer.login'});
+               }
+               if (res.status === 403) {
+                   confirm('You are unauthorized to peform this action');
+               }
+               if (res.status === 500) {
+                  confirm('There was an error trying to perform this action');
+               }
             }
           }
         },
-        clear: function(){},
+
     },
     computed: {
 

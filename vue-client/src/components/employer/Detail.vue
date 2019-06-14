@@ -3,17 +3,16 @@
       <v-container>
          <v-card>
            <v-toolbar color="primary">
-                <h2><span class="white--text">Company Profile</span></h2>
-                <v-spacer></v-spacer>
+               <div>
+                 <img :src="employer.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
+               </div>
+               <h2><span class="white--text"><span v-if="company">{{company.company}}'s</span> Company Profile</span></h2>
+               <v-spacer></v-spacer>
                <h2><router-link :to="{name: 'home'}" class="white--text"> Back to Job List</router-link></h2>
            </v-toolbar>
          <v-layout row wrap>
            <v-flex xs7 class="detail-container">
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-list-tile-title>Company: <span v-if="company">{{company.company}}</span></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
+             <div>
                   <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>Slogan: <span v-if="employer">{{employer.slogan}}</span></v-list-tile-title>
@@ -38,18 +37,19 @@
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
-           </v-flex>
-           <v-flex xs4 class="detail-container">
-             <div style="height: 230px;">
-                  <img src="http://placehold.it/230x230" style="display: block; margin: 0 auto;">
              </div>
-           </v-flex>
-           <v-flex xs12>
-             <div style="padding: 1em;">
+              <div style="padding: 1em;">
                  <h2> Company Description: </h2>
                 <p>{{employer.description}}</p>
              </div>
            </v-flex>
+           <v-flex xs4 class="detail-container">
+             <div style="width: 100%;">
+                  <img :src="employer.coverphoto" style="width: 100%; display: block; margin: 0 auto;">
+             </div>
+           </v-flex>
+           </v-layout>
+           <v-layout row wrap>
             <v-flex xs12>
                  <div style="padding: 1em;">
                  <h2>Active Jobs</h2>
@@ -65,6 +65,7 @@
                       <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
                        <td>{{ props.item.location }}</td>
                         <td>{{ props.item.createdAt | formateDate }}</td>
+                        <td><router-link :to="{name:'view.job.detail', params:{jobId: props.item.id}}" target='_blank'><v-btn>View job</v-btn></router-link></td>
                     </template>
                   </v-data-table>
                   <!-- <div class="text-xs-center pt-2">
@@ -73,7 +74,7 @@
                 </div>
              </div>
             </v-flex>
-         </v-layout>
+             </v-layout>
          </v-card>
       </v-container>
   </div>

@@ -16,9 +16,13 @@ const store = new Vuex.Store({
     isJobseekerLoggenIn: false,
     createdJob: null,
     currentlyBeingEdited: null,
+    successMessage: '',
   },
   plugins: [createPersistedState()],
   mutations: {
+    setSuccessMessageMutation(state, message){
+      state.successMessage = message;
+    },
     setEmployerTokenMutation(state, token){
       state.token = token;
       if (token){
@@ -71,6 +75,9 @@ const store = new Vuex.Store({
 
   },
   actions: {
+    setSuccessMessageAction(context, message){
+     context.commit('setSuccessMessageMutation', message);
+    },
     setEmployerTokenAction(context, token){
       context.commit('setEmployerTokenMutation', token)
     },
