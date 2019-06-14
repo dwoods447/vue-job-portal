@@ -88,6 +88,7 @@ module.exports = (app)  =>{
             // const logoSaved = EmployerProfile.update({
             //     logo: req.file.destination +  req.file.filename
             // })
+            console.log(`File object: ${JSON.stringify(req.file)}`)
             console.log(`Original File name: ${JSON.stringify(originalFilename)}`);
             console.log(`Position: ${JSON.stringify(position)}`)
             console.log(`Extension: ${JSON.stringify(ext)}`)
