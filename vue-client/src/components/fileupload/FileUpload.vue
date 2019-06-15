@@ -17,8 +17,11 @@
           </form>
         </v-card-actions>
          <v-card-actions>
-            <div>
-              <h5>{{message}}</h5>
+            <div v-if="uploadError">
+              <h5 style="color:red;">{{message}}</h5>
+            </div>
+             <div v-if="uploadSuccess">
+              <h5 style="color:green;">{{message}}</h5>
             </div>
         </v-card-actions>
       </v-card>
@@ -32,6 +35,8 @@ export default {
     return {
       message: '',
       selectedFile: null,
+      uploadError: false,
+      uploadSuccess: false,
     }
   },
   methods: {
@@ -45,32 +50,58 @@ export default {
     async onSubmit(){
         if (this.upload_name === 'company_logo') {
             console.log(`Submitting....Company Logo`)
-            const fileUploadSuccesFull = (await ProfileService.uploadCompanyLogo(this.$store.state.route.params.employerId, this.selectedFile))
-            if (fileUploadSuccesFull) {
-                console.log('File Uploaded Succefully!');
-                console.log(`Logo Response: ${JSON.stringify(fileUploadSuccesFull)}`)
+            try {
+              const fileUploadSuccesFull = (await ProfileService.uploadCompanyLogo(this.$store.state.route.params.employerId, this.selectedFile)).data
+              console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+              if (fileUploadSuccesFull.error) {
+                this.uploadError = true;
+                 this.uploadSuccess = false;
+                this.message = 'There was an error uploading the file.'
+              } else {
+                 console.log('Successful file upload')
+                  this.uploadError = false;
+                  this.uploadSuccess = true;
+                  this.message = 'Successful file upload'
+              }
+            } catch (error) {
+              console.log(`There was an error uploading the file.: ${error}`);
+              this.uploadError = true;
+              this.uploadSuccess = false;
+              this.message = 'There was an error uploading the file.'
             }
         }
         if (this.upload_name === 'company_photo') {
            console.log(`Submitting....Company Photo`)
-          const fileUploadSuccesFull = (await ProfileService.uploadCompanyPhoto(this.$store.state.route.params.employerId, this.file))
+            const fileUploadSuccesFull = (await ProfileService.uploadCompanyPhoto(this.$store.state.route.params.employerId, this.file))
+            console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
            if (fileUploadSuccesFull) {
                 console.log('File Uploaded Succefully!');
+            }
+            if (fileUploadSuccesFull.status === 500) {
+              console.log('Error occured!')
             }
         }
         if (this.upload_name === 'jobseeker_resume') {
            console.log(`Submitting....Jobseeker Resume`)
               const fileUploadSuccesFull = (await ProfileService.uploadCompanyPhoto(this.$store.state.route.params.jobseekerId, this.file))
+               console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
                if (fileUploadSuccesFull) {
                 console.log('File Uploaded Succefully!');
-            }
+             }
+             if (fileUploadSuccesFull.status === 500) {
+               console.log('Error occured!')
+             }
         }
         if (this.upload_name === 'jobseeker_coverletter') {
           console.log(`Submitting....Jobseeker Cover Photo`)
               const fileUploadSuccesFull = (await ProfileService.uploadCoverLetter(this.$store.state.route.params.jobseekerId, this.file))
-               if (fileUploadSuccesFull) {
+               console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+              if (fileUploadSuccesFull) {
                 console.log('File Uploaded Succefully!');
-            }
+              }
+              if (fileUploadSuccesFull.status === 500) {
+              console.log('Error occured!')
+              }
         }
     }
   }

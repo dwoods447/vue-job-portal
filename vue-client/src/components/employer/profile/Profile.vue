@@ -237,7 +237,7 @@ export default {
 
     updateProgressStatus(employerObj){
       // Declare empty array to store steps to complete
-      console.log(`Progress status  employer obj: ${JSON.stringify(employerObj)}`)
+      // console.log(`Progress status  employer obj: ${JSON.stringify(employerObj)}`)
       this.stepsToComplete = [];
       // Set the progress status  = 1
       this.progressStatus = 1;

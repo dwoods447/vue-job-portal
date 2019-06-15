@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 app.use(cors());
 
 
-require('../src/routes/routes.js')(app)
+require('../src/routes/routes.js')(app, express)
 
 app.set('port', process.env.PORT || config.port);
 
