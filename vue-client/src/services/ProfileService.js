@@ -15,17 +15,30 @@ export default {
   checkJobsAppliedTo(jobseekerId){
     return Api.get(`/jobseeker/${jobseekerId}/profile/applications`)
   },
+  uploadJobseekerPhoto(jobseekerId, photo){
+    const formData = new FormData();
+    formData.append('file', photo, photo.name)
+     return Api.post(`/jobseeker/${jobseekerId}/jobseeker/photo/upload`, formData)
+  },
   uploadResume(jobseekerId, resume){
-     return Api.post(`/jobseeker/${jobseekerId}/resume/upload`, resume)
+    const formData = new FormData();
+    formData.append('file', resume, resume.name)
+     return Api.post(`/jobseeker/${jobseekerId}/resume/upload`, formData)
   },
   uploadCoverLetter(jobseekerId, coverletter){
-    return Api.post(`/jobseeker/${jobseekerId}/coverletter/upload`, coverletter)
+    const formData = new FormData();
+    formData.append('file', coverletter, coverletter.name)
+    return Api.post(`/jobseeker/${jobseekerId}/coverletter/upload`, formData)
   },
   uploadCompanyPhoto(employerId, photo){
-    return Api.post(`/employer/${employerId}/company/photo/upload`, photo)
+    const formData = new FormData();
+    console.log(photo)
+    formData.append('file', photo, photo.name)
+    return Api.post(`/employer/${employerId}/company/photo/upload`, formData)
   },
   uploadCompanyLogo(employerId, logo){
     const formData = new FormData();
+    console.log(logo)
     formData.append('file', logo, logo.name)
     return Api.post(`/employer/${employerId}/company/logo/upload`, formData)
   },

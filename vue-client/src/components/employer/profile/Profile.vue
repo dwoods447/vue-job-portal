@@ -2,42 +2,24 @@
   <v-container>
      <v-layout>
     <v-flex xs3 class="section-container">
-      <file-upload upload_header="Upload Company Logo" file_type=".jpg|.png" upload_label="Choose Logo" upload_name="company_logo"></file-upload>
+      <file-upload
+         upload_header="Upload Company Logo"
+         file_type="image"
+         upload_label="Choose Logo"
+         upload_name="company_logo"
+         profileType="employer"
+         :profileID="this.$store.state.route.params.employerId"
+         >
+      </file-upload>
       <br/>
-      <file-upload upload_header="Upload Company Photo" file_type=".jpg|.png" upload_label="Choose Photo" upload_name="company_photo"></file-upload>
-      <!-- <v-card>
-        <v-toolbar>
-          Update Company Logo
-        </v-toolbar>
-        <v-img
-          src="https://placehold.it/300x300"
-          aspect-ratio="2.75"
-        ></v-img>
-
-        <v-card-actions>
-          <form action="">
-            <input type="file">
-          <v-btn flat color="orange" @change="logoUpload">Update</v-btn>
-          </form>
-        </v-card-actions>
-      </v-card>
-      <br/>
-       <v-card>
-        <v-toolbar>
-          Update Company Photo
-        </v-toolbar>
-        <v-img
-          src="https://placehold.it/300x300"
-          aspect-ratio="2.75"
-        ></v-img>
-
-        <v-card-actions>
-          <form action="">
-            <input type="file">
-          <v-btn flat color="orange" @change="companyPhotoUpload">Update</v-btn>
-          </form>
-        </v-card-actions>
-      </v-card> -->
+      <file-upload
+      upload_header="Upload Company Photo"
+      file_type="image"
+      upload_label="Choose Photo"
+      upload_name="company_photo"
+      profileType="employer"
+      :profileID="this.$store.state.route.params.employerId"
+      ></file-upload>
     </v-flex>
 
 
@@ -84,14 +66,14 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Phone: <span v-if="this.$store.state.currentEmployer">{{this.$store.state.currentEmployer.phone}}</span></v-list-tile-title>
+                <v-list-tile-title>Phone: <span v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.phone !== null">{{this.$store.state.currentEmployer.phone}}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
               <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Website: <span v-if="this.$store.state.currentEmployer">{{this.$store.state.currentEmployer.website | shortenURL }}</span></v-list-tile-title>
+                <v-list-tile-title>Website: <span v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.website !== null">{{this.$store.state.currentEmployer.website | shortenURL }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -99,7 +81,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer">{{this.$store.state.currentEmployer.slogan | shortenString}}...</span></v-list-tile-title>
+                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.slogan !== null">{{this.$store.state.currentEmployer.slogan | shortenString}}...</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -110,7 +92,7 @@
                       <v-list-tile-title>Company Description:</v-list-tile-title>
                      </v-list-tile-content>
                 </v-list-tile>
-                    <p v-if="this.$store.state.currentEmployer" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}...</p>
+                    <p v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.description !== null" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}...</p>
              </div>
           </v-card>
           <br/>
@@ -152,8 +134,9 @@
   </v-container>
 </template>
 <script>
-import ProfileSerivce from '../../../services/ProfileSerivce';
+import ProfileService from '../../../services/ProfileService';
 import FileUpload from '../../fileupload/FileUpload'
+import EventBus from '../../../main'
 export default {
   components: {
     'file-upload': FileUpload
@@ -162,6 +145,11 @@ export default {
     this.getProfileInfo();
   },
   mounted(){
+     let $this = this;
+     EventBus.$on('update-employer-progress', function(){
+      console.log(`Updating the progress for the EmployerProfile`);
+      $this.getProfileInfo();
+    })
   },
   data: function(){
     return {
@@ -180,10 +168,18 @@ export default {
 
   filters: {
     shortenString(string){
-      return string.substring(0, (string.length / 12))
+      if (string && string !== null) {
+        return string.substring(0, (string.length / 12))
+       } else {
+         return '';
+      }
     },
     shortenURL(url){
-      return url.substring(0, (url.length / 14))
+       if (url && url !== null) {
+        return url.substring(0, (url.length / 14))
+       } else {
+         return '';
+      }
     }
   },
 
@@ -199,7 +195,7 @@ export default {
         let employerId = this.$store.state.route.params.employerId;
         // Make request to ProfileService sending employer :id
         console.log(`EmployerID: ${employerId}`);
-        let employer = (await ProfileSerivce.getEmployerProfile(employerId)).data.data
+        let employer = (await ProfileService.getEmployerProfile(employerId)).data.data
         // Get response and check if employer object is returned and store that in the employer object if null is returned then empty employer object
         if (employer === null) {
             this.employer = {}
@@ -223,7 +219,7 @@ export default {
          if (this.employer.slogan) emplObj.slogan = this.employer.slogan
          if (this.employer.description) emplObj.description = this.employer.description
         // Make request to ProfileService sending the employer object
-        const updatedEmployer = await ProfileSerivce.updateEmployerProfile(emplObj)
+        const updatedEmployer = await ProfileService.updateEmployerProfile(emplObj)
         // Check response and if updated employer object is retured
         if (updatedEmployer) {
            // If updated employer object is returned then call getProfileInfo function to pull down updated info
@@ -246,6 +242,7 @@ export default {
          let reqValuesObj = employerObj;
         // Loop through employer object ignoring keys with null values and foreach key increase the progress status by 6.999
          for (let key in reqValuesObj) {
+            console.log(reqValuesObj[key]);
            if (reqValuesObj[key] !== null) {
               this.progressStatus = this.progressStatus + 8.99
               // Check if progress status is greater than 100 if so set it to 100
@@ -261,7 +258,7 @@ export default {
               if (key === 'slogan') this.stepsToComplete.push('Enter Company Slogan')
               if (key === 'description') this.stepsToComplete.push('Enter Company Description')
               if (key === 'logo') this.stepsToComplete.push('Upload Company Logo')
-              if (key === 'photo') this.stepsToComplete.push('Upload Company Photo')
+              if (key === 'coverphoto') this.stepsToComplete.push('Upload Company Photo')
            }
          }
       } else {

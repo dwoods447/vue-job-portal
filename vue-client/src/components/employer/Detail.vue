@@ -81,7 +81,7 @@
 </template>
 <script>
 import JobService from '../../services/JobService'
-import ProfileSerivce from '../../services/ProfileSerivce';
+import ProfileService from '../../services/ProfileService';
 import moment from 'moment'
 export default {
   created(){
@@ -111,7 +111,7 @@ export default {
       console.log('Getting job info...')
       this.company = {}
       let company = (await JobService.employerJob(employerID)).data.data
-      let employer = (await ProfileSerivce.getEmployerProfile(employerID)).data.data
+      let employer = (await ProfileService.getEmployerProfile(employerID)).data.data
       this.company = company;
       this.employer = employer;
        console.log(`Employer Detail: ${JSON.stringify(company)}`)

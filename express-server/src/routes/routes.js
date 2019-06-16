@@ -3,6 +3,8 @@ const ProfileController = require('../controllers/ProfileController');
 const JobController = require('../controllers/JobController');
 const EmployerController = require('../controllers/EmployerController');
 const { EmployerProfile } = require('../models')
+const { JobseekerProfile } = require('../models')
+
 const multer = require('multer');
 const path = require('path')
 let employer_storage = multer.diskStorage({
@@ -24,7 +26,7 @@ let jobseeker_storage = multer.diskStorage({
     }
 });
 
-const fileFilter = (req, file, cb) =>{
+const imageFilter = (req, file, cb) =>{
     // Set Allowed ext
     const allowedFiletypes = /jpeg|jpg|png|gif/;
     // Check ext
@@ -38,24 +40,49 @@ const fileFilter = (req, file, cb) =>{
     }
 }
 
+
+
+const documentFilter = (req, file, cb) =>{
+      // Set Allowed ext
+    const allowedFiletypes = /pdf|doc|docx/;
+    // Check ext
+    const extname = allowedFiletypes.test(path.extname(file.originalname).toLowerCase());
+    // Check mime
+    const mimetype = allowedFiletypes.test(file.mimetype);
+    if(mimetype && extname){
+        cb(null, true)
+    }else{
+        cb(new Error('File type must be an document: .doc, .docx, or .pdf!'), false);
+    }
+}
+
 const employer_upload = multer({
     storage: employer_storage, 
     limits: { fieldSize: 1024 * 1024 * 8 },  
-    fileFilter: fileFilter
+    fileFilter: imageFilter
 }).single('file');
 
 const jobseeker_upload = multer({
     storage: jobseeker_storage, 
     limits: {fieldSize: 1024 * 1024 * 8},  
-    fileFilter: fileFilter
+    fileFilter: imageFilter
 }).single('file');
+
+
+const jobseeker_document = multer({
+     storage: jobseeker_storage,
+     limits: {fieldSize: 1024 * 1024 * 8}, 
+     fileFilter: documentFilter
+}).single('file');
+
 
 module.exports = (app, express)  =>{
     app.get('/', (req, res)=>{
         res.send('This is the server start page')
     })
 
-  app.use('/uploads/employers',express.static('../../uploads/employers/'))
+  app.use('/uploads',express.static('uploads'))
+  app.use('/trees', express.static('public'))
 
  /**** Job Seeker ****/
     // Get employer profile info
@@ -100,7 +127,7 @@ module.exports = (app, express)  =>{
     app.get('/employer/job/:employerId/detail', JobController.employerJob)
 
     // Uploads
-        app.post('/jobseeker/:jobseekerId/resume/upload', function(req, res){
+          app.post('/jobseeker/:jobseekerId/jobseeker/photo/upload', function(req, res){
             jobseeker_upload(req, res, function(err){
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
@@ -115,9 +142,43 @@ module.exports = (app, express)  =>{
                     })
                 } else {
                     // Everything went fine
+                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    const url  = "http://localhost:3000/"+ filepath;
+                    JobseekerProfile.update({photo: url },
+                      {where:{ JobseekerId: req.params.jobseekerId }});
                     res.status(200).send({
                         'success': 'Every thing went fine'
                     })
+                } 
+                  
+              
+            })
+        })
+
+
+        app.post('/jobseeker/:jobseekerId/resume/upload', function(req, res){
+          jobseeker_document(req, res, function(err){
+                if(err instanceof multer.MulterError){
+                    console.log(`There was a multer error:${err}`);
+                    // Multer Error
+                    res.status(500).send({
+                        error: err
+                    })
+                } else if (err){
+                    // Unknown error
+                    res.status(500).send({
+                        error: err
+                    })
+                } else {
+                    // Everything went fine
+                     // Everything went fine
+                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                     const url  = "http://localhost:3000/"+ filepath;
+                     JobseekerProfile.update({resume: url},
+                       {where: {JobseekerId: req.params.jobseekerId}})
+                     res.status(200).send({
+                         'success': 'Every thing went fine'
+                     })
                 } 
                    
                
@@ -125,7 +186,7 @@ module.exports = (app, express)  =>{
         })
         
         app.post('/jobseeker/:jobseekerId/coverletter/upload', function(req,  res){ 
-            jobseeker_upload(req, res, function(err){
+          jobseeker_document(req, res, function(err){
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
@@ -139,6 +200,10 @@ module.exports = (app, express)  =>{
                     })
                 }  else {
                     // Everything went fine
+                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    const url  = "http://localhost:3000/"+ filepath;
+                    JobseekerProfile.update({coverletter: url},
+                      {where: {JobseekerId: req.params.jobseekerId}})
                     res.status(200).send({
                         'success': 'Every thing went fine'
                     })
@@ -149,6 +214,7 @@ module.exports = (app, express)  =>{
         })
         app.post('/employer/:employerId/company/photo/upload', function(req,  res){ 
             employer_upload(req, res, function(err){
+              console.log(`File: ${JSON.stringify(req.file)}`);
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
@@ -162,7 +228,10 @@ module.exports = (app, express)  =>{
                     })
                 }  else {
                     // Everything went fine
-
+                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    const url  = "http://localhost:3000/"+ filepath;
+                    EmployerProfile.update({coverphoto: url},
+                      {where: {EmployerId: req.params.employerId}})
                     res.status(200).send({
                         'success': 'Every thing went fine'
                     })
@@ -190,7 +259,9 @@ module.exports = (app, express)  =>{
                         })
                     }  else {
                         // Everything went fine
-                        EmployerProfile.update({logo: req.file.path,},
+                        const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                        const url  = "http://localhost:3000/"+ filepath;
+                        EmployerProfile.update({logo: url},
                             {where: {EmployerId: req.params.employerId}})
                         res.status(200).send({
                             'success': 'Every thing went fine'
@@ -201,6 +272,7 @@ module.exports = (app, express)  =>{
                
         })
 
+        
 
 
         

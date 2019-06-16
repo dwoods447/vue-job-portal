@@ -2,46 +2,35 @@
   <v-container>
      <v-layout row wrap>
     <v-flex xs3 class="section-container">
-      <v-card>
-        <v-toolbar>
-          <h2>Update Your Profile Photo</h2>
-        </v-toolbar>
-        <v-img
-          src="https://placehold.it/900x900"
-          aspect-ratio="3.57"
-        ></v-img>
-
-        <v-card-actions>
-          <form action="">
-            <input type="file" @change="photoUpload">
-          <v-btn flat color="orange">Update</v-btn>
-          </form>
-        </v-card-actions>
-      </v-card>
+        <file-upload
+         upload_header="Update Your Profile Photo"
+         file_type="image"
+         upload_label="Choose Photo"
+         upload_name="profilephoto"
+         profileType="jobseeker"
+         :profileID="this.$store.state.route.params.jobseekerId"
+         >
+      </file-upload>
       <br/>
-       <v-card>
-        <v-toolbar>
-          <h2>Update Your Resume</h2>
-        </v-toolbar>
-        <v-card-actions>
-          <form action="">
-            <input type="file" @change="resumeUpload">
-          <v-btn flat color="orange">Update</v-btn>
-          </form>
-        </v-card-actions>
-      </v-card>
+      <file-upload
+         upload_header="Update Your Resume"
+         file_type="document"
+         upload_label="Choose File"
+         upload_name="resume"
+         profileType="jobseeker"
+         :profileID="this.$store.state.route.params.jobseekerId"
+         >
+      </file-upload>
       <br/>
-       <v-card>
-        <v-toolbar>
-          <h2>Update Your Cover Letter</h2>
-        </v-toolbar>
-        <v-card-actions>
-          <form action="">
-            <input type="file" @change="coverLetterUpload">
-          <v-btn flat color="orange">Update</v-btn>
-          </form>
-        </v-card-actions>
-      </v-card>
+       <file-upload
+         upload_header="Update Your Cover Letter"
+         file_type="document"
+         upload_label="Choose File"
+         upload_name="coverletter"
+         profileType="jobseeker"
+         :profileID="this.$store.state.route.params.jobseekerId"
+         >
+      </file-upload>
       <br/>
     </v-flex>
 
@@ -179,7 +168,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobseeker"><span>{{ this.$store.state.currentJobseeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -255,15 +244,25 @@
   </v-container>
 </template>
 <script>
-import ProfileService from '../../../services/ProfileSerivce.js'
-import { setTimeout } from 'timers';
+import ProfileService from '../../../services/ProfileService.js'
+import FileUpload from '../../fileupload/FileUpload'
+import EventBus from '../../../main'
+import { setTimeout } from 'timers'
 import moment from 'moment'
 export default {
+  components: {
+    'file-upload': FileUpload
+  },
   created(){
     this.getProfileInfo();
     this.checkJobsAppliedTo();
   },
   mounted(){
+   let $this = this;
+    EventBus.$on('update-jobseeker-progress', function(){
+      console.log(`Updating the progress for the JobseekerProfile`);
+      $this.getProfileInfo();
+    })
   },
   data: function(){
     return {

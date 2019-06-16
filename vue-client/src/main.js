@@ -10,7 +10,9 @@ import {sync} from 'vuex-router-sync'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+ const EventBus = new Vue();
 
+ export default EventBus;
 
 Vue.use(Vuetify, {
   iconfont: 'md, mdi, fa, fa4'

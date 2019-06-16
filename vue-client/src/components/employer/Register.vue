@@ -136,6 +136,10 @@ export default {
           }
         },
 
+        clear(){
+
+        }
+
     },
     computed: {
 
