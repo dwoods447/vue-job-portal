@@ -1,22 +1,12 @@
-module.exports = (sequelize, DataTypes) =>{
+module.exports = (sequelize) =>{
     const JobApplicant = sequelize.define('JobApplicant', {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-        },
-          JobId: {
-             type: DataTypes.INTEGER,
-          },
-          JobseekerId: {
-                type: DataTypes.INTEGER,
-      }
+    
     })
 
-  //   JobApplicant.associate = function(models){
-  //     JobApplicant.belongsToMany(models.Job, {through: JobApplicant})
-  //     JobApplicant.belongsToMany(models.Jobseeker, {through: JobApplicant})
-  // }
+    JobApplicant.associate = function(models){
+      JobApplicant.belongsTo(models.Job)
+      JobApplicant.belongsTo(models.Jobseeker)
+  }
 
     return JobApplicant;
 }	  

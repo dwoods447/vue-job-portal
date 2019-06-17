@@ -1,5 +1,6 @@
 import Api from './Api'
 export default {
+
   updateJobSeekerProfile(info){
     return Api.post('/jobseeker/profile', info)
   },
@@ -14,6 +15,9 @@ export default {
   },
   checkJobsAppliedTo(jobseekerId){
     return Api.get(`/jobseeker/${jobseekerId}/profile/applications`)
+  },
+  getFavoritedJobs(jobseekerId){
+    return Api.get(`/jobseeker/${jobseekerId}/profile/favorites`)
   },
   uploadJobseekerPhoto(jobseekerId, photo){
     const formData = new FormData();

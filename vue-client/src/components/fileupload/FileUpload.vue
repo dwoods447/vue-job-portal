@@ -4,18 +4,19 @@
         <v-toolbar>
            {{  upload_header }}
         </v-toolbar>
-        <div v-if="urlLoaded && url !== null && file_type !== 'document'">
+        <div v-if="url !== null && file_type !== 'document'">
           <v-img
             :src="url"
             aspect-ratio="1"
+            v-model="url"
           ></v-img>
         </div>
-        <div v-if="noURL && file_type !== 'document'">
+        <!-- <div v-if="noURL && file_type !== 'document'">
         <v-img
           src="https://placehold.it/300x300"
           aspect-ratio="2.75"
         ></v-img>
-        </div>
+        </div> -->
         <v-card-actions>
           <form @submit.prevent="onSubmit" enctype="multipart/form-data">
             <label>{{ upload_label }}</label>
@@ -53,6 +54,16 @@ export default {
       urlLoaded: false,
     }
   },
+  computed: {
+
+  },
+  watch: {
+    url(newUrl, oldValue){
+      var date = new Date();
+      var timestamp = date.getTime();
+      console.log(`At: ${timestamp} Url changed to: ${newUrl}, Old value was ${oldValue}`);
+    }
+  },
   methods: {
     onSelect: function(e){
         console.log(e);
@@ -64,34 +75,43 @@ export default {
     async getImageUrl(uploadName){
       console.log('Getting Image....')
       if (this.profileID && this.profileType === 'employer') {
+        // Pull down url from backend
          let employer = (await ProfileService.getEmployerProfile(this.profileID)).data.data
-           console.log(`Employer: ${JSON.stringify(employer)}`)
+          // console.log(`Employer: ${JSON.stringify(employer)}`)
+          // Check for result
           if (employer){
+            // Check name of component
              if (uploadName === 'company_logo') {
+               // If the url is not null set new url
                if (employer.logo !== null) {
                 this.url = employer.logo;
                 this.noURL = false;
-                this.urlLoaded = true;
                }
             }
             if (uploadName === 'company_photo') {
               if (employer.coverphoto !== null) {
                this.url = employer.coverphoto;
                this.noURL = false;
-               this.urlLoaded = true;
               }
            }
           }
       }
       if (this.profileID && this.profileType === 'jobseeker') {
        let seeker = (await ProfileService.getJobseekerProfile(this.profileID)).data.jobseeker;
-       console.log(`Seeker: ${JSON.stringify(seeker)}`)
+       // console.log(`Seeker: ${JSON.stringify(seeker)}`)
        if (seeker) {
          if (uploadName === 'profilephoto') {
            if (seeker.photo !== null){
+                console.log(`Setting seeker url to: ${seeker.photo}`)
                 this.url = seeker.photo;
+                console.log(`Url set to: ${this.url}`)
+                console.log(`Unhiding image`)
                 this.noURL = false;
                 this.urlLoaded = true;
+                console.log(`Unhiding image`)
+           } else {
+             console.log(`Seeker photo in the db is null setting image url to placehold.it`)
+              this.url = 'https://placehold.it/300x300'
            }
          }
          if (uploadName === 'coverletter') {
@@ -121,13 +141,13 @@ export default {
             try {
               // Upload File
               const fileUploadSuccesFull = (await ProfileService.uploadCompanyLogo(this.$store.state.route.params.employerId, this.selectedFile)).data
-              console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+               console.log(`Upload results : ${JSON.stringify(fileUploadSuccesFull)}`)
               if (fileUploadSuccesFull.error) {
                 this.uploadError = true;
                  this.uploadSuccess = false;
                 this.message = 'There was an error uploading the file.'
               } else {
-                 console.log('Successful file upload')
+                 // console.log('Successful file upload')
                  // If file success change image url
                   this.getImageUrl(this.upload_name);
                   this.uploadError = false;
@@ -148,13 +168,13 @@ export default {
            console.log(`Submitting....Company Photo`)
            try {
           const fileUploadSuccesFull = (await ProfileService.uploadCompanyPhoto(this.$store.state.route.params.employerId, this.selectedFile)).data
-            console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+            console.log(`Upload results : ${JSON.stringify(fileUploadSuccesFull)}`)
            if (fileUploadSuccesFull.error) {
                   this.uploadError = true;
                  this.uploadSuccess = false;
                 this.message = 'There was an error uploading the file.'
            } else {
-                console.log('File Uploaded Succefully!');
+                // console.log('File Uploaded Succefully!');
                  this.getImageUrl(this.upload_name);
                   this.uploadError = false;
                   this.uploadSuccess = true;
@@ -171,8 +191,8 @@ export default {
         }
         if (this.upload_name === 'profilephoto'){
           try {
-            const fileUploadSuccesFull = (await ProfileService.uploadJobseekerPhoto(this.$store.state.route.params.jobseekerId, this.selectedFile)).data
-            console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+            const fileUploadSuccesFull = (await ProfileService.uploadJobseekerPhoto(this.$store.state.route.params.jobseekerId, this.selectedFile)).data.data
+            console.log(`Upload results ${JSON.stringify(fileUploadSuccesFull)}`)
              if (fileUploadSuccesFull.error) {
                   this.uploadError = true;
                  this.uploadSuccess = false;
@@ -197,7 +217,7 @@ export default {
           try {
             console.log(`Submitting....Jobseeker Resume`)
               const fileUploadSuccesFull = (await ProfileService.uploadResume(this.$store.state.route.params.jobseekerId, this.selectedFile)).data
-               console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+               console.log(`Upload results ${JSON.stringify(fileUploadSuccesFull)}`)
              if (fileUploadSuccesFull.error) {
                console.log('Error occured!')
                 this.uploadError = true;
@@ -222,7 +242,7 @@ export default {
            try {
               console.log(`Submitting....Jobseeker Cover Letter`)
               const fileUploadSuccesFull = (await ProfileService.uploadCoverLetter(this.$store.state.route.params.jobseekerId, this.selectedFile)).data
-              console.log(`${JSON.stringify(fileUploadSuccesFull)}`)
+              console.log(`Upload results ${JSON.stringify(fileUploadSuccesFull)}`)
               if (fileUploadSuccesFull.error) {
               console.log('Error occured!')
               } else {

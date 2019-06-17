@@ -2,6 +2,15 @@ import Api from './Api';
 
 
 export default {
+    addJobToFavorites(jobId, jobseekerId){
+      return Api.get(`/jobseeker/${jobseekerId}/favorite/job/${jobId}`)
+    },
+    removeJobFromFavorites(jobId, jobseekerId){
+      return Api.get(`/jobseeker/${jobseekerId}/favorite/remove/job/${jobId}`)
+    },
+    checkFavoritedJob(jobId, jobseekerId){
+      return Api.get(`/check/jobseeker/${jobseekerId}/favorite/job/${jobId}`)
+    },
     viewAllJobs(){
      return Api.get('/jobs/all')
     },

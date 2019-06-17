@@ -22,7 +22,11 @@ let jobseeker_storage = multer.diskStorage({
         cb(null, 'uploads/jobseekers/')
     },
     filename: function(req, file, cb){
-        cb(null,  new Date().toISOString().replace(/:/g, '-')+'_'+ file.originalname)
+        let date = new Date();
+        let time = date.getTime();
+        let filename = date.toISOString().replace(/:/g, '-')+'_'+time+'_'+ file.originalname;
+        console.log(`Filename: ${filename}`);
+        cb(null,  filename)
     }
 });
 
@@ -96,8 +100,10 @@ module.exports = (app, express)  =>{
     app.post('/jobseeker/:jobseekerId/job/:jobId/apply', JobController.applyforJob)
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
     app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
-   
-    
+    app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', JobController.addJobToFavorites)
+    app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', JobController.removeJobFromFavorites)
+    app.get('/check/jobseeker/:jobseekerId/favorite/job/:jobId', JobController.checkFavoritedJob)
+    app.get('/jobseeker/:jobseekerId/profile/favorites', ProfileController.getFavoritedJobsForJobseekerProfile)
  /**** Employer ****/
     // Get employer profile info
     app.get('/employer/:employerId/profile', ProfileController.getEmployerProfileInfo)

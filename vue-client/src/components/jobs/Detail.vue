@@ -66,9 +66,10 @@
                 <v-divider></v-divider>
 
 
-
-
-                 <v-list-tile v-if="!this.$store.state.isJobseekerLoggenIn">
+                  <div>
+                   <v-layout row wrap>
+                      <v-flex xs6>
+                           <v-list-tile v-if="!this.$store.state.isJobseekerLoggenIn">
                   <v-list-tile-content>
                     <v-list-tile-title><span style="color: red;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
                   </v-list-tile-content>
@@ -95,6 +96,23 @@
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
+
+
+                      </v-flex>
+                       <v-flex xs6>
+                          <div style="padding: 0.5em;" v-if="this.$store.state.isJobseekerLoggenIn">
+
+                               <span v-if="isFavorited"><a href="#"  @click.prevent="unFavorite" class="favorites">
+                                 <v-icon color="red darken-2">fas fa-heart</v-icon>
+                              </a>&nbsp;&nbsp;Remove from Favorites</span>
+                              <span v-else><a href="#"  @click.prevent="favorite" class="favorites">
+                                <v-icon color="red darken-2">far fa-heart</v-icon>
+                              </a>&nbsp;&nbsp;Mark as Favorite</span>
+                          </div>
+                      </v-flex>
+                   </v-layout>
+                  </div>
+
                 </v-card>
            </v-flex>
          </v-layout>
@@ -108,6 +126,7 @@ export default {
   created(){
     this.getJobInfo();
     this.checkExisitingJobApplication();
+    this.checkFavoritedJob();
   },
   mounted(){
 
@@ -117,9 +136,32 @@ export default {
       job: {},
       company: {},
       alreadyApplied: false,
+      isFavorited: false,
     }
   },
   methods: {
+    async unFavorite(){
+      this.isFavorited = !this.isFavorited;
+      let jobseekerID = this.$store.state.jobseeker.id;
+      let jobID = this.$store.state.route.params.jobId;
+      console.log(`Jobseeker: ${jobseekerID} Unfavoriting job id: ${jobID}`);
+       let jobResponse = (await JobService.removeJobFromFavorites(jobID, jobseekerID)).data.data;
+      console.log(`Unfavorite response: ${JSON.stringify(jobResponse)}`)
+       if (jobResponse) {
+         console.log('Unfavorite Response not empty')
+       }
+    },
+    async favorite(){
+      this.isFavorited = !this.isFavorited;
+      let jobseekerID = this.$store.state.jobseeker.id;
+      let jobID = this.$store.state.route.params.jobId;
+      console.log(`Jobseeker: ${jobseekerID} favoriting job id: ${jobID}`);
+      let jobResponse = (await JobService.addJobToFavorites(jobID, jobseekerID)).data.data;
+      console.log(`Favorite repsonse: ${JSON.stringify(jobResponse)}`)
+      if (jobResponse) {
+        console.log('Unfavorite Response not empty')
+      }
+    },
     async getJobInfo(){
       this.job = {};
        const jobId = this.$store.state.route.params.jobId;
@@ -162,6 +204,23 @@ export default {
               console.log(`You have never applied to this job: ${JSON.stringify(applied)}`)
           }
       }
+    },
+    async checkFavoritedJob(){
+      console.log(`Checking for favorites...`)
+      let jobId = this.$store.state.route.params.jobId;
+      if (this.$store.state.jobseeker) {
+       let jobseekerId = this.$store.state.jobseeker.id;
+       console.log(`Checking jobseeker id: ${jobseekerId} favorite status for job: ${jobId}`)
+       const markedAsFavorite = (await JobService.checkFavoritedJob(jobId, jobseekerId)).data.data
+        console.log(`Results of favorite status: ${JSON.stringify(markedAsFavorite)}`)
+          if (markedAsFavorite && markedAsFavorite !== null) {
+              console.log(`You have already marked this job as a favorite: ${JSON.stringify(markedAsFavorite)}`)
+              this.isFavorited = true;
+          } else {
+              console.log(`You have never marked this job as a favorite: ${JSON.stringify(markedAsFavorite)}`)
+              this.isFavorited = false;
+          }
+      }
     }
   },
   computed: {
@@ -176,3 +235,8 @@ export default {
 
 }
 </script>
+<style scoped>
+  .favorites{
+    text-decoration: none !important;
+  }
+</style>

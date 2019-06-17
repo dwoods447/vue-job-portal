@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     createdJob: null,
     currentlyBeingEdited: null,
     successMessage: '',
+    currentProfileImagUrl: null,
   },
   plugins: [createPersistedState()],
   mutations: {
@@ -69,6 +70,9 @@ const store = new Vuex.Store({
 
     setJobCurrentlyBeingEditedMutation(state, job){
       state.currentlyBeingEdited = job;
+    },
+    setCurrentUploadedProfilePhotoMutation(state, url){
+      state.currentProfileImagUrl = url;
     }
   },
   getters: {
@@ -107,6 +111,9 @@ const store = new Vuex.Store({
     },
     setJobCurrentlyBeingEditedAction(context, job){
       context.commit('setJobCurrentlyBeingEditedMutation', job)
+    },
+    setCurrentUploadedProfilePhotoAction(context, url){
+      context.commit('setCurrentUploadedProfilePhotoMutation', url)
     }
   }
 

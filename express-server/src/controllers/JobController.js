@@ -3,8 +3,71 @@ const {Employer} = require('../models')
 const { EmployerProfile } = require('../models')
  const { Op } = require('sequelize')
 const {JobApplicant} = require('../models')
+const {Favorite} = require('../models')
 // const db = require('../models')
 module.exports = {
+    async checkFavoritedJob(req, res){
+        console.log('Checking JobFavorites Server Side...');
+        console.log(`Request Params Jobseeker ID ${JSON.stringify(req.params.jobseekerId)}`)
+        console.log(`Request Params Job ID ${JSON.stringify(req.params.jobId)}`)
+        try{
+          const isInFavorites = await Favorite.findOne({
+            where: {JobId: req.params.jobId, JobseekerId: req.params.jobseekerId }
+          });
+          console.log(`Favorites Status: ${JSON.stringify(isInFavorites)}`)
+          res.send({
+              data: isInFavorites
+          })
+        } catch (error){
+          res.send({
+              data: error
+          })
+        }
+    },
+
+    async addJobToFavorites (req, res){
+        try {
+            console.log(`Add to Job Favorites params: ${JSON.stringify(req.params)}`);
+            const favoritedJob = await Favorite.create({
+                JobId: req.params.jobid,
+                JobseekerId: req.params.jobseekerId
+            });
+            let favoritedJobJSON = favoritedJob.toJSON();
+            res.send({
+                data: favoritedJobJSON,
+              
+            })
+        } catch (error){
+            res.send({
+                error: error,
+                
+            })
+        }
+    
+    },
+
+    async removeJobFromFavorites(req, res){
+        try {
+            console.log(`Remove Job Favorites params: ${JSON.stringify(req.params)}`);
+            const favoritedJob = await Favorite.destroy({
+                where:  {
+                JobId: req.params.jobid,
+                JobseekerId: req.params.jobseekerId
+              }
+            });
+            let favoritedJobJSON = favoritedJob.toJSON();
+            res.send({
+                data: favoritedJobJSON,
+              
+            })
+        } catch (error){
+            res.send({
+                error: error,
+                
+            })
+        }
+    },
+
     async employerJob(req, res){
       const employer = await Employer.findOne({
         where: {

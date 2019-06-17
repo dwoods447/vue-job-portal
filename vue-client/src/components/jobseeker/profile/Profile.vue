@@ -161,20 +161,20 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.resume }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Resume: <a :href="this.$store.state.currentJobSeeker.resume" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.resume }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a href="javascript:void(0)" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a :href="this.$store.state.currentJobSeeker.coverlette" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
 
-             <div style="padding: 0.3em;">
+             <div style="padding: 0.3em;  word-wrap: break-word;">
                <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>Bio:</v-list-tile-title>
@@ -232,13 +232,35 @@
                     class="elevation-1"
                   >
                     <template v-slot:items="props">
-                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
-                         <td>{{ props.item.location }}</td>
-                         <td>{{ props.item.date_posted | formateDate}}</td>
-                          <td>{{ props.item.date_applied | formateDate }}</td>
+                      <td>{{ props.item.Job.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+                         <td>{{ props.item.Job.location }}</td>
+                         <td>{{ props.item.Job.date_posted | formateDate}}</td>
+                          <td>{{ props.item.Job.date_applied | formateDate }}</td>
                     </template>
                   </v-data-table>
           </v-card>
+        </v-flex>
+
+        <v-flex xs12 class="section-container">
+            <v-card>
+              <v-toolbar>
+                <h2>Favorite Jobs</h2>
+              </v-toolbar>
+                <v-data-table
+                    :headers="tableHeaders"
+                    :items="favorites"
+                    hide-actions
+                    :pagination.sync="pagination"
+                    class="elevation-1"
+                  >
+                    <template v-slot:items="props">
+                      <td>{{ props.item.Job.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+                         <td>{{ props.item.Job.location }}</td>
+                         <td>{{ props.item.Job.date_posted | formateDate}}</td>
+                          <td>{{ props.item.Job.date_applied | formateDate }}</td>
+                    </template>
+                  </v-data-table>
+            </v-card>
         </v-flex>
     </v-layout>
   </v-container>
@@ -256,6 +278,7 @@ export default {
   created(){
     this.getProfileInfo();
     this.checkJobsAppliedTo();
+    this.getFavoritedJobs();
   },
   mounted(){
    let $this = this;
@@ -278,6 +301,7 @@ export default {
       stepsToComplete: [],
       joBSeeker: {},
       jobApplications: [],
+      favorites: [],
         tableHeaders: [
         {text: 'Position/Type', value:'Position/Type'},
         {text: 'Location', value: 'Location'},
@@ -315,11 +339,11 @@ export default {
         if (this.joBSeeker.photo) obj.photo = this.joBSeeker.photo
         if (this.joBSeeker.resume) obj.resume = this.joBSeeker.resume
         if (this.joBSeeker.coverletter) obj.coverletter = this.joBSeeker.coverletter
-         console.log(`Sending data: ${JSON.stringify(obj)}`)
+        // console.log(`Sending data: ${JSON.stringify(obj)}`)
          const updated = await ProfileService.updateJobSeekerProfile(obj);
          if (updated) {
-            console.log('Info has been updated.... Retriveing It')
-            console.log(JSON.stringify(updated));
+           // console.log('Info has been updated.... Retriveing It')
+           // console.log(JSON.stringify(updated));
             this.alertSubmit = false;
             this.getProfileInfo();
          }
@@ -342,24 +366,24 @@ export default {
     async getProfileInfo() {
        this.joBSeeker = {};
        const seekerId = this.$store.state.route.params.jobseekerId;
-       console.log(`Route params: ${seekerId}`);
+      // console.log(`Route params: ${seekerId}`);
        let seeker = (await ProfileService.getJobseekerProfile(seekerId)).data.jobseeker;
        if (seeker === null) {
          this.joBSeeker = {};
        } else {
         this.joBSeeker = seeker;
        }
-       console.log(JSON.stringify(seeker))
+      // console.log(JSON.stringify(seeker))
 
-       console.log(`Setting Current Jobseeker in store state : ${JSON.stringify(this.joBSeeker)}`)
+       // console.log(`Setting Current Jobseeker in store state : ${JSON.stringify(this.joBSeeker)}`)
        this.$store.dispatch('setCurrentJobseekerAction', this.joBSeeker)
-       console.log(`Current Job Seeker in STATE: ${JSON.stringify(this.$store.state.currentJobSeeker)}`)
+      //  console.log(`Current Job Seeker in STATE: ${JSON.stringify(this.$store.state.currentJobSeeker)}`)
        // console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
        this.updateProgressStatus(this.joBSeeker);
     },
     updateProgressStatus(joBSeeker){
-       console.log(`Getting progress status`);
-      console.log(JSON.stringify(joBSeeker))
+      // console.log(`Getting progress status`);
+      // console.log(JSON.stringify(joBSeeker))
      this.stepsToComplete = [];
      this.progressStatus = 1;
      if (joBSeeker) {
@@ -370,7 +394,7 @@ export default {
               if (requireValues[key] !== null) {
                 this.progressStatus = this.progressStatus + 8.29;
                 if (this.progressStatus > 100) {
-                  this.this.progressStatus = 100;
+                  this.progressStatus = 100;
                 }
               } else {
                     if (key === 'address') {
@@ -418,11 +442,25 @@ export default {
         let jobseekerId = this.$store.state.route.params.jobseekerId;
         if (jobseekerId) {
            const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
-           console.log(`Job Apps: ${JSON.stringify(applications)}`)
+          // console.log(`Job Apps: ${JSON.stringify(applications)}`)
            if (applications) {
              this.jobApplications = applications;
            }
-            console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
+          //  console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
+        }
+      }
+    },
+
+    async getFavoritedJobs(){
+        if (this.$store.state.route.params) {
+        let jobseekerId = this.$store.state.route.params.jobseekerId;
+        if (jobseekerId) {
+           const favorites = (await ProfileService.getFavoritedJobs(jobseekerId)).data.data;
+          // console.log(`Favorited Jobs: ${JSON.stringify(favorites)}`)
+           if (favorites) {
+             this.favorites = favorites;
+           }
+           // console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
         }
       }
     }

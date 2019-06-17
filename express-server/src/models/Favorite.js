@@ -1,12 +1,11 @@
-module.exports = (sequelize, DataTypes) =>{
+module.exports = (sequelize) =>{
     const Favorite = sequelize.define('Favorite', {
-          jobId: {
-             type: DataTypes.INTEGER,
-          },
-          jobseekerId: {
-                type: DataTypes.INTEGER,
-          }
-    })
+       })
+
+       Favorite.associate = function(models){
+       Favorite.belongsTo(models.Job)
+       Favorite.belongsTo(models.Jobseeker)
+  }
 
     return Favorite;
 }

@@ -1,9 +1,32 @@
 const {EmployerProfile} = require('../models')
- const {JobseekerProfile} = require('../models')
-//  const {JobApplicant} = require('../models')
- const db = require('../models')
+const {JobseekerProfile} = require('../models')
+const {Favorite} = require('../models')
+const {JobApplicant} = require('../models')
 
 module.exports = {
+
+    async getFavoritedJobsForJobseekerProfile(req, res){
+        try {
+            console.log(`Favorites for id ${JSON.stringify(req.params.jobseekerId)}`);
+            const favorites = await Favorite.findAll({
+                where: {
+                    JobseekerId: req.params.jobseekerId
+                },
+                include: [{
+                    all: true
+                }]
+            })
+            console.log(`Favorites returned: ${JSON.stringify(favorites)}`)
+            res.send({
+                data: favorites
+            })
+        } catch (error){
+            res.send({
+               error: error
+            })
+        }
+        
+    },
     async updateEmployerProfile(req, res){
         try{
             const profile = await EmployerProfile.findOne({where:{id: req.body.id}})
@@ -110,16 +133,16 @@ module.exports = {
          console.log(`ID that was passed in: ${JSON.stringify(req.params.jobseekerId)}`)
          console.log('\r\n\r\n')
          console.log('\r\n\r\n')
-         const applications = await db.sequelize.query(`
-         SELECT jobapplicants.id as applicant_id, jobs.id as jobs_id, jobs.jobTitle, jobs.location, jobs.type, jobs.description, jobs.createdAt as 'date_posted', jobapplicants.createdAt as 'date_applied'
-         FROM jobapplicants
-         INNER JOIN jobs ON jobapplicants.JobId = jobs.id
-         INNER JOIN jobseekers ON jobapplicants.JobseekerId = jobseekers.id
-         WHERE jobapplicants.JobseekerId = ${req.params.jobseekerId}
-         `, { type: db.sequelize.QueryTypes.SELECT });
-        // const applications = await JobApplicant.findAll({
-        //     include: [{ all: true }]
-        //   });
+        //  const applications = await db.sequelize.query(`
+        //  SELECT jobapplicants.id as applicant_id, jobs.id as jobs_id, jobs.jobTitle, jobs.location, jobs.type, jobs.description, jobs.createdAt as 'date_posted', jobapplicants.createdAt as 'date_applied'
+        //  FROM jobapplicants
+        //  INNER JOIN jobs ON jobapplicants.JobId = jobs.id
+        //  INNER JOIN jobseekers ON jobapplicants.JobseekerId = jobseekers.id
+        //  WHERE jobapplicants.JobseekerId = ${req.params.jobseekerId}
+        //  `, { type: db.sequelize.QueryTypes.SELECT });
+        const applications = await JobApplicant.findAll({
+            include: [{ all: true }]
+          });
           console.log('\r\n\r\n')
           console.log('\r\n\r\n')
           console.log(`Getting Jobs Applied FOR!!!: ${JSON.stringify(applications)}`)
