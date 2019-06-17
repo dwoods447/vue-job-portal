@@ -76,6 +76,7 @@ module.exports = {
     },
 
     async employerLogin(req, res) {
+         // Check email
         try{
             const {email, password } = req.body;
             console.log(`Employer email ${email}\r\n\r\n`)
@@ -84,93 +85,67 @@ module.exports = {
                 where: {
                     email: email
                 }
-                })
-         console.log(`Employer email ${req.body.email}`)
-         console.log(`Employer ${JSON.stringify(employer.toJSON())}`);
-        if(!employer){
-            console.log('No employer found in db');
+         })
+         if(!employer){
                res.status(403).send({
-                   error: 'This email or password is incorrect'
-               })     
-        }
-      
-
-        try{
-        const isPasswordValid = await employer.comparePassword(password)
-        console.log(`Hash return ${isPasswordValid}`)
-        if(!isPasswordValid){
-            console.log('Password is not valid');
+                        error: 'This email or password is incorrect'
+              })     
+           }
+         // Check password   
+         try{
+            const isPasswordValid = await employer.comparePassword(password)
+            if(!isPasswordValid){
+                res.status(403).send({
+                error: 'This email or password is incorrect'
+             })     
+            }}catch(err){
                 res.status(403).send({
                     error: 'This email or password is incorrect'
                 })     
-       
-        }
-       
-        }catch(err){
-         return `${err}`
-        }
-  
+            }
+      // If email and password is correct send back jwt token and employer info
         const employerJSON = employer.toJSON()
-
         res.send({
                employer: employerJSON,
                token: jwtSignEmployer(employerJSON)
         })
-
-
         }catch(error){
-            res.status(500).send({ error: `An error has occured to login: ${error}`})
+            res.status(500).send({ error: `An error has occured trying to login`})
         }
-       
-    
     },
 
     async jobseekerLogin(req, res) {
+        // Check email
         try{
-           
             const {email, password } = req.body;
-            console.log(`Jobseeker email ${email}\r\n\r\n`)
-            console.log(`Jobseeker password ${email}\r\n\r\n`)
-            const jobseeker = await Jobseeker.findOne({ 
-                where: {
-                    email: email
-                }
-                })
-         console.log(`Jobseeker email ${req.body.email}`)
-         console.log(`Jobseeker ${JSON.stringify(jobseeker.toJSON())}`);
-        if(!jobseeker){
-            console.log('No jobseeker found in db');
-               res.status(403).send({
-                   error: 'This email or password is incorrect'
-               })     
-        }
-      
-
+            const jobseeker = await Jobseeker.findOne({ where: { email: email}
+          })
+            if(!jobseeker){
+            res.status(403).send({
+                error: 'This email or password is incorrect'
+            })     
+            }
+        // Check password
         try{
         const isPasswordValid = await jobseeker.comparePassword(password)
-        console.log(`Hash return ${isPasswordValid}`)
-        if(!isPasswordValid){
-            console.log('Password is not valid');
+            if(!isPasswordValid){
                 res.status(403).send({
                     error: 'This email or password is incorrect'
                 })     
-       
-        }
-       
+            }
         }catch(err){
-         return `${err}`
+            res.status(403).send({
+                error: 'This email or password is incorrect'
+            })     
         }
-  
+        // If email and password is correct send back jwt token and jobseeker info
         const jobseekerJSON = jobseeker.toJSON()
-
         res.send({
                jobseeker: jobseekerJSON,
                token: jwtSignJobSeeker(jobseekerJSON)
         })
-
-
-        }catch(error){
-            res.status(500).send({ error: `An error has occured to login: ${error}`})
+        } catch(error){
+            res.status(500).send({ error: `An error has occured while trying to login:`})
         }
     }
     

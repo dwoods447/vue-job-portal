@@ -16,12 +16,14 @@
 
       <v-container fluid grid-list-md  ref="formContainer">
         <v-layout row wrap>
-              <v-flex xs12 style="max-width: 1200px; margin: 0 auto;">
+           <v-flex xs12 style="max-width: 1200px; margin: 0 auto;">
                 <h2>Search Jobs</h2>
                 <v-text-field outline label="Search..." append-icon ="search"
                  @keyup="searchJobs" v-model="search">
                 </v-text-field>
               </v-flex>
+        </v-layout>
+        <v-layout column>
                <v-flex x12 justify-center style="max-width: 1200px; margin: 0 auto;">
                   <v-data-iterator
                     :items="jobs"
@@ -34,7 +36,7 @@
                       <template v-slot:item="props">
                           <v-flex xs12  class="job-container">
                               <v-toolbar color="primary">
-                                <div>
+                                <div v-if="props.item.Employer.EmployerProfile">
                                   <img :src="props.item.Employer.EmployerProfile.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
                                 </div>
                                 <div>
@@ -58,7 +60,11 @@
                         </template>
                       </v-data-iterator>
                </v-flex>
-                <v-flex xs12>
+
+
+        </v-layout>
+        <v-layout row wrap>
+            <v-flex xs12>
                         <h2>Featured Companies</h2>
                         <v-layout row wrap>
                             <v-flex xs4 v-for="company in featured_companies" :key="company.id">
@@ -91,28 +97,6 @@
 
                         </v-layout>
                 </v-flex><!--  end of companies-->
-                <!-- <v-flex xs12>
-                      <v-layout row wrap>
-                          <v-flex style="max-width: 1200px; margin: 0 auto;" justify-center>
-                            <h2>Subscribe to our newsletter</h2>
-                             <h4>Get the best of our listings into your inbox. Issued weekly.</h4>
-                              <v-flex xs6 sm6 md6>
-                                  <v-text-field
-                                    label="Outline"
-                                    placeholder="Placeholder"
-                                    outline
-                                  ></v-text-field>
-                                </v-flex>
-                                 <v-flex xs6 sm6 md6>
-                                  <v-text-field
-                                    label="Outline"
-                                    placeholder="Placeholder"
-                                    outline
-                                  ></v-text-field>
-                                </v-flex>
-                          </v-flex>
-                      </v-layout>
-                </v-flex> -->
         </v-layout>
     </v-container>
     </div>

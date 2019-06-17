@@ -143,15 +143,18 @@ module.exports = (app, express)  =>{
                     })
                 } else if (err){
                     // Unknown error
+                    console.log(`There was a unknown error:${err}`);
                     res.status(500).send({
                         error: err
                     })
                 } else {
                     // Everything went fine
+                   
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                     const url  = "http://localhost:3000/"+ filepath;
                     JobseekerProfile.update({photo: url },
                       {where:{ JobseekerId: req.params.jobseekerId }});
+                    console.log(`Everything went fine saved filepath: ${url} `);   
                     res.status(200).send({
                         'success': 'Every thing went fine'
                     })

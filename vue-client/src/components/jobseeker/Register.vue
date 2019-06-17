@@ -4,7 +4,7 @@
                 <v-flex x12 justify-center>
                     <h2>Jobseeker Registration</h2>
                     <v-card-actions class="justify-center">
-                    <form style="width: 50%;">
+                    <form style="width: 50%;" autocomplete="off">
 
                       <v-text-field
                         v-model="jobSeekerRegistration.name"
@@ -36,6 +36,7 @@
                             v-model="jobSeekerRegistration.password"
                            v-validate="'required'"
                             data-vv-name="password"
+                            autocomplete="new-password"
                           ></v-text-field>
 
                           <v-text-field

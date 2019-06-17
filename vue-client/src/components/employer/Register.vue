@@ -4,7 +4,7 @@
                 <v-flex x12 justify-center>
                     <h2>Employer Registration</h2>
                     <v-card-actions class="justify-center">
-                    <form style="width: 50%;">
+                    <form style="width: 50%;" autocomplete="off">
 
                       <v-text-field
                         v-model="employerRegistration.companyName"
@@ -45,6 +45,7 @@
                             v-model="employerRegistration.password"
                            v-validate="'required'"
                             data-vv-name="password"
+                            autocomplete="new-password"
                           ></v-text-field>
 
                           <v-text-field
