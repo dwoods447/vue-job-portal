@@ -4,7 +4,7 @@
 
        <v-layout row wrap>
             <h1>View Applicants:</h1>
-            <v-flex xs12 v-for="applicant in applicants" :key="applicant.email+''+applicant.name+''+applicant.jobTitle" style="margin: 10px;">
+            <v-flex xs12 v-for="applicant in applicants.Applicant" :key="applicant.email+''+applicant.name+''+applicant.jobTitle" style="margin: 10px;">
               <v-toolbar color="primary">
                   <span class="white--text">{{ applicant.name }} - applying for <span>{{applicant.type}}</span> </span>&nbsp;<strong><span class="white--text"> {{applicant.jobTitle}}</span></strong>
               </v-toolbar>
@@ -46,7 +46,7 @@ export default {
      async getApplicants(){
         const employerId = this.$store.state.route.params.employerId
         const applicants = (await JobService.getEmployerJobApplicants(employerId)).data.data
-        console.log(`Applicants: ${JSON.stringify(applicants)}`)
+        console.log(`Applicants: ${JSON.stringify(applicants, null, 2)}`)
         if (applicants) {
           this.applicants = applicants;
         }

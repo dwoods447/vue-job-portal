@@ -22,6 +22,7 @@ Vue.use(VeeValidate)
 Vue.config.productionTip = false
 sync(store, router) // done. Returns an unsync callback fn
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -4,9 +4,13 @@ const JobController = require('../controllers/JobController');
 const EmployerController = require('../controllers/EmployerController');
 const { EmployerProfile } = require('../models')
 const { JobseekerProfile } = require('../models')
-
+const isEmployerAuthenticated = require('../policies/isEmployerAuthenticated.js')
+const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.js')
 const multer = require('multer');
 const path = require('path')
+
+
+
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
         cb(null, 'uploads/employers/')
@@ -97,7 +101,7 @@ module.exports = (app, express)  =>{
     app.post('/jobseeker/login', AuthenticationController.jobseekerLogin)
     // Send jobseeker registration info
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
-    app.post('/jobseeker/:jobseekerId/job/:jobId/apply', JobController.applyforJob)
+    app.post('/jobseeker/:jobseekerId/job/:jobId/apply', isJobseekerAuthenticated, JobController.applyforJob)
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
     app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
     app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', JobController.addJobToFavorites)
@@ -116,7 +120,7 @@ module.exports = (app, express)  =>{
     
     app.get('/job/categories', EmployerController.getCategories)
     app.get('/job/types', EmployerController.getJobTypes)
-    app.post('/employer/create/job', EmployerController.createJob)
+    app.post('/employer/create/job', isEmployerAuthenticated, EmployerController.createJob)
     app.post('/employer/update/job', EmployerController.updateJob)
     app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
     app.get('/employer/featured/companies', EmployerController.getFeaturedCompanies)  

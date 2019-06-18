@@ -12,8 +12,8 @@ const store = new Vuex.Store({
     currentJobSeeker: null,
     currentEmployer: null,
     job: null,
-    isEmployerLoggenIn: false,
-    isJobseekerLoggenIn: false,
+    isEmployerLoggedIn: false,
+    isJobseekerLoggedIn: false,
     createdJob: null,
     currentlyBeingEdited: null,
     successMessage: '',
@@ -27,17 +27,17 @@ const store = new Vuex.Store({
     setEmployerTokenMutation(state, token){
       state.token = token;
       if (token){
-        state.isEmployerLoggenIn = true;
+        state.isEmployerLoggedIn = true;
       } else {
-        state.isEmployerLoggenIn = false;
+        state.isEmployerLoggedIn = false;
       }
     },
     setJobseekerTokenMutation(state, token){
       state.token = token;
       if (token){
-        state.isJobseekerLoggenIn = true;
+        state.isJobseekerLoggedIn = true;
       } else {
-        state.isJobseekerLoggenIn = false;
+        state.isJobseekerLoggedIn = false;
       }
     },
     setEmployerMutation(state, employer){
@@ -53,13 +53,13 @@ const store = new Vuex.Store({
       state.currentEmployer = employer;
     },
     setEmployerLogOutMutation(state){
-      state.isEmployerLoggenIn = false;
+      state.isEmployerLoggedIn = false;
       state.currentEmployer = null;
       state.employer = null;
       state.token = null;
     },
     setJobseekerLogOutMutation(state){
-      state.isJobseekerLoggenIn = false;
+      state.isJobseekerLoggedIn = false;
       state.jobseeker = null;
       state.token = null;
       state.currentJobSeeker = null;

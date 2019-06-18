@@ -7,7 +7,7 @@
                 <v-toolbar color="primary">
                 <div>
                  <h2 v-if="job" class="white--text">{{job.jobTitle}}</h2>
-                   <div class="white--text">at {{ company.company }} - </div>
+                   <div class="white--text">at {{ company.company }} - {{job.location}}</div>
                 </div>
                 </v-toolbar>
 
@@ -69,14 +69,14 @@
                   <div>
                    <v-layout row wrap>
                       <v-flex xs6>
-                           <v-list-tile v-if="!this.$store.state.isJobseekerLoggenIn">
+                           <v-list-tile v-if="!this.$store.state.isJobseekerLoggedIn">
                   <v-list-tile-content>
                     <v-list-tile-title><span style="color: red;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
 
-                <div v-if="this.$store.state.isJobseekerLoggenIn && !alreadyApplied">
+                <div v-if="this.$store.state.isJobseekerLoggedIn && !alreadyApplied">
                  <v-list-tile>
                     <v-list-tile-content>
                         <div  class="justify-center text-xs-center">
@@ -88,7 +88,7 @@
                 </div>
 
 
-                 <v-list-tile v-if="this.$store.state.isJobseekerLoggenIn && alreadyApplied">
+                 <v-list-tile v-if="this.$store.state.isJobseekerLoggedIn && alreadyApplied">
                   <v-list-tile-content>
                     <div class="green--text">
                        <v-list-tile-title class="text-xs-center"><strong><span>You've Already Applied</span></strong></v-list-tile-title>
@@ -100,7 +100,7 @@
 
                       </v-flex>
                        <v-flex xs6>
-                          <div style="padding: 0.5em;" v-if="this.$store.state.isJobseekerLoggenIn">
+                          <div style="padding: 0.5em;" v-if="this.$store.state.isJobseekerLoggedIn">
 
                                <span v-if="isFavorited"><a href="#"  @click.prevent="unFavorite" class="favorites">
                                  <v-icon color="red darken-2">fas fa-heart</v-icon>
@@ -165,11 +165,8 @@ export default {
     async getJobInfo(){
       this.job = {};
        const jobId = this.$store.state.route.params.jobId;
-      // console.log(`Route params: ${jobId}`);
        let job = (await JobService.viewJob(jobId)).data.data;
-       // console.log(JSON.stringify(job))
        this.job = job;
-       // console.log(`Setting job : ${JSON.stringify(this.job)}`)
        this.getCompanyInfo(job.EmployerId);
     },
 
@@ -177,7 +174,6 @@ export default {
       this.company = {}
       const company = (await JobService.employerJob(employerID)).data.data
       this.company = company;
-      // console.log(JSON.stringify(company))
     },
 
     async applyForJob(){

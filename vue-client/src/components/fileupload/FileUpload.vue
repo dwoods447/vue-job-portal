@@ -6,7 +6,7 @@
            <br/>
 
         </v-toolbar>
-        <div v-if="url !== null && file_type !== 'document'">
+        <div v-if="url !== null && this.file_type !== 'document'">
           <v-img
             :src="fullImageSrc"
             aspect-ratio="1"
@@ -67,11 +67,6 @@ export default {
       }
   },
   watch: {
-    // url(newUrl, oldValue){
-    //   var date = new Date();
-    //   var timestamp = date.getTime();
-    //   console.log(`At: ${timestamp} Url changed to: ${newUrl}, Old value was ${oldValue}`);
-    // }
   },
   methods: {
     onSelect: function(e){
@@ -129,14 +124,14 @@ export default {
              console.log(`Seeker photo in the db is null setting image url to placehold.it`)
               this.url = 'https://placehold.it/300x300'
            }
-           if (seeker.coverletter !== null){
+           if (seeker.coverletter !== null && this.filetype === 'document'){
             console.log('Need to update profile with coverletter url')
             // this.url = seeker.resume;
-            this.url = seeker.coverletter;
+            // this.url = seeker.coverletter;
            }
-           if (seeker.resume !== null){
+           if (seeker.resume !== null && this.filetype === 'document'){
               console.log('Need to update profile with resume url')
-              this.url = seeker.resume;
+              // this.url = seeker.resume;
            }
       }
     },

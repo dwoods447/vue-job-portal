@@ -52,7 +52,7 @@
                                   </div>
                                   <v-layout justify-end>
                                     <v-card-actions justify-right>
-                                        <router-link v-bind:to="{name:'view.job.detail', params: {jobId: props.item.id}}" style="text-decoration: none;" v-if="!$store.state.isEmployerLoggenIn"><v-btn color="success">Apply</v-btn></router-link>
+                                        <router-link v-bind:to="{name:'view.job.detail', params: {jobId: props.item.id}}" style="text-decoration: none;" v-if="!$store.state.isEmployerLoggedIn"><v-btn color="success">Apply</v-btn></router-link>
                                       </v-card-actions>
                                   </v-layout>
                                 </v-card>

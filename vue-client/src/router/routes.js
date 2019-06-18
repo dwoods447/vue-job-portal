@@ -10,21 +10,98 @@ import EmployerDetail from '../components/employer/Detail'
 import EmployerPostJob from '../components/employer/CreateJob'
 import EditEmployerJob from '../components/employer/EditJob'
 import ViewApplicants from '../components/jobs/ViewApplicants.vue'
-
+import store from '../store'
 const routes = [
   {path: '/', component: Home, name:'home'},
   {path: '/employer/login', component: EmployerLogin, name:'employer.login'},
   {path: '/jobseeker/login', component: JobSeekerLogin, name:'jobseeker.login'},
   {path: '/employer/registration', component: EmployerRegistration, name:'employer.registration'},
   {path: '/jobseeker/registration', component: JobSeekerRegistration, name:'jobseeker.registration'},
-  {path: '/employer/:employerId/profile/', component: EmployerProfile, name: 'view.employer.profile'},
-  {path: '/jobseeker/:jobseekerId/profile/', component: JobseekerProfile, name: 'view.jobseeker.profile'},
+  {
+    path: '/employer/:employerId/profile/',
+    component: EmployerProfile,
+    name: 'view.employer.profile',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isEmployerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'employer.login'})
+      }
+    }
+  },
+  {
+    path: '/jobseeker/:jobseekerId/profile/',
+    component: JobseekerProfile,
+    name: 'view.jobseeker.profile',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isJobseekerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'jobseeker.login'})
+      }
+    }
+  },
   {path: '/job/:jobId/detail', component: JobDetail, name:'view.job.detail'},
   {path: '/employer/:employerId/detail', component: EmployerDetail, name:'view.employer.detail'},
-  {path: '/employer/:employerId/create/job', component:  EmployerPostJob, name:'employer.post.job'},
-  {path: '/employer/:employerId/edit/:jobId/job', component:  EditEmployerJob, name:'edit.employer.job'},
-  {path: '/employer/:employerId/delete/job', name:'delete.employer.job'},
-  { path: '/employer/:employerId/view/applicants', component: ViewApplicants, name:'view.job.applicants' }
+  {
+    path: '/employer/:employerId/create/job',
+    component:  EmployerPostJob,
+    name:'employer.post.job',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isEmployerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'employer.login'})
+      }
+    }
+  },
+  {
+    path: '/employer/:employerId/edit/:jobId/job',
+    component:  EditEmployerJob,
+    name:'edit.employer.job',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isEmployerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'employer.login'})
+      }
+    }
+  },
+  {
+    path: '/employer/:employerId/delete/job',
+    name:'delete.employer.job',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isEmployerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'employer.login'})
+      }
+    }
+},
+{
+    path: '/employer/:employerId/view/applicants',
+    component: ViewApplicants,
+    name:'view.job.applicants',
+    beforeEnter: (to, from, next) => {
+      if (store.state.isEmployerLoggedIn) {
+        console.log('You are logged in...')
+        next()
+      } else {
+        console.log('You are not logged in... Redirecting')
+        next({name: 'employer.login'})
+      }
+    }
+  }
 ]
 
 export default routes

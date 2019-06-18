@@ -12,6 +12,8 @@ app.use(bodyParser.json())
 app.use(cors());
 
 
+require('./JobSeekerPassport')
+require('./EmployerPassport')
 require('../src/routes/routes.js')(app, express)
 
 app.set('port', process.env.PORT || config.port);

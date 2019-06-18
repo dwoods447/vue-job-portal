@@ -1,6 +1,6 @@
  const {JobCategory}  = require('../models/')
  const {Job}  = require('../models/')
-// const {Job}  = require('../models/')
+   const {JobApplicant}  = require('../models/')
 const db = require('../models')
 
  module.exports  = {
@@ -102,17 +102,23 @@ const db = require('../models')
 
      async getJobApplicants(req, res){
         try{
-            const jobApplicants = await  db.sequelize.query(`
-            SELECT jobs.id, jobseekerprofiles.photo, jobseekerprofiles.address, jobseekerprofiles.phone, jobseekerprofiles.gender,
-            jobseekerprofiles.dob, jobseekerprofiles.bio, jobseekerprofiles.resume, jobseekerprofiles.coverletter,
-            jobseekers.name, jobseekers.email, jobs.jobTitle, jobs.type, jobs.EmployerId
-            FROM jobseekerprofiles 
-            INNER JOIN jobseekers ON jobseekerprofiles.JobseekerId = jobseekers.id
-            INNER JOIN jobapplicants ON jobseekers.id = jobapplicants.JobseekerId
-            INNER JOIN jobs ON jobapplicants.JobId = jobs.id
-            INNER JOIN employers ON employers.id = jobs.EmployerId
-            WHERE jobs.EmployerId = ${req.params.employerId}
-        `, { type: db.sequelize.QueryTypes.SELECT })
+          const jobApplicants = await JobApplicant.findAll({
+            include:[{
+               model: Job, where: { EmployerId: req.params.employerId}
+            }],
+            
+          })  
+        //     const jobApplicants = await  db.sequelize.query(`
+        //     SELECT jobs.id, jobseekerprofiles.photo, jobseekerprofiles.address, jobseekerprofiles.phone, jobseekerprofiles.gender,
+        //     jobseekerprofiles.dob, jobseekerprofiles.bio, jobseekerprofiles.resume, jobseekerprofiles.coverletter,
+        //     jobseekers.name, jobseekers.email, jobs.jobTitle, jobs.type, jobs.EmployerId
+        //     FROM jobseekerprofiles 
+        //     INNER JOIN jobseekers ON jobseekerprofiles.JobseekerId = jobseekers.id
+        //     INNER JOIN jobapplicants ON jobseekers.id = jobapplicants.JobseekerId
+        //     INNER JOIN jobs ON jobapplicants.JobId = jobs.id
+        //     INNER JOIN employers ON employers.id = jobs.EmployerId
+        //     WHERE jobs.EmployerId = ${req.params.employerId}
+        // `, { type: db.sequelize.QueryTypes.SELECT })
         console.log('\r\n\r\n');
         console.log('\r\n\r\n');
          res.send({
