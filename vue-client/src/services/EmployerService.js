@@ -10,6 +10,9 @@ export default {
  createJob(jobInfo){
   return Api.post('/employer/create/job', jobInfo)
  },
+ deleteJob(jobInfo){
+  return Api.post(`/employer/delete/job/${jobInfo}`)
+ },
  updateJob(jobInfo){
   return Api.post('/employer/update/job', jobInfo)
  },

@@ -99,6 +99,7 @@
             </v-flex>
              <v-flex xs12  d-flex>
                <v-textarea
+                 maxlength="300"
                  outline
                  textarea
                  label="Short Bio"
@@ -168,7 +169,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a :href="this.$store.state.currentJobSeeker.coverlette" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a :href="this.$store.state.currentJobSeeker.coverletter" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -442,7 +443,7 @@ export default {
         let jobseekerId = this.$store.state.route.params.jobseekerId;
         if (jobseekerId) {
            const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
-          // console.log(`Job Apps: ${JSON.stringify(applications)}`)
+           console.log(`Job Apps: ${JSON.stringify(applications, null, 2)}`)
            if (applications) {
              this.jobApplications = applications;
            }

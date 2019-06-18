@@ -1,6 +1,8 @@
  const {JobCategory}  = require('../models/')
  const {Job}  = require('../models/')
-   const {JobApplicant}  = require('../models/')
+ const {JobApplicant}  = require('../models/')
+ const {Jobseeker}  = require('../models/')
+ const {JobseekerProfile}  = require('../models/')
 const db = require('../models')
 
  module.exports  = {
@@ -23,7 +25,9 @@ const db = require('../models')
               data: types
             })    
          }catch(err){
-              `Error: ${err}`
+          res.status(500).send({
+            error: err
+           })
          }
 
           
@@ -38,9 +42,28 @@ const db = require('../models')
                 data: createdJobJSON
             })
         }catch(err){
-          `${err}`
+          res.status(500).send({
+            error: err
+          })
         }
      },
+
+     async deleteJob(req, res){
+      try{
+          const job = await Job.update({active: 0}, {where:{id: req.params.jobId}})
+           console.log(`Job Found: ${JSON.stringify(job)}`);
+          // console.log(`Job JSON: ${JSON.stringify(jobJSON)}`);
+          if(job){
+            res.send({
+                success: 'The job was removed.',
+            })
+          }
+      } catch(err){
+          res.send({
+              error:  `There was an error: ${err}`
+          })
+      }
+  },
 
      async updateJob(req, res){
         try {
@@ -59,23 +82,28 @@ const db = require('../models')
                     data: job
                 })
         }catch(err){
-          `${err}`
+          res.status(500).send({
+            error: err
+         })
         }
      },
 
      async getEmployerJobs(req, res){
          try{
             console.log(`Job info recieved: ${JSON.stringify(req.params.employerId)}`)
-            const jobs = await Job.findAll({
-                where: {EmployerId: req.params.employerId}
-            })
+            const jobs = await Job.findAll(
+                {where: {EmployerId: req.params.employerId, active: true}},
+               
+            )
             // console.log(`Employer Jobs found: ${JSON.stringify(jobs)}`)
             // const jobsJSON = jobs.toJSON();
             res.send({
                 data: jobs
             })
          }catch(err){
-            `${err}`
+          res.status(500).send({
+            error: err
+          })
          }
        
      },
@@ -93,9 +121,9 @@ const db = require('../models')
             data: featuredCompanies
           })
          } catch(err) {
-            res.send({
-                error:  `There was an error: ${err}`
-              })
+          res.status(500).send({
+            error: err
+          })
          }
             
      },
@@ -103,10 +131,11 @@ const db = require('../models')
      async getJobApplicants(req, res){
         try{
           const jobApplicants = await JobApplicant.findAll({
-            include:[{
-               model: Job, where: { EmployerId: req.params.employerId}
-            }],
-            
+           
+            include:[
+              { model: Job, where: { EmployerId: req.params.employerId},}, 
+              { model: Jobseeker, include: [{model: JobseekerProfile}]} 
+            ],
           })  
         //     const jobApplicants = await  db.sequelize.query(`
         //     SELECT jobs.id, jobseekerprofiles.photo, jobseekerprofiles.address, jobseekerprofiles.phone, jobseekerprofiles.gender,
@@ -125,9 +154,9 @@ const db = require('../models')
             data: jobApplicants
           })
          } catch(err) {
-            res.send({
-                error:  `There was an error: ${err}`
-              })
+           res.status(500).send({
+            error: err
+           })
          } 
      }
  }

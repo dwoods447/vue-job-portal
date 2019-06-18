@@ -92,7 +92,7 @@
                        <td>{{ props.item.location }}</td>
                         <td>{{ props.item.createdAt | formateDate }}</td>
                         <td><router-link :to="{name:'edit.employer.job', params:{jobId: props.item.id} }"><v-btn>Edit</v-btn></router-link></td>
-                          <td><router-link :to="{name:'delete.employer.job', params:{jobId: props.item.id} }"><v-btn>Remove</v-btn></router-link></td>
+                          <td><v-btn @click="removeJob(props.item.id)">Remove</v-btn></td>
                     </template>
                   </v-data-table>
                   <!-- <div class="text-xs-center pt-2">
@@ -151,6 +151,25 @@ export default {
     }
   },
   methods: {
+    async removeJob(jobId){
+      try {
+      if (jobId) {
+         console.log(`Removing Job Id: ${jobId}`);
+          let response = confirm('Are you sure you want to make this job inactive? This Cannot Be Undone.');
+          if (response) {
+                const deletedJob = (await EmployerService.deleteJob(jobId)).data;
+                console.log(JSON.stringify(deletedJob))
+                if (deletedJob.success) {
+                    console.log(`Job was sucessfully deleted`);
+                } else {
+                  console.log(`There was an error deleting the job`)
+                }
+          }
+        }
+      } catch (error) {
+         console.log(`Error: ${error}`)
+      }
+    },
     async createJob(){
       // declare empty object to hold job values
          let jobObj = {};
@@ -191,6 +210,7 @@ export default {
     },
 
     async getEmployerJobs(employerId){
+      this.employersJobs = [];
       const employerJobs = (await EmployerService.getEmployerJobs(employerId)).data.data;
       this.employersJobs = employerJobs;
       // console.log(`Employers Jobs ${JSON.stringify(this.employersJobs)}`);

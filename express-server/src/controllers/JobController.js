@@ -140,7 +140,9 @@ module.exports = {
                 data: job
             })
         }catch(err){
-            '${err}'
+            res.status(500).send({
+               error: err
+            })
         }
        
        

@@ -21,7 +21,7 @@
                 <v-text-field outline label="Search..." append-icon ="search"
                  @keyup="searchJobs" v-model="search">
                 </v-text-field>
-              </v-flex>
+            </v-flex>
         </v-layout>
         <v-layout column>
                <v-flex x12 justify-center style="max-width: 1200px; margin: 0 auto;">

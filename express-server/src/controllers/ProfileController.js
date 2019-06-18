@@ -2,7 +2,7 @@ const {EmployerProfile} = require('../models')
 const {JobseekerProfile} = require('../models')
 const {Favorite} = require('../models')
 const {JobApplicant} = require('../models')
-
+const {Job} = require('../models')
 module.exports = {
 
     async getFavoritedJobsForJobseekerProfile(req, res){
@@ -128,24 +128,12 @@ module.exports = {
     },
 
     async getJobAppliedFor(req, res){
-      try{
-         
-         console.log(`ID that was passed in: ${JSON.stringify(req.params.jobseekerId)}`)
-         console.log('\r\n\r\n')
-         console.log('\r\n\r\n')
-        //  const applications = await db.sequelize.query(`
-        //  SELECT jobapplicants.id as applicant_id, jobs.id as jobs_id, jobs.jobTitle, jobs.location, jobs.type, jobs.description, jobs.createdAt as 'date_posted', jobapplicants.createdAt as 'date_applied'
-        //  FROM jobapplicants
-        //  INNER JOIN jobs ON jobapplicants.JobId = jobs.id
-        //  INNER JOIN jobseekers ON jobapplicants.JobseekerId = jobseekers.id
-        //  WHERE jobapplicants.JobseekerId = ${req.params.jobseekerId}
-        //  `, { type: db.sequelize.QueryTypes.SELECT });
+      try{   
+         console.log(`ID that was passed in: ${JSON.stringify(req.jobseeker.id)}`)
         const applications = await JobApplicant.findAll({
-            include: [{ all: true }]
+            include: [{ model: Job }],
+            where: {JobseekerId: req.jobseeker.id}
           });
-          console.log('\r\n\r\n')
-          console.log('\r\n\r\n')
-          console.log(`Getting Jobs Applied FOR!!!: ${JSON.stringify(applications)}`)
         res.send({
           data: applications
         })
@@ -155,7 +143,6 @@ module.exports = {
         })
       }
      
-    }
-
+    },
 
 }

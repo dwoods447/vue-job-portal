@@ -94,7 +94,7 @@ module.exports = (app, express)  =>{
 
  /**** Job Seeker ****/
     // Get employer profile info
-    app.get('/jobseeker/:jobseekerId/profile', ProfileController.getJobSeekerProfileInfo)
+    app.get('/jobseeker/:jobseekerId/profile',isJobseekerAuthenticated ,ProfileController.getJobSeekerProfileInfo)
     // Update jobseeker profile info 
     app.post('/jobseeker/profile/', ProfileController.updateJobseekerProfile)
     // Send employer login credentials
@@ -103,11 +103,14 @@ module.exports = (app, express)  =>{
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
     app.post('/jobseeker/:jobseekerId/job/:jobId/apply', isJobseekerAuthenticated, JobController.applyforJob)
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
-    app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
+    app.get('/jobseeker/:jobseekerId/profile/applications',isJobseekerAuthenticated ,ProfileController.getJobAppliedFor)
     app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', JobController.addJobToFavorites)
     app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', JobController.removeJobFromFavorites)
     app.get('/check/jobseeker/:jobseekerId/favorite/job/:jobId', JobController.checkFavoritedJob)
     app.get('/jobseeker/:jobseekerId/profile/favorites', ProfileController.getFavoritedJobsForJobseekerProfile)
+
+
+
  /**** Employer ****/
     // Get employer profile info
     app.get('/employer/:employerId/profile', ProfileController.getEmployerProfileInfo)
@@ -121,6 +124,7 @@ module.exports = (app, express)  =>{
     app.get('/job/categories', EmployerController.getCategories)
     app.get('/job/types', EmployerController.getJobTypes)
     app.post('/employer/create/job', isEmployerAuthenticated, EmployerController.createJob)
+    app.post('/employer/delete/job/:jobId', isEmployerAuthenticated, EmployerController.deleteJob)
     app.post('/employer/update/job', EmployerController.updateJob)
     app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
     app.get('/employer/featured/companies', EmployerController.getFeaturedCompanies)  
@@ -136,7 +140,20 @@ module.exports = (app, express)  =>{
     // Get individual company details
     app.get('/employer/job/:employerId/detail', JobController.employerJob)
 
-    // Uploads
+   
+   
+   
+   
+   
+   /********************************* Upload Routes *************************************************
+    * **********************************************************************************
+    * ******************************************************************************************
+    * *****************************************************************************************
+    */
+   
+   
+   
+   
           app.post('/jobseeker/:jobseekerId/jobseeker/photo/upload', function(req, res){
             jobseeker_upload(req, res, function(err){
                 if(err instanceof multer.MulterError){
