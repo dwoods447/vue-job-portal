@@ -8,6 +8,7 @@ const sequelize = new Sequelize(
     config.db.database,
     config.db.user,
     config.db.password,
+    config.db.dialect,
     config.db.options
 )
 fs.readdirSync(__dirname)
