@@ -7,10 +7,10 @@ const sequelize = new Sequelize(
     config.db.url,
     config.db.database,
     config.db.user,
-    config.db.password,
-    config.db.dialect,
-    config.db.host
-)
+    config.db.password,{
+         dialect: 'postgres'
+    })
+    
 fs.readdirSync(__dirname)
 .filter((file)=>
     file !== 'index.js'
