@@ -7,7 +7,6 @@ module.exports = {
         password: process.env.DB_PASS || 'pimpjuice',
         dialect: process.env.DIALECT,
         options: {
-            dialect: process.env.DIALECT || 'mysql',
             host: process.env.HOST || 'localhost'
         }
 
