@@ -1,5 +1,6 @@
 const Promise = require('bluebird')
-const bcrypt = Promise.promisifyAll(require('bcrypt')) 
+const bcrypt = require('../app').bcrypt
+const bcryptPromise = Promise.promisifyAll(bcrypt) 
 /**
  * Function that hashes the password
  * 
@@ -10,9 +11,9 @@ function hashPassword(jobseeker){
     if(!jobseeker.changed('password')){
         return;
     }
-    return bcrypt
+    return bcryptPromise
     .genSaltAsync(SALT_FACTOR)
-    .then(salt => bcrypt.hashSync(jobseeker.password, salt, null))
+    .then(salt => bcryptPromise.hashSync(jobseeker.password, salt, null))
     .then(hash =>{
         jobseeker.setDataValue('password', hash)
     })
@@ -39,7 +40,7 @@ module.exports = (sequelize, DataTypes) =>{
      }
 
     Jobseeker.prototype.comparePassword = function(password){
-        return bcrypt.compareAsync(password, this.password)
+        return bcryptPromise.compareAsync(password, this.password)
     }
     return Jobseeker;
 }

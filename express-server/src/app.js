@@ -2,6 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+module.exports.bcrypt = bcrypt;
 const morgan  = require('morgan');
 const process = require('process');
 const {sequelize} = require('./models')
