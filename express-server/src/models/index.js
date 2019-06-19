@@ -8,8 +8,8 @@ const sequelize = new Sequelize(
     config.db.database,
     config.db.user,
     config.db.password,
-    {dialect: 'postgres'},
-    config.db.options
+    config.db.dialect,
+    config.db.host
 )
 fs.readdirSync(__dirname)
 .filter((file)=>
