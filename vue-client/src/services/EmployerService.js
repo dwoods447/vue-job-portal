@@ -19,6 +19,9 @@ export default {
  getEmployerJobs(employerId){
    return Api.get('/employer/' + employerId + '/jobs')
  },
+ getInactiveEmployerJobs(employerId){
+  return Api.get('/employer/' + employerId + '/inactive/jobs')
+ },
  getFeaturedCompanies(){
     return Api.get('/employer/featured/companies')
  },

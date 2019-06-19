@@ -129,7 +129,6 @@ export default {
     this.checkFavoritedJob();
   },
   mounted(){
-
   },
   data(){
     return {
@@ -144,22 +143,18 @@ export default {
       this.isFavorited = !this.isFavorited;
       let jobseekerID = this.$store.state.jobseeker.id;
       let jobID = this.$store.state.route.params.jobId;
-      console.log(`Jobseeker: ${jobseekerID} Unfavoriting job id: ${jobID}`);
        let jobResponse = (await JobService.removeJobFromFavorites(jobID, jobseekerID)).data.data;
-      console.log(`Unfavorite response: ${JSON.stringify(jobResponse)}`)
        if (jobResponse) {
-         console.log('Unfavorite Response not empty')
+        // The favorite was removed
        }
     },
     async favorite(){
       this.isFavorited = !this.isFavorited;
       let jobseekerID = this.$store.state.jobseeker.id;
       let jobID = this.$store.state.route.params.jobId;
-      console.log(`Jobseeker: ${jobseekerID} favoriting job id: ${jobID}`);
       let jobResponse = (await JobService.addJobToFavorites(jobID, jobseekerID)).data.data;
-      console.log(`Favorite repsonse: ${JSON.stringify(jobResponse)}`)
       if (jobResponse) {
-        console.log('Unfavorite Response not empty')
+       // The favorite was added
       }
     },
     async getJobInfo(){
@@ -169,51 +164,42 @@ export default {
        this.job = job;
        this.getCompanyInfo(job.EmployerId);
     },
-
     async getCompanyInfo(employerID){
       this.company = {}
       const company = (await JobService.employerJob(employerID)).data.data
       this.company = company;
     },
-
     async applyForJob(){
       let jobseekerId = this.$store.state.jobseeker.id;
       let jobId = this.$store.state.route.params.jobId;
       const applied = (await JobService.applyForJob(jobseekerId, jobId))
           if (applied) {
-              console.log(`Application sent successfully: ${applied}`)
+            // Application sent
           } else {
-              console.log(`Application was not sent: ${applied}`)
+               // Application was not sent
           }
           this.checkExisitingJobApplication();
     },
     async checkExisitingJobApplication(){
-      console.log(`Checking for application...`)
       let jobId = this.$store.state.route.params.jobId;
       if (this.$store.state.jobseeker) {
        let jobseekerId = this.$store.state.jobseeker.id;
        const applied = (await JobService.checkJobApplication(jobseekerId, jobId)).data.data
           if (applied && applied !== null) {
-              console.log(`You have already applied to this job: ${JSON.stringify(applied)}`)
               this.alreadyApplied = true;
           } else {
-              console.log(`You have never applied to this job: ${JSON.stringify(applied)}`)
+            // Never applied
           }
       }
     },
     async checkFavoritedJob(){
-      console.log(`Checking for favorites...`)
       let jobId = this.$store.state.route.params.jobId;
       if (this.$store.state.jobseeker) {
        let jobseekerId = this.$store.state.jobseeker.id;
-       console.log(`Checking jobseeker id: ${jobseekerId} favorite status for job: ${jobId}`)
        const markedAsFavorite = (await JobService.checkFavoritedJob(jobId, jobseekerId)).data.data
-        console.log(`Results of favorite status: ${JSON.stringify(markedAsFavorite)}`)
           if (markedAsFavorite && markedAsFavorite !== null) {
-              console.log(`You have already marked this job as a favorite: ${JSON.stringify(markedAsFavorite)}`)
               this.isFavorited = true;
           } else {
-              console.log(`You have never marked this job as a favorite: ${JSON.stringify(markedAsFavorite)}`)
               this.isFavorited = false;
           }
       }

@@ -106,16 +106,12 @@ export default {
     }
   },
   methods: {
-
     async getCompanyInfo(employerID){
-      console.log('Getting job info...')
       this.company = {}
       let company = (await JobService.employerJob(employerID)).data.data
       let employer = (await ProfileService.getEmployerProfile(employerID)).data.data
       this.company = company;
       this.employer = employer;
-       console.log(`Employer Detail: ${JSON.stringify(company)}`)
-       console.log(`Employer Profile Details: ${JSON.stringify(employer)}`)
     }
   },
   computed: {
@@ -123,11 +119,9 @@ export default {
         if (this.pagination.rowsPerPage == null ||
           this.pagination.totalItems == null
         ) return 0
-
         return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
       }
   },
-
   filters: {
     formateDate(date){
       return moment(date).format('MMMM Do YYYY');

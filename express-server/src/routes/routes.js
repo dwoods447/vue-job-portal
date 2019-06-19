@@ -94,19 +94,26 @@ module.exports = (app, express)  =>{
 
  /**** Job Seeker ****/
     // Get employer profile info
-    app.get('/jobseeker/:jobseekerId/profile',isJobseekerAuthenticated ,ProfileController.getJobSeekerProfileInfo)
+    app.get('/jobseeker/:jobseekerId/profile',ProfileController.getJobSeekerProfileInfo)
     // Update jobseeker profile info 
     app.post('/jobseeker/profile/', ProfileController.updateJobseekerProfile)
     // Send employer login credentials
     app.post('/jobseeker/login', AuthenticationController.jobseekerLogin)
     // Send jobseeker registration info
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
+    // Apply for a job
     app.post('/jobseeker/:jobseekerId/job/:jobId/apply', isJobseekerAuthenticated, JobController.applyforJob)
+    // Check Job seeker application
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
-    app.get('/jobseeker/:jobseekerId/profile/applications',isJobseekerAuthenticated ,ProfileController.getJobAppliedFor)
-    app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', JobController.addJobToFavorites)
+    // Get all obs jobseeker applied for
+    app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
+    // Add Job to favorites
+    app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', isJobseekerAuthenticated,JobController.addJobToFavorites)
+    // Remove Job from favorites
     app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', JobController.removeJobFromFavorites)
+    // Check if job is in jobseekers favorites
     app.get('/check/jobseeker/:jobseekerId/favorite/job/:jobId', JobController.checkFavoritedJob)
+    // Get list of all jobs in job seeker favorites
     app.get('/jobseeker/:jobseekerId/profile/favorites', ProfileController.getFavoritedJobsForJobseekerProfile)
 
 
@@ -121,13 +128,23 @@ module.exports = (app, express)  =>{
     // Update employer profile info
     app.post('/employer/profile/', ProfileController.updateEmployerProfile)
     
+    //Get job categories
     app.get('/job/categories', EmployerController.getCategories)
+    // Get job types
     app.get('/job/types', EmployerController.getJobTypes)
+    // Create job
     app.post('/employer/create/job', isEmployerAuthenticated, EmployerController.createJob)
+    // Delete job doesnt delete from db just makes inactive
     app.post('/employer/delete/job/:jobId', isEmployerAuthenticated, EmployerController.deleteJob)
+    // Update job information
     app.post('/employer/update/job', EmployerController.updateJob)
+    // Get all jobs that belong to employer
     app.get('/employer/:employerId/jobs', EmployerController.getEmployerJobs)
+    //  Get all inactive jobs that belong to employer
+    app.get('/employer/:employerId/inactive/jobs', EmployerController.getEmployerInactiveJobs)
+    // Get all jobs that belong to employer
     app.get('/employer/featured/companies', EmployerController.getFeaturedCompanies)  
+    // Get job applicants that have applied to employer jobs
     app.get(`/employer/:employerId/job/applicants`, EmployerController.getJobApplicants)
 
     /***** Job ****/   

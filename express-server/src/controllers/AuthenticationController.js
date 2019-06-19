@@ -24,8 +24,6 @@ module.exports = {
     
     async employerRegister(req, res) {
         try{
-            console.log(`Employer email ${JSON.stringify(req.body)}\r\n\r\n`)
-
             const employer = await Employer.create(req.body)
             const emlProfile = await EmployerProfile.create({
                 company: employer.company,
@@ -33,7 +31,6 @@ module.exports = {
             })
             const employerJSON = employer.toJSON()
             const  employerProfileJSON = emlProfile.toJSON()
-            console.log(employerJSON.id)
             const status = "Registration Successful! Please login to complete your Profile."
            res.send({
             employer: employerJSON,
@@ -51,8 +48,6 @@ module.exports = {
     },
     async jobseekerRegister(req, res) {
         try{
-            console.log(`Request Body ${JSON.stringify(req.body)}`)
-            console.log(`Jobseeker email ${JSON.stringify(req.body.email)}`)
             const jobseeker = await Jobseeker.create(req.body)
             const jobSeekProfile = await JobseekerProfile.create({
                 JobseekerId: jobseeker.id
@@ -79,8 +74,6 @@ module.exports = {
          // Check email
         try{
             const {email, password } = req.body;
-            console.log(`Employer email ${email}\r\n\r\n`)
-            console.log(`Employer password ${email}\r\n\r\n`)
             const employer = await Employer.findOne({ 
                 where: {
                     email: email

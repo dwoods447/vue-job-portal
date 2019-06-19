@@ -77,8 +77,6 @@ const dict = {
 };
 
 Validator.localize('en', dict);
-
-
 export default {
   inject: ['$validator'],
     created(){
@@ -108,8 +106,6 @@ export default {
                   email: this.jobSeekerRegistration.email,
                   password: this.jobSeekerRegistration.password
                 })
-                console.log(`Result of registration: ${JSON.stringify(res)}`);
-                console.log(`Message: ${JSON.stringify(res.data.message)}`);
                 if (res.status === 200){
                    this.$store.dispatch('setSuccessMessageAction', res.data.message)
                    this.$router.push({name: 'jobseeker.login'});
@@ -123,7 +119,12 @@ export default {
               }
           }
         },
-
+        clear(){
+          this.name = '';
+          this.email = '';
+          this.password = '';
+          this.confirmPassword = '';
+        }
     },
     computed: {
 

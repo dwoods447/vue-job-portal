@@ -23,10 +23,8 @@ const routes = [
     name: 'view.employer.profile',
     beforeEnter: (to, from, next) => {
       if (store.state.isEmployerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'employer.login'})
       }
     }
@@ -37,10 +35,8 @@ const routes = [
     name: 'view.jobseeker.profile',
     beforeEnter: (to, from, next) => {
       if (store.state.isJobseekerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'jobseeker.login'})
       }
     }
@@ -53,10 +49,8 @@ const routes = [
     name:'employer.post.job',
     beforeEnter: (to, from, next) => {
       if (store.state.isEmployerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'employer.login'})
       }
     }
@@ -67,10 +61,8 @@ const routes = [
     name:'edit.employer.job',
     beforeEnter: (to, from, next) => {
       if (store.state.isEmployerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'employer.login'})
       }
     }
@@ -80,10 +72,8 @@ const routes = [
     name:'delete.employer.job',
     beforeEnter: (to, from, next) => {
       if (store.state.isEmployerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'employer.login'})
       }
     }
@@ -94,10 +84,8 @@ const routes = [
     name:'view.job.applicants',
     beforeEnter: (to, from, next) => {
       if (store.state.isEmployerLoggedIn) {
-        console.log('You are logged in...')
         next()
       } else {
-        console.log('You are not logged in... Redirecting')
         next({name: 'employer.login'})
       }
     }

@@ -22,13 +22,14 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field prepend-icon="person" name="email" label="Email" type="text" v-model="email"></v-text-field>
-                  <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" v-model="password"></v-text-field>
+                  <v-text-field prepend-icon="person" name="email" label="Email" type="text" v-model="email" v-validate="'required|email'" :error-messages="errors.collect('email')"></v-text-field>
+                  <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password" v-model="password"  v-validate="'required'" :error-messages="errors.collect('password')"></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <div v-if="this.$store.state.successMessage"><strong><span style="color: green;">{{ this.$store.state.successMessage}}</span></strong></div>
                 <div style="padding: 1em;" v-if="invalidPassword"><strong><span style="color: red;">Incorrect Username and/or Password</span></strong></div>
+                 <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a Username and Password</span></strong></div>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" @click="login">Login</v-btn>
               </v-card-actions>
@@ -39,6 +40,19 @@
 </template>
 <script>
 import AuthenticationSerivce from '../../services/AuthtenicationService'
+import { Validator } from 'vee-validate';
+const dict = {
+        custom: {
+            email: {
+                required: 'Please enter your email'
+            },
+            password:{
+                required: 'Please enter your password'
+            },
+
+   }
+};
+Validator.localize('en', dict);
 export default {
   created () {
 
@@ -55,12 +69,28 @@ export default {
       password:'',
       invalidPassword: false,
       emptyCredentials: false,
+      missingCredentials: false,
     }
   },
   methods: {
     async login(){
-    if (this.email && this.password) {
-    const response = await AuthenticationSerivce.employerLogin({
+      this.missingCredentials = false;
+      this.$validator.validate().then(valid => {
+          if (!valid) {
+          // do stuff if not valid.
+            this.missingCredentials = true;
+          } else {
+             this.sendCredentials();
+          }
+     });
+    },
+    clearInvalid(){
+        this.invalidPassword = false;
+        this.$store.dispatch('setSuccessMessageAction', null)
+    },
+    async sendCredentials(){
+      try {
+        const response = await AuthenticationSerivce.employerLogin({
             email: this.email,
             password: this.password
           })
@@ -68,28 +98,18 @@ export default {
                 this.$store.dispatch('setEmployerTokenAction', response.data.token);
                 this.$store.dispatch('setEmployerAction', response.data.employer);
                 this.$store.dispatch('setSuccessMessageAction', null)
-                console.log(response);
                 confirm('You are logged in !!!!!');
                 this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
           }
            if (response.status === 403) {
-              console.log(response);
               this.$store.dispatch('setSuccessMessageAction', null)
-                this.invalidPassword = true;
-                 this.email = '';
-                 this.password = '';
+              this.invalidPassword = true;
+              this.email = '';
+              this.password = '';
           }
-      } else {
-         this.$store.dispatch('setSuccessMessageAction', null)
-          this.invalidPassword = true;
-          this.email = '';
-          this.password = '';
+      } catch (error){
+         confirm(`An erorr occurred ${error}`)
       }
-    },
-
-    clearInvalid(){
-        this.invalidPassword = false;
-        this.$store.dispatch('setSuccessMessageAction', null)
     },
     resetForm(){
       this.email = '';

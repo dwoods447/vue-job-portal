@@ -122,7 +122,6 @@ export default {
                   representative: this.employerRegistration.representative,
                   password: this.employerRegistration.password
                 })
-               console.log(`Message: ${JSON.stringify(res.data.message)}`);
                 if (res.status === 200){
                       this.$store.dispatch('setSuccessMessageAction', res.data.message)
                       this.$router.push({name: 'employer.login'});
@@ -138,7 +137,11 @@ export default {
         },
 
         clear(){
-
+          this.employerRegistration.companyName = '';
+          this.employerRegistration.representative = '';
+          this.employerRegistration.email = '';
+          this.employerRegistration.password = '';
+          this.employerRegistration.confirmPassword = '';
         }
 
     },

@@ -73,6 +73,7 @@
               </v-layout>
               <v-textarea label="Job Description" outline v-model="employersJob.description"></v-textarea>
               <v-btn color="primary" @click="updateJob">Update Job</v-btn>
+
             </form>
            </div>
          </v-flex> <!--  end of form flex-->
@@ -80,8 +81,11 @@
          <v-flex xs6 v-if="updated">
             <div justify-center>
               <h2 style="text-align:center; margin: 5% auto;"><span style="color: green;">Job Updated!</span></h2>
-             <router-link :to="{name:'employer.post.job', params:{employerId: $store.state.employer.id}}" style="display: block; text-align:center; margin: 5% auto;">Back to Post a Job</router-link>
+               <router-link :to="{name:'employer.post.job', params:{employerId: $store.state.employer.id}}" style="display: block; text-align:center; margin: 5% auto;">Back to Post a Job</router-link>
             </div>
+         </v-flex>
+         <v-flex xs12>
+            <router-link :to="{name:'employer.post.job', params:{employerId: $store.state.employer.id}}" style="display: block; text-align:center; margin: 5% auto;">Back to Post a Job</router-link>
          </v-flex>
       </v-layout>
       </v-card>
@@ -124,14 +128,11 @@ export default {
   methods: {
      async getJobInfo(){
        this.employersJob = {};
-        console.log(`Getting Job info from server...`)
         // Get employer job ID from router parameter
         let jobId = this.$store.state.route.params.jobId;
         this.jobID = jobId;
-       console.log(`Job ID: ${this.jobID}`);
         // Make request to JobService sending job :id
         let job = (await JobSerivce.viewJob(jobId)).data.data
-       // console.log(`Job Returned: ${JSON.stringify(job)}`);
         // Get response and check if job object is returned and store that in the job object if null is returned then empty job object
         if (job === null) {
             this.employersJob = {}
@@ -146,12 +147,10 @@ export default {
     async getCategories(){
        const catsReturned = await EmployerService.getJobCategories();
         this.categories = catsReturned.data.data;
-        // console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
     },
     async getJobTypes(){
         const jobTypes = await EmployerService.getJobTypes()
         this.jobTypes = jobTypes.data.data[0];
-        // console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
     },
 
      async updateJob(){
@@ -167,19 +166,14 @@ export default {
         let employerId = this.$store.state.route.params.employerId;
         if (employerId) jobObj.EmployerId = employerId;
         for (var cat in this.categories) {
-            // console.log(cat + ' ' + JSON.stringify(this.categories[cat]))
              if (this.categories[cat].name === this.categoryChosen) {
                     jobObj.JobCategoryId = this.categories[cat].id;
              }
         }
-       console.log(`Job Object: ${JSON.stringify(jobObj)}`);
        const updatedJob = await EmployerService.updateJob(jobObj);
-       console.log(`Created Job: ${JSON.stringify(updatedJob)}`);
         if (updatedJob) {
            this.updated = true;
-           // this.getEmployerJobs(this.$store.state.route.params.employerId);
         }
-        console.log(JSON.stringify(jobObj))
     },
   }
 }

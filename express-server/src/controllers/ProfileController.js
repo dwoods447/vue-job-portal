@@ -7,7 +7,6 @@ module.exports = {
 
     async getFavoritedJobsForJobseekerProfile(req, res){
         try {
-            console.log(`Favorites for id ${JSON.stringify(req.params.jobseekerId)}`);
             const favorites = await Favorite.findAll({
                 where: {
                     JobseekerId: req.params.jobseekerId
@@ -16,7 +15,6 @@ module.exports = {
                     all: true
                 }]
             })
-            console.log(`Favorites returned: ${JSON.stringify(favorites)}`)
             res.send({
                 data: favorites
             })
@@ -46,7 +44,6 @@ module.exports = {
 
     async updateJobseekerProfile(req, res){
         try{
-             console.log(`Profile info received at first ${JSON.stringify(req.body)}`);
             let updateObj = {};
             
             if (req.body.photo) {
@@ -73,12 +70,8 @@ module.exports = {
             if (req.body.coverletter) {
                 updateObj.coverletter = req.body.coverletter;
             }
-            
             let whereObj = {where:{ jobseekerId: req.body.id}}
-            
-           // console.log(`*** Object to be inserted: ${JSON.stringify(updateObj)}`)
             const profile = await JobseekerProfile.update(updateObj, whereObj)
-            // console.log(`Profile info sending back from update ${JSON.stringify(profile)}`);
             res.send({
                 profile: profile
             })
@@ -93,12 +86,9 @@ module.exports = {
 
     async getJobSeekerProfileInfo (req, res){
         try{
-           
-            // console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.jobseekerId)}`)
             const jobSeeker = await JobseekerProfile.findOne({
                 where: {jobseekerId: req.params.jobseekerId}
             })
-            // console.log(`Job Seeker that was found ${JSON.stringify(jobSeeker)}`);
             res.send({
                 jobseeker: jobSeeker
             })
@@ -111,12 +101,9 @@ module.exports = {
 
     async getEmployerProfileInfo(req, res){
     try{
-        // console.log(`ID that was passed in to profile info: ${JSON.stringify(req.params.employerId)}`)
         const employer = await EmployerProfile.findOne({
             where: {employerId: req.params.employerId}
         })
-
-        // console.log(`Employer that was found ${JSON.stringify(employer)}`);
         res.send({
             data: employer
         })
@@ -128,8 +115,7 @@ module.exports = {
     },
 
     async getJobAppliedFor(req, res){
-      try{   
-         console.log(`ID that was passed in: ${JSON.stringify(req.jobseeker.id)}`)
+      try {
         const applications = await JobApplicant.findAll({
             include: [{ model: Job }],
             where: {JobseekerId: req.jobseeker.id}

@@ -101,6 +101,36 @@
                 </div>
              </div>
          </v-flex>
+      </v-layout><!-- end of row -->
+      <v-layout row wrap>
+        <v-flex xs6>
+
+        </v-flex>
+        <v-flex xs6>
+            <div style="padding: 1em;">
+                 <h2>Inactive Jobs</h2>
+                   <div>
+                  <v-data-table
+                    :headers="tableHeaders"
+                    :items="employersInactiveJobs"
+                    hide-actions
+                    :pagination.sync="pagination"
+                    class="elevation-1"
+                  >
+                    <template v-slot:items="props">
+                      <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
+                       <td>{{ props.item.location }}</td>
+                        <td>{{ props.item.createdAt | formateDate }}</td>
+                        <!-- <td><router-link :to="{name:'edit.employer.job', params:{jobId: props.item.id} }"><v-btn>Edit</v-btn></router-link></td>
+                          <td><v-btn @click="removeJob(props.item.id)">Remove</v-btn></td> -->
+                    </template>
+                  </v-data-table>
+                  <!-- <div class="text-xs-center pt-2">
+                    <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+                  </div> -->
+                </div>
+           </div>
+        </v-flex>
       </v-layout>
       </v-card>
     </v-container>
@@ -114,6 +144,7 @@ export default {
     this.getCategories();
     this.getJobTypes();
     this.getEmployerJobs(this.$store.state.route.params.employerId);
+    this.getInactiveEmployerJobs(this.$store.state.route.params.employerId)
   },
   mounted(){
 
@@ -135,6 +166,7 @@ export default {
       status: '',
       description: '',
       employersJobs: [],
+      employersInactiveJobs: [],
       tableHeaders: [
         {text: 'Position/Type', value:'Position/Type'},
         {text: 'Location', value: 'Location'},
@@ -154,20 +186,20 @@ export default {
     async removeJob(jobId){
       try {
       if (jobId) {
-         console.log(`Removing Job Id: ${jobId}`);
           let response = confirm('Are you sure you want to make this job inactive? This Cannot Be Undone.');
           if (response) {
                 const deletedJob = (await EmployerService.deleteJob(jobId)).data;
-                console.log(JSON.stringify(deletedJob))
                 if (deletedJob.success) {
-                    console.log(`Job was sucessfully deleted`);
+                    this.getEmployerJobs(this.$store.state.route.params.employerId);
+                    this.getInactiveEmployerJobs(this.$store.state.route.params.employerId);
                 } else {
-                  console.log(`There was an error deleting the job`)
+                  confirm('There was an error with the request');
                 }
           }
         }
       } catch (error) {
-         console.log(`Error: ${error}`)
+        // An error occoured
+        confirm('There was an error with the request');
       }
     },
     async createJob(){
@@ -183,37 +215,33 @@ export default {
         let employerId = this.$store.state.route.params.employerId;
         if (employerId) jobObj.EmployerId = employerId;
         for (var cat in this.categories) {
-            console.log(cat + ' ' + JSON.stringify(this.categories[cat]))
              if (this.categories[cat].name === this.categoryChosen) {
                     jobObj.JobCategoryId = this.categories[cat].id;
              }
         }
        const createdJob = await EmployerService.createJob(jobObj);
-       console.log(`Created Job: ${createdJob}`);
         if (createdJob) {
-           // console.log(`Created a Job ${JSON.stringify(jobObj)}`)
-           // console.log(`Sending created job to store.`)
-       //   this.$store.dispatch('setCreatedJobAction', jobObj)
           this.getEmployerJobs(this.$store.state.route.params.employerId);
         }
-        console.log(JSON.stringify(jobObj))
     },
     async getCategories(){
        const catsReturned = await EmployerService.getJobCategories();
         this.categories = catsReturned.data.data;
-       // console.log(`Categories: ${JSON.stringify(this.categories[0])}`)
     },
     async getJobTypes(){
         const jobTypes = await EmployerService.getJobTypes()
         this.jobTypes = jobTypes.data.data[0];
-       // console.log(`Job Types: ${JSON.stringify(this.jobTypes)}`)
     },
 
     async getEmployerJobs(employerId){
       this.employersJobs = [];
       const employerJobs = (await EmployerService.getEmployerJobs(employerId)).data.data;
       this.employersJobs = employerJobs;
-      // console.log(`Employers Jobs ${JSON.stringify(this.employersJobs)}`);
+    },
+    async getInactiveEmployerJobs(employerId){
+      this.employersInactiveJob = [];
+      const employerInactiveJobs = (await EmployerService.getInactiveEmployerJobs(employerId)).data.data;
+      this.employersInactiveJobs = employerInactiveJobs;
     }
   }
 }

@@ -147,7 +147,6 @@ export default {
   mounted(){
      let $this = this;
      EventBus.$on('update-employer-progress', function(){
-      console.log(`Updating the progress for the EmployerProfile`);
       $this.getProfileInfo();
     })
   },
@@ -182,7 +181,6 @@ export default {
       }
     }
   },
-
   methods:{
     inputChange: function(input){
       if (input && !this.alertSubmit) {
@@ -190,11 +188,9 @@ export default {
       }
     },
     async getProfileInfo(){
-        console.log(`Getting Profile info from server...`)
         // Get employer profile ID from router parameter
         let employerId = this.$store.state.route.params.employerId;
         // Make request to ProfileService sending employer :id
-        console.log(`EmployerID: ${employerId}`);
         let employer = (await ProfileService.getEmployerProfile(employerId)).data.data
         // Get response and check if employer object is returned and store that in the employer object if null is returned then empty employer object
         if (employer === null) {
@@ -208,7 +204,6 @@ export default {
              this.updateProgressStatus(this.employer);
         }
     },
-
     async updateEmployerProfile(){
         // Declare empty object to store the employer information
         let emplObj = {};
@@ -230,10 +225,8 @@ export default {
           confirm('There was an error handling your request')
         }
     },
-
     updateProgressStatus(employerObj){
       // Declare empty array to store steps to complete
-      // console.log(`Progress status  employer obj: ${JSON.stringify(employerObj)}`)
       this.stepsToComplete = [];
       // Set the progress status  = 1
       this.progressStatus = 1;
@@ -242,7 +235,6 @@ export default {
          let reqValuesObj = employerObj;
         // Loop through employer object ignoring keys with null values and foreach key increase the progress status by 6.999
          for (let key in reqValuesObj) {
-            console.log(reqValuesObj[key]);
            if (reqValuesObj[key] !== null) {
               this.progressStatus = this.progressStatus + 8.99
               // Check if progress status is greater than 100 if so set it to 100
@@ -272,15 +264,6 @@ export default {
         this.stepsToComplete.push('Upload Company Photo');
       }
     },
-
-    logoUpload(e){
-      this.employer.logo = e.target.files || e.dataTransfer.files;
-    },
-
-    companyPhotoUpload(e){
-      this.employer.photo = e.target.files || e.dataTransfer.files;
-    }
-
   }
 }
 </script>

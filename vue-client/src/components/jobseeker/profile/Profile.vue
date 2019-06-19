@@ -284,7 +284,6 @@ export default {
   mounted(){
    let $this = this;
     EventBus.$on('update-jobseeker-progress', function(){
-      console.log(`Updating the progress for the JobseekerProfile`);
       $this.getProfileInfo();
     })
   },
@@ -340,15 +339,11 @@ export default {
         if (this.joBSeeker.photo) obj.photo = this.joBSeeker.photo
         if (this.joBSeeker.resume) obj.resume = this.joBSeeker.resume
         if (this.joBSeeker.coverletter) obj.coverletter = this.joBSeeker.coverletter
-        // console.log(`Sending data: ${JSON.stringify(obj)}`)
          const updated = await ProfileService.updateJobSeekerProfile(obj);
          if (updated) {
-           // console.log('Info has been updated.... Retriveing It')
-           // console.log(JSON.stringify(updated));
             this.alertSubmit = false;
             this.getProfileInfo();
          }
-         // window.location.reload(true);
     },
 
     photoUpload: (e) => {
@@ -367,30 +362,21 @@ export default {
     async getProfileInfo() {
        this.joBSeeker = {};
        const seekerId = this.$store.state.route.params.jobseekerId;
-      // console.log(`Route params: ${seekerId}`);
        let seeker = (await ProfileService.getJobseekerProfile(seekerId)).data.jobseeker;
        if (seeker === null) {
          this.joBSeeker = {};
        } else {
         this.joBSeeker = seeker;
        }
-      // console.log(JSON.stringify(seeker))
-
-       // console.log(`Setting Current Jobseeker in store state : ${JSON.stringify(this.joBSeeker)}`)
        this.$store.dispatch('setCurrentJobseekerAction', this.joBSeeker)
-      //  console.log(`Current Job Seeker in STATE: ${JSON.stringify(this.$store.state.currentJobSeeker)}`)
-       // console.log(`Pulling Down profile ${JSON.stringify(this.joBSeeker)}`)
        this.updateProgressStatus(this.joBSeeker);
     },
     updateProgressStatus(joBSeeker){
-      // console.log(`Getting progress status`);
-      // console.log(JSON.stringify(joBSeeker))
      this.stepsToComplete = [];
      this.progressStatus = 1;
      if (joBSeeker) {
       let requireValues = joBSeeker;
       for (var key in requireValues) {
-         // console.log(`Key ${key} value: ${requireValues[key]}`);
            if (key !== 'jobseekerId' || key !== 'createdAt' || key !== 'updatedAt'){
               if (requireValues[key] !== null) {
                 this.progressStatus = this.progressStatus + 8.29;
@@ -443,11 +429,9 @@ export default {
         let jobseekerId = this.$store.state.route.params.jobseekerId;
         if (jobseekerId) {
            const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
-           console.log(`Job Apps: ${JSON.stringify(applications, null, 2)}`)
            if (applications) {
              this.jobApplications = applications;
            }
-          //  console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
         }
       }
     },
@@ -457,11 +441,9 @@ export default {
         let jobseekerId = this.$store.state.route.params.jobseekerId;
         if (jobseekerId) {
            const favorites = (await ProfileService.getFavoritedJobs(jobseekerId)).data.data;
-          // console.log(`Favorited Jobs: ${JSON.stringify(favorites)}`)
            if (favorites) {
              this.favorites = favorites;
            }
-           // console.log(`Job seeker ID: ${JSON.stringify(jobseekerId)}`)
         }
       }
     }

@@ -114,7 +114,6 @@ export default {
     this.getFeaturedCompanies();
   },
   mounted () {
-    console.log('Component Mounted')
   },
   data: function () {
     return {
@@ -134,15 +133,12 @@ export default {
     async getFeaturedCompanies(){
        this.featured_companies = [];
        this.featured_companies = (await EmployerService.getFeaturedCompanies()).data.data
-       // console.log(`Featured Companies returned: ${JSON.stringify(this.featured_companies)}`);
     },
     async getAllJobs(){
           this.jobs = [];
           this.jobs = (await JobService.viewAllJobs()).data.data;
-          // console.log(`Jobs returned: ${JSON.stringify(this.jobs, null, 2)}`);
     },
     async searchJobs () {
-      console.log('Searching jobs....');
       if (this.search.length > 5) {
           let loader = this.$loading.show({
                   // Optional parameters
@@ -150,13 +146,10 @@ export default {
                   canCancel: true,
                   onCancel: this.onCancel,
           });
-          console.log(`Search for: ${this.search}`);
           this.jobs = (await JobService.searchJob(this.search)).data.data
           if (this.jobs) {
              loader.hide()
-           // console.log(JSON.stringify(`Jobs returned: ${JSON.stringify(this.jobs)}`))
           } else {
-            // console.log(JSON.stringify(`No jobs returned: ${JSON.stringify(this.jobs)}`))
               loader.hide()
           }
       }

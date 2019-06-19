@@ -36,13 +36,11 @@ export default {
   },
   uploadCompanyPhoto(employerId, photo){
     const formData = new FormData();
-    console.log(photo)
     formData.append('file', photo, photo.name)
     return Api.post(`/employer/${employerId}/company/photo/upload`, formData)
   },
   uploadCompanyLogo(employerId, logo){
     const formData = new FormData();
-    console.log(logo)
     formData.append('file', logo, logo.name)
     return Api.post(`/employer/${employerId}/company/logo/upload`, formData)
   },

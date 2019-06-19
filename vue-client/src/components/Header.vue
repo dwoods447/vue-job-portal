@@ -79,7 +79,6 @@ export default {
   methods: {
     navigateTo(route, param){
       if (param) {
-        console.log(`The params are defined: ${JSON.stringify(param)}`)
         this.$router.push({ name: route, params: param });
       } else {
          this.$router.push({name: route});
@@ -90,12 +89,10 @@ export default {
       if (employer) {
         this.$store.dispatch('setEmployerLogOutAction');
         this.$router.push('/')
-        localStorage.clear();
       }
       if (jobseeker) {
         this.$store.dispatch('setJobseekerLogOutAction');
         this.$router.push('/')
-        localStorage.clear();
       }
     }
   }
