@@ -1,0 +1,15 @@
+{
+    "name": "vue-job-portal",
+    "version": "1.0.0",
+    "description": "Online job portall for jobseekers and employers",
+    "scripts": {
+      "heroku-postbuild": "npm run build-client && npm run install-server",
+      "start": "node express-server/src/app.js",
+      "build-client": "cd ./vue-client && npm install && npm run build",
+      "install-server": "cd ./express-server && npm install"
+    },
+    "engines": {
+      "node": ">= 6.0.0"
+    },
+    "cacheDirectories": ["vue-client/node_modules", "express-server/node_modules"]
+  }

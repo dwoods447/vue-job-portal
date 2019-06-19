@@ -6,11 +6,12 @@ const morgan  = require('morgan');
 const process = require('process');
 const {sequelize} = require('./models')
 const config = require('./config/config.js');
+const path  = require('path')
 const app = express();
 app.use(morgan('tiny'));
 app.use(bodyParser.json())
 app.use(cors());
-
+app.use(express.static(path.join(__dirname, '../../vue-client')))
 
 require('./JobSeekerPassport')
 require('./EmployerPassport')
