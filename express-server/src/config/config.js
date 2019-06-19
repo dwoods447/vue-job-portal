@@ -5,7 +5,6 @@ module.exports = {
         database: process.env.DB_NAME || 'vue-job-portal',
         user: process.env.DB_USER || 'dpwoods',
         password: process.env.DB_PASS || 'pimpjuice',
-        dialect: process.env.DIALECT,
         options: {
             host: process.env.HOST || 'localhost'
         }
