@@ -8,7 +8,7 @@
       style="margin-top: -150px;"
     >
       <h1 class="display-2 font-weight-thin mb-3 blue--text"><strong>Online Job Portal</strong></h1>
-      <h4 class="subheading blue--text"><strong>Applicants Post your resume, and Submit your application today!</strong></h4>
+      <h4 class="subheading blue--text"><strong>Applicants create a Jobseeker Profile, and Submit your application today!</strong></h4>
         <h4 class="subheading blue--text"><strong>Employers, Post a job, Find the perfect Applicant</strong></h4>
     </v-layout>
       </v-parallax>
