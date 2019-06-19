@@ -1,7 +1,7 @@
 {
     "name": "vue-job-portal",
     "version": "1.0.0",
-    "description": "Online job portall for jobseekers and employers",
+    "description": "this appplication serves an online job portal for employers and jobseekers.",
     "scripts": {
       "heroku-postbuild": "npm run build-client && npm run install-server",
       "start": "node express-server/src/app.js",
