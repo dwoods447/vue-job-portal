@@ -85,12 +85,7 @@ const jobseeker_document = multer({
 
 
 module.exports = (app, express)  =>{
-    app.get('/', (req, res)=>{
-        res.send('This is the server start page')
-    })
-
   app.use('/uploads',express.static('uploads'))
-  app.use('/trees', express.static('public'))
 
  /**** Job Seeker ****/
     // Get employer profile info
