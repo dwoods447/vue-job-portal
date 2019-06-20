@@ -13,7 +13,7 @@ const app = express();
 app.use(morgan('tiny'));
 app.use(bodyParser.json())
 app.use(cors());
-app.use('/', express.static(path.join(__dirname, '../../vue-client/build')))
+app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')))
 
 require('./JobSeekerPassport')
 require('./EmployerPassport')
