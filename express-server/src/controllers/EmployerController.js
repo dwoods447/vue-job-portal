@@ -114,7 +114,7 @@ const db = require('../models')
             SELECT employers.id, employers.company, employerprofiles.website, employerprofiles.coverphoto,
             employerprofiles.description
             FROM  employerprofiles INNER JOIN employers ON employers.id = employerprofiles.EmployerId
-            ORDER BY RAND() LIMIT 3
+            ORDER BY random() LIMIT 3
         `, { type: db.sequelize.QueryTypes.SELECT })
          res.send({
             data: featuredCompanies
