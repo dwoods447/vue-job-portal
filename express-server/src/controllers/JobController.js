@@ -94,10 +94,10 @@ module.exports = {
              const allJobs = await Job.findAll({
                 include: [{ model: Employer, include: [
                   {model: EmployerProfile}
-                ] }],
+                ]}],
                 where: {active: 1}
              });
-             res.send({data: allJobs});
+            return res.send({data: allJobs});
         } catch(err) {
             `error: ${err}`
         }
