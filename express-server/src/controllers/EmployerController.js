@@ -111,9 +111,9 @@ const db = require('../models')
      async getFeaturedCompanies(req, res){
          try{
             const featuredCompanies = await  db.sequelize.query(`
-            SELECT employers.id, employers.company, employerprofiles.website, employerprofiles.coverphoto,
-            employerprofiles.description
-            FROM  EmployerProfiles INNER JOIN employers ON employers.id = employerprofiles.EmployerId
+            SELECT Employers.id, Employers.company, EmployerProfiles.website, EmployerProfiles.coverphoto,
+            EmployerProfiles.description
+            FROM  EmployerProfiles INNER JOIN Employers ON Employers.id = EmployerProfiles.EmployerId
             ORDER BY RAND() LIMIT 3
         `, { type: db.sequelize.QueryTypes.SELECT })
          res.send({
