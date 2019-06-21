@@ -70,7 +70,7 @@ module.exports = {
             if (req.body.coverletter) {
                 updateObj.coverletter = req.body.coverletter;
             }
-            let whereObj = {where:{ jobseekerId: req.body.id}}
+            let whereObj = {where:{ JobseekerId: req.body.id}}
             const profile = await JobseekerProfile.update(updateObj, whereObj)
             res.send({
                 profile: profile
@@ -87,7 +87,7 @@ module.exports = {
     async getJobSeekerProfileInfo (req, res){
         try{
             const jobSeeker = await JobseekerProfile.findOne({
-                where: {jobseekerId: req.params.jobseekerId}
+                where: {JobseekerId: req.params.jobseekerId}
             })
             res.send({
                 jobseeker: jobSeeker
@@ -102,7 +102,7 @@ module.exports = {
     async getEmployerProfileInfo(req, res){
     try{
         const employer = await EmployerProfile.findOne({
-            where: {employerId: req.params.employerId}
+            where: {EmployerId: req.params.employerId}
         })
         res.send({
             data: employer

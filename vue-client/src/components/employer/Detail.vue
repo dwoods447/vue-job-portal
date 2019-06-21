@@ -3,7 +3,7 @@
       <v-container>
          <v-card>
            <v-toolbar color="primary">
-               <div>
+               <div v-if="employer.logo">
                  <img :src="employer.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
                </div>
                <h2><span class="white--text"><span v-if="company">{{company.company}}'s</span> Company Profile</span></h2>
