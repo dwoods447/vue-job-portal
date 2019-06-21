@@ -11,11 +11,11 @@ module.exports = {
           const isInFavorites = await Favorite.findOne({
             where: {JobId: req.params.jobId, JobseekerId: req.params.jobseekerId }
           });
-          res.send({
+          return  res.send({
               data: isInFavorites
           })
         } catch (error){
-          res.send({
+            return    res.send({
               data: error
           })
         }
@@ -28,12 +28,12 @@ module.exports = {
                 JobseekerId: req.params.jobseekerId
             });
             let favoritedJobJSON = favoritedJob.toJSON();
-            res.send({
+            return   res.send({
                 data: favoritedJobJSON,
               
             })
         } catch (error){
-            res.send({
+            return    res.send({
                 error: error,
                 
             })
@@ -50,14 +50,14 @@ module.exports = {
               }
             });
             let favoritedJobJSON = favoritedJob.toJSON();
-            res.send({
+            return  res.send({
                 data: favoritedJobJSON,
               
-            })
+             })
         } catch (error){
-            res.send({
+            return  res.send({
                 error: error,
-                
+                 
             })
         }
     },
@@ -72,19 +72,19 @@ module.exports = {
         ]
       })
       const employerJSON  = employer.toJSON();
-       res.send({
-        data: employerJSON,
-    })
+      return  res.send({
+             data: employerJSON,
+        })
     },
     async viewJob(req, res){
         try{
             const job = await Job.findOne({where:{id: req.params.jobId}})
             let jobJSON = job.toJSON();
-            res.send({
+            return  res.send({
                 data: jobJSON,
             })
         } catch(err){
-            res.send({
+            return res.send({
                 error:  `There was an error: ${err}`
             })
         }
@@ -99,7 +99,9 @@ module.exports = {
              });
             return res.send({data: allJobs});
         } catch(err) {
-            `error: ${err}`
+            return res.status(500).send({
+                error: err
+             })
         }
     },
 
@@ -116,11 +118,11 @@ module.exports = {
                 },
                 include: [{ all: true }]
             })
-            res.send({
+            return  res.send({
                 data: job
             })
         }catch(err){
-            res.status(500).send({
+            return res.status(500).send({
                error: err
             })
         }
@@ -135,11 +137,11 @@ module.exports = {
                 JobseekerId:req.params.jobseekerId,
                 
             });
-            res.send({
+            return  res.send({
                 data: applicationSent,
             })
         } catch (error){
-            res.send({
+            return  res.send({
                 data: error
             })
         }
@@ -150,11 +152,11 @@ module.exports = {
         const applicationSent = await JobApplicant.findOne({
           where: {JobId: req.params.jobId, JobseekerId: req.params.jobseekerId }
         });
-        res.send({
+        return  res.send({
             data: applicationSent
         })
       } catch (error){
-        res.send({
+        return res.send({
             data: error
         })
       }
