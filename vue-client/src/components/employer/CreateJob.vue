@@ -8,7 +8,7 @@
          </v-toolbar>
       </v-layout>
       <v-layout row wrap >
-         <v-flex xs6>
+         <v-flex lg6 xs12>
            <div style="padding: 0.25em; margin: 0 auto; width: 70%;">
               <form action="">
                <v-layout row wrap>
@@ -75,7 +75,7 @@
            </div>
          </v-flex> <!--  end of form flex-->
 
-         <v-flex xs6 v-if="employersJobs">
+         <v-flex lg6 xs12 v-if="employersJobs">
 
                  <div style="padding: 1em;">
                  <h2>Active Jobs</h2>
@@ -92,7 +92,7 @@
                        <td>{{ props.item.location }}</td>
                         <td>{{ props.item.createdAt | formateDate }}</td>
                         <td><router-link :to="{name:'edit.employer.job', params:{jobId: props.item.id} }"><v-btn>Edit</v-btn></router-link></td>
-                          <td><v-btn @click="removeJob(props.item.id)">Remove</v-btn></td>
+                          <td><v-btn small @click="removeJob(props.item.id)">Remove</v-btn></td>
                     </template>
                   </v-data-table>
                   <!-- <div class="text-xs-center pt-2">
@@ -103,10 +103,10 @@
          </v-flex>
       </v-layout><!-- end of row -->
       <v-layout row wrap>
-        <v-flex xs6>
+        <v-flex lg6 xs12>
 
         </v-flex>
-        <v-flex xs6>
+        <v-flex lg6 xs12>
             <div style="padding: 1em;">
                  <h2>Inactive Jobs</h2>
                    <div>
@@ -246,3 +246,16 @@ export default {
   }
 }
 </script>
+<style scope>
+@media screen and (max-width: 825px) {
+.profile-header{
+  font-size: 1em;
+ }
+   .v-datatable thead th{
+    padding: 0 !important;
+   }
+  .v-datatable tbody td{
+    padding: 0 !important;
+   }
+}
+</style>

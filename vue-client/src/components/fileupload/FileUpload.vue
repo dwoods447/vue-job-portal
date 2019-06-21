@@ -2,7 +2,7 @@
   <div>
       <v-card>
         <v-toolbar>
-           <h2>{{  upload_header }}</h2>
+           <h2 class="profile-header">{{  upload_header }}</h2>
            <br/>
 
         </v-toolbar>
@@ -234,3 +234,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+@media screen and (max-width: 825px) {
+.profile-header{
+  font-size: 1em;
+ }
+}
+</style>

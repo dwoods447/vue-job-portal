@@ -1,7 +1,10 @@
 <template>
   <v-container>
+    <!-- <v-layout row wrap>
+
+    </v-layout> -->
      <v-layout row wrap>
-    <v-flex xs3 class="section-container">
+    <v-flex lg3 md3 xs12  class="section-container">
         <file-upload
          upload_header="Update Your Profile Photo"
          file_type="image"
@@ -35,10 +38,10 @@
     </v-flex>
 
 
-    <v-flex xs-7 class="section-container">
+    <v-flex lg5 md5 xs12  class="section-container">
       <v-card class="form-container">
         <v-toolbar>
-         <h2>Update Your Profile Information</h2>
+         <h2 class="profile-header">Update Your Profile Information</h2>
         </v-toolbar>
         <v-list two-line>
 
@@ -120,10 +123,10 @@
     </v-flex>
 
 
-    <v-flex xs-3 class="section-container" style="max-width: 650px;">
+    <v-flex lg4 md4 xs12 class="section-container" style="max-width: 650px;">
           <v-card>
             <v-toolbar>
-              <h2><span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}}'s Profile information</span></h2>
+              <h2 class="profile-header"><span v-if="this.$store.state.jobseeker">{{this.$store.state.jobseeker.name}}'s Profile information</span></h2>
           </v-toolbar>
             <v-list-tile>
               <v-list-tile-content>
@@ -187,11 +190,11 @@
           <br/>
           <v-card>
           <v-toolbar>
-            <h2>Profile Completion Status</h2>
+            <h2 class="profile-header">Profile Completion Status</h2>
           </v-toolbar>
             <v-layout row wrap>
             <v-flex xs3 >
-              <div style="padding: 1em;">
+              <div style="padding: 1.3em;">
               <v-progress-circular
                 :rotate="-90"
                 :size="100"
@@ -466,4 +469,19 @@ export default {
     padding: 1em;
     border-bottom: 1px solid #eee;
   }
+@media screen and (max-width: 825px) {
+.profile-header{
+  font-size: 1em;
+ }
+ .v-progress-circular{
+   width: 78px !important;
+   height: 78px !important;
+ }
+   .v-datatable thead th{
+    padding: 0 !important;
+   }
+  .v-datatable tbody td{
+    padding: 0 !important;
+   }
+}
 </style>

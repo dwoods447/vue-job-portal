@@ -1,7 +1,7 @@
 <template>
   <v-container>
      <v-layout>
-    <v-flex xs3 class="section-container">
+    <v-flex lg3 md3 xs12  class="section-container">
       <file-upload
          upload_header="Upload Company Logo"
          file_type="image"
@@ -23,7 +23,7 @@
     </v-flex>
 
 
-    <v-flex xs-7 class="section-container">
+    <v-flex lg5 md5 xs12 class="section-container">
       <v-card class="form-container">
         <v-toolbar>
           Update Your Company Information
@@ -52,7 +52,7 @@
     </v-flex>
 
 
-        <v-flex xs-3 class="section-container">
+        <v-flex lg4 md4 xs12  class="section-container">
           <v-card>
             <v-toolbar>
             About your company
@@ -278,4 +278,19 @@ export default {
     padding: 1em;
     border-bottom: 1px solid #eee;
   }
+@media screen and (max-width: 825px) {
+.profile-header{
+  font-size: 1em;
+ }
+.v-progress-circular{
+   width: 78px !important;
+   height: 78px !important;
+ }
+.v-datatable thead th{
+    padding: 0 !important;
+}
+.v-datatable tbody td{
+    padding: 0 !important;
+}
+}
 </style>
