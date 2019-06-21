@@ -95,7 +95,7 @@ module.exports = {
                 include: [{ model: Employer, include: [
                   {model: EmployerProfile}
                 ]}],
-                where: {active: 1}
+                where: {active: true}
              });
              res.json(allJobs);
         } catch(err) {
