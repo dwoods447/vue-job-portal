@@ -97,7 +97,7 @@ module.exports = {
                 ]}],
                 where: {active: true}
              });
-             res.json(allJobs);
+             res.send({data: allJobs});
         } catch(err) {
          res.status(500).send({
                error: err
