@@ -35,16 +35,16 @@
                     >
                       <template v-slot:item="props">
                           <v-flex xs12  class="job-container">
-                              <v-toolbar color="primary">
+                              <v-toolbar color="primary" class="mobile-toolbar">
                                 <div v-if="props.item.Employer.EmployerProfile">
                                   <img :src="props.item.Employer.EmployerProfile.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
                                 </div>
-                                <div>
+                                <div class="">
                                   <h2><span class="white--text">{{ props.item.jobTitle}}</span></h2>
                                   <div class="white--text">at {{props.item.Employer.company}} - near {{props.item.location}}</div>
                                 </div>
-                                <v-spacer style="width: 50%;"></v-spacer>
-                                  <span class="yellow--text"><strong>{{props.item.type}}</strong></span>
+                                <v-spacer  class="desktop-spacer mobile-spacer"></v-spacer>
+                                <div class="job-type"><span class="yellow--text"><strong>{{props.item.type}}</strong></span></div>
                               </v-toolbar>
                                 <v-card>
                                   <div style="padding: 1em;">
@@ -67,7 +67,7 @@
             <v-flex xs12>
                         <h2>Featured Companies</h2>
                         <v-layout row wrap>
-                            <v-flex xs4 v-for="company in featured_companies" :key="company.id">
+                            <v-flex xs12 md4 v-for="company in featured_companies" :key="company.id">
                                 <v-card>
                                   <div v-if="company.coverphoto">
                                     <v-img
@@ -167,4 +167,25 @@ export default {
 .job-container{
   margin: 7px;
 }
+@media screen and (max-width: 825px) {
+  .mobile-toolbar{
+    height: 75px;
+  }
+  .job-container-title{
+    width: 65%;
+  }
+  .job-container-title h2{
+    font-size: 1em;
+  }
+  .mobile-spacer{
+    width: 15%;
+  }
+  .desktop-spacer{
+    width: 50%;
+  }
+  .job-type{
+    width: 29%;
+  }
+}
+
 </style>

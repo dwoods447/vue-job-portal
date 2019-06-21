@@ -1,9 +1,10 @@
 <template>
   <div>
   <v-toolbar color="primary">
-      <v-toolbar-title><v-btn  @click="navigateTo('home')" flat dark>Online Job Portal</v-btn></v-toolbar-title>
+      <v-toolbar-title class="hidden-sm-and-down"><v-btn  @click="navigateTo('home')" flat dark>Online Job Portal</v-btn></v-toolbar-title>
+      <v-toolbar-title class="hidden-md-and-up"><v-btn  @click="navigateTo('home')" flat dark>Home</v-btn></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-and-down">
+      <v-toolbar-items>
       <v-menu offset-y v-if="!$store.state.isJobseekerLoggedIn">
         <template v-slot:activator="{ on }">
           <v-btn
@@ -66,6 +67,11 @@
           Log Out
           </v-btn>
       </v-toolbar-items>
+
+
+
+
+
   </v-toolbar>
   </div>
 </template>
