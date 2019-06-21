@@ -135,7 +135,7 @@ export default {
     margin: 7px;
   }
   @media screen and (max-width: 825px) {
-  .v-datatable th{
+  .v-datatable>th{
     padding: 0px;
    }
    .company-header-container{
