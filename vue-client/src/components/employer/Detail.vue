@@ -11,7 +11,7 @@
                <h2><router-link :to="{name: 'home'}" class="white--text"> Back to Job List</router-link></h2>
            </v-toolbar>
          <v-layout row wrap>
-           <v-flex xs7 class="detail-container">
+           <v-flex md7 xs12 class="detail-container">
              <div>
                   <v-list-tile>
                   <v-list-tile-content>
@@ -43,7 +43,7 @@
                 <p>{{employer.description}}</p>
              </div>
            </v-flex>
-           <v-flex xs4 class="detail-container">
+           <v-flex md4 xs12 class="detail-container">
              <div style="width: 100%;">
                   <img :src="employer.coverphoto" style="width: 100%; display: block; margin: 0 auto;">
              </div>

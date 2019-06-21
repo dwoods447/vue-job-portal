@@ -167,6 +167,9 @@ export default {
 .job-container{
   margin: 7px;
 }
+ .desktop-spacer{
+    width: 50%;
+}
 @media screen and (max-width: 825px) {
   .mobile-toolbar{
     height: 75px;
@@ -179,9 +182,6 @@ export default {
   }
   .mobile-spacer{
     width: 15%;
-  }
-  .desktop-spacer{
-    width: 50%;
   }
   .job-type{
     width: 29%;
