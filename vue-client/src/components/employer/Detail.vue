@@ -135,11 +135,11 @@ export default {
     margin: 7px;
   }
   @media screen and (max-width: 825px) {
-  thead>th{
-    padding: 0px;
+  .v-datatable thead th{
+    padding: 0 !important;
    }
-  tbody>td{
-    padding: 0px;
+  .v-datatable tbody td{
+    padding: 0 !important;
    }
    .company-header-container{
      font-size: 1em;
