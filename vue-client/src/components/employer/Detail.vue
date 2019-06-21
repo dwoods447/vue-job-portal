@@ -6,9 +6,9 @@
                <div v-if="employer.logo">
                  <img :src="employer.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
                </div>
-               <h2><span class="white--text"><span v-if="company">{{company.company}}'s</span> Company Profile</span></h2>
+               <h2 class="company-header-container"><span class="white--text"><span v-if="company">{{company.company}}'s</span> Company Profile</span></h2>
                <v-spacer></v-spacer>
-               <h2><router-link :to="{name: 'home'}" class="white--text"> Back to Job List</router-link></h2>
+               <h2 class="company-header-container"><router-link :to="{name: 'home'}" class="white--text"> Back to Job List</router-link></h2>
            </v-toolbar>
          <v-layout row wrap>
            <v-flex md7 xs12 class="detail-container">
@@ -38,8 +38,8 @@
                 </v-list-tile>
                 <v-divider></v-divider>
              </div>
-              <div style="padding: 1em;">
-                 <h2> Company Description: </h2>
+              <div class="company-header-container">
+                 <h2 class="company-header"> Company Description: </h2>
                 <p>{{employer.description}}</p>
              </div>
            </v-flex>
@@ -65,7 +65,7 @@
                       <td>{{ props.item.jobTitle }}<br/>&nbsp;&nbsp;&nbsp;{{ props.item.type }}</td>
                        <td>{{ props.item.location }}</td>
                         <td>{{ props.item.createdAt | formateDate }}</td>
-                        <td><router-link :to="{name:'view.job.detail', params:{jobId: props.item.id}}" target='_blank'><v-btn>View job</v-btn></router-link></td>
+                        <td><router-link :to="{name:'view.job.detail', params:{jobId: props.item.id}}" target='_blank'><v-btn small>View job</v-btn></router-link></td>
                     </template>
                   </v-data-table>
                   <!-- <div class="text-xs-center pt-2">
@@ -133,5 +133,13 @@ export default {
 <style>
   .detail-container{
     margin: 7px;
+  }
+  @media screen and (max-width: 825px) {
+  .v-datatable th{
+    padding: 0px;
+   }
+   .company-header-container{
+     font-size: 1em;
+   }
   }
 </style>

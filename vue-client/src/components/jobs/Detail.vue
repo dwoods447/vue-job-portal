@@ -2,7 +2,7 @@
   <div>
       <v-container>
          <v-layout row wrap>
-           <v-flex xs9 pa-2>
+           <v-flex xs12 md9 pa-2>
               <v-card>
                 <v-toolbar color="primary">
                 <div>
@@ -17,7 +17,7 @@
                 </div>
               </v-card>
            </v-flex>
-             <v-flex xs3 pa-2>
+             <v-flex xs12 md3 pa-2>
                <v-card>
                 <v-toolbar color="primary" class="white--text">
                  Job Details
