@@ -99,9 +99,9 @@ export default {
         pages: 1
       },
       tableHeaders: [
-        {text: 'Position/Type'},
-        {text: 'Location'},
-        {text: 'Date Posted'},
+        {text: 'Position/Type', value: 'type'},
+        {text: 'Location', value: 'location'},
+        {text: 'Date Posted', value: 'createdAt'},
       ]
     }
   },
