@@ -39,7 +39,7 @@
                                 <div v-if="props.item.Employer.EmployerProfile">
                                   <img :src="props.item.Employer.EmployerProfile.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>
                                 </div>
-                                <div class="">
+                                <div class="job-container-title">
                                   <h2><span class="white--text">{{ props.item.jobTitle}}</span></h2>
                                   <div class="white--text">at {{props.item.Employer.company}} - near {{props.item.location}}</div>
                                 </div>
