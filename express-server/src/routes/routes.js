@@ -13,7 +13,7 @@ const path = require('path')
 
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, '../uploads/employers/')
+        cb(null, 'uploads/employers/')
     },
     filename: function(req, file, cb){
         cb(null,   new Date().toISOString().replace(/:/g, '_')+'_'+ file.originalname)
@@ -23,7 +23,7 @@ let employer_storage = multer.diskStorage({
 
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, '../uploads/jobseekers/')
+        cb(null, 'uploads/jobseekers/')
     },
     filename: function(req, file, cb){
         let date = new Date();
@@ -184,7 +184,7 @@ module.exports = (app, express)  =>{
                     // Everything went fine
                    
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "http://localhost:3000/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
                     JobseekerProfile.update({photo: url },
                       {where:{ JobseekerId: req.params.jobseekerId }});
                     console.log(`Everything went fine saved filepath: ${url} `);   
@@ -215,7 +215,7 @@ module.exports = (app, express)  =>{
                     // Everything went fine
                      // Everything went fine
                      const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                     const url  = "http://localhost:3000/"+ filepath;
+                     const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
                      JobseekerProfile.update({resume: url},
                        {where: {JobseekerId: req.params.jobseekerId}})
                      res.status(200).send({
@@ -243,7 +243,7 @@ module.exports = (app, express)  =>{
                 }  else {
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "http://localhost:3000/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
                     JobseekerProfile.update({coverletter: url},
                       {where: {JobseekerId: req.params.jobseekerId}})
                     res.status(200).send({
@@ -271,7 +271,7 @@ module.exports = (app, express)  =>{
                 }  else {
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "http://localhost:3000/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
                     EmployerProfile.update({coverphoto: url},
                       {where: {EmployerId: req.params.employerId}})
                     res.status(200).send({
@@ -286,7 +286,6 @@ module.exports = (app, express)  =>{
                 // console.log(`Response: ${JSON.stringify(res)}`);
                  // console.log(`Response: ${JSON.stringify(employer_upload)}`);
                 employer_upload(req, res, function(err){
-                    console.log(`File: ${JSON.stringify(req.file)}`);
                     if(err instanceof multer.MulterError){
                         console.log(`There was a multer error:${err}`);
                         // Multer Error
@@ -302,7 +301,7 @@ module.exports = (app, express)  =>{
                     }  else {
                         // Everything went fine
                         const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                        const url  = "http://localhost:3000/"+ filepath;
+                        const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
                         EmployerProfile.update({logo: url},
                             {where: {EmployerId: req.params.employerId}})
                         res.status(200).send({
