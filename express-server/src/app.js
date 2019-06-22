@@ -10,10 +10,20 @@ const {sequelize} = require('./models')
 const config = require('./config/config.js');
 const path  = require('path')
 const app = express();
+const fs = require('fs')
 app.use(morgan('tiny'));
 app.use(bodyParser.json())
 app.use(cors());
 app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')))
+
+//Create Uploads directory
+
+try {
+    fs.mkdirSync(path.join(__dirname, './uploads/employers/'))
+    fs.mkdirSync(path.join(__dirname, './uploads/jobseekers/'))
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err
+  }
 
 require('./JobSeekerPassport')
 require('./EmployerPassport')
