@@ -27,6 +27,7 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <div><strong>Email:</strong> <span style="color:green">rfairfoot9@tiny.cc</span> <br/><strong>Password:</strong>   <span style="color:green">password</span></div>
                 <div v-if="this.$store.state.successMessage"><strong><span style="color: green;">{{ this.$store.state.successMessage}}</span></strong></div>
                 <div style="padding: 1em;" v-if="invalidPassword"><strong><span style="color: red;">Incorrect Username and/or Password</span></strong></div>
                  <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a Username and Password</span></strong></div>
@@ -98,7 +99,6 @@ export default {
                 this.$store.dispatch('setEmployerTokenAction', response.data.token);
                 this.$store.dispatch('setEmployerAction', response.data.employer);
                 this.$store.dispatch('setSuccessMessageAction', null)
-                confirm('You are logged in !!!!!');
                 this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
           }
            if (response.status === 403) {

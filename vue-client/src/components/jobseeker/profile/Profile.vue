@@ -217,6 +217,7 @@
             </v-list-tile>
             <v-divider></v-divider>
             </div>
+             <div v-if="allStepsComplete"><router-link :to="{name:'home'}" style="text-decoration:none;"><v-btn color="success" style="width: 250px;">Apply For Jobs</v-btn></router-link></div>
             </v-flex>
             </v-layout>
           </v-card>
@@ -303,6 +304,7 @@ export default {
       value: '50%',
       stepsToComplete: [],
       joBSeeker: {},
+      allStepsComplete: false,
       jobApplications: [],
       favorites: [],
         tableHeaders: [
@@ -377,6 +379,7 @@ export default {
     updateProgressStatus(joBSeeker){
      this.stepsToComplete = [];
      this.progressStatus = 1;
+     this.allStepsComplete = false;
      if (joBSeeker) {
       let requireValues = joBSeeker;
       for (var key in requireValues) {
@@ -385,6 +388,9 @@ export default {
                 this.progressStatus = this.progressStatus + 8.29;
                 if (this.progressStatus > 100) {
                   this.progressStatus = 100;
+                  if (this.progressStatus === 100) {
+                      this.allStepsComplete = true;
+                  }
                 }
               } else {
                     if (key === 'address') {
