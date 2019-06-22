@@ -1,9 +1,7 @@
-# vue-client
-
 # Online Job Portal
 A simple job portal built Vue.js / Express.js and Sequelize
-  i. Jobseekers are able to register, search, and apply for jobs, and also add job to favorites. Jobseekers must create a jobseeker profile after registration.
-  ii. Employers are able to register, create, edit, and post new jobs, and view applicants. Employers must create a employer profile after registration.
+  ** i. Jobseekers are able to register, search, and apply for jobs, and also add job to favorites. Jobseekers must create a jobseeker profile after registration.
+  ** ii. Employers are able to register, create, edit, and post new jobs, and view applicants. Employers must create a employer profile after registration.
 ## Setup
 You need to have Node Js installed
 
