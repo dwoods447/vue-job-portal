@@ -188,12 +188,19 @@ module.exports = (app, express)  =>{
                    
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                     const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
-                    JobseekerProfile.update({photo: url },
-                      {where:{ JobseekerId: req.params.jobseekerId }});
-                    console.log(`Everything went fine saved filepath: ${url} `);   
-                    res.status(200).send({
-                        'success': 'Every thing went fine'
-                    })
+                    try {
+                        JobseekerProfile.update({photo: url },
+                            {where:{ JobseekerId: req.params.jobseekerId }});
+                          console.log(`Everything went fine saved filepath: ${url} `);
+                          res.status(200).send({
+                            'success': 'Every thing went fine'
+                          })
+                    } catch(error){
+                        res.status(500).send({
+                            error: error
+                        })
+                    }
+                   
                 } 
                   
               
@@ -219,11 +226,18 @@ module.exports = (app, express)  =>{
                      // Everything went fine
                      const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                      const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
-                     JobseekerProfile.update({resume: url},
-                       {where: {JobseekerId: req.params.jobseekerId}})
-                     res.status(200).send({
-                         'success': 'Every thing went fine'
-                     })
+                     try {
+                        JobseekerProfile.update({resume: url},
+                            {where: {JobseekerId: req.params.jobseekerId}})
+                          res.status(200).send({
+                              'success': 'Every thing went fine'
+                          })
+                     } catch(error){
+                        res.status(500).send({
+                            error: error
+                        })
+                     }
+                 
                 } 
                    
                
@@ -247,11 +261,18 @@ module.exports = (app, express)  =>{
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                     const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
-                    JobseekerProfile.update({coverletter: url},
-                      {where: {JobseekerId: req.params.jobseekerId}})
-                    res.status(200).send({
-                        'success': 'Every thing went fine'
-                    })
+                    try {
+                        JobseekerProfile.update({coverletter: url},
+                            {where: {JobseekerId: req.params.jobseekerId}})
+                          res.status(200).send({
+                              'success': 'Every thing went fine'
+                          })
+                    } catch(error){
+                        res.status(500).send({
+                            error: err
+                        })
+                    }
+                 
                 } 
                
                 
@@ -275,11 +296,18 @@ module.exports = (app, express)  =>{
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                     const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
-                    EmployerProfile.update({coverphoto: url},
-                      {where: {EmployerId: req.params.employerId}})
-                    res.status(200).send({
-                        'success': 'Every thing went fine'
-                    })
+                    try {
+                        EmployerProfile.update({coverphoto: url},
+                            {where: {EmployerId: req.params.employerId}})
+                          res.status(200).send({
+                              'success': 'Every thing went fine'
+                          })
+                    } catch(error){
+                        res.status(500).send({
+                            error: err
+                        })
+                    }
+                  
                 } 
                   
             
@@ -305,11 +333,17 @@ module.exports = (app, express)  =>{
                         // Everything went fine
                         const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                         const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
-                        EmployerProfile.update({logo: url},
-                            {where: {EmployerId: req.params.employerId}})
-                        res.status(200).send({
-                            'success': 'Every thing went fine'
-                        })
+                        try {
+                            EmployerProfile.update({logo: url},
+                                {where: {EmployerId: req.params.employerId}})
+                            res.status(200).send({
+                                'success': 'Every thing went fine'
+                            })
+                        } catch(error){
+                            res.status(500).send({
+                                error: err
+                            })
+                        }
                     } 
                 })
                 
