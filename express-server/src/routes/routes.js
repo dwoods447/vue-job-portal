@@ -16,7 +16,10 @@ let employer_storage = multer.diskStorage({
         cb(null, 'uploads/employers/')
     },
     filename: function(req, file, cb){
-        cb(null,   new Date().toISOString().replace(/:/g, '_')+'_'+ file.originalname)
+        let date = new Date();
+        let time = date.getTime();
+        let filename = date.toISOString().replace(/:/g, '-')+'_'+time+'_'+ file.originalname;
+        cb(null,   filename)
     }
 });
 
