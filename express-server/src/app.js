@@ -19,8 +19,8 @@ app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')))
 //Create Uploads directory
 
 try {
-    fs.mkdirSync(path.join(__dirname, './uploads/employers/'))
-    fs.mkdirSync(path.join(__dirname, './uploads/jobseekers/'))
+    fs.mkdirSync(path.join(__dirname, 'uploads/employers/'))
+    fs.mkdirSync(path.join(__dirname, 'uploads/jobseekers/'))
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
