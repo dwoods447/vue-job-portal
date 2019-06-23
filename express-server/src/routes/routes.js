@@ -94,9 +94,9 @@ const jobseeker_document = multer({
 }).single('file');
 
 
-module.exports = (app /*express*/)  =>{
+module.exports = (app, express) =>{
  
-    // app.use('/uploads',express.static('uploads'))
+     app.use('/apps/uploads',express.static('../../../uploads/'))
 
  /**** Job Seeker ****/
     // Get employer profile info
