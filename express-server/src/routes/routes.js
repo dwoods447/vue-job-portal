@@ -87,7 +87,7 @@ const jobseeker_document = multer({
 }).single('file');
 
 
-module.exports = (app, express)  =>{
+module.exports = (app /*express*/)  =>{
  
     // app.use('/uploads',express.static('uploads'))
 

@@ -15,12 +15,16 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json())
 app.use(cors());
 app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')))
-const dir = '../../uploads';
+const employers = './uploads/employers/employers/';
+const jobseekers = './uploads/employers/jobseekers/';
 //Create Uploads directory
 try {
-  if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
-   }
+  if (!fs.existsSync(employers)){
+    fs.mkdirSync(employers);
+  }
+  if(!jobseekers){
+    fs.mkdirSync(jobseekers);
+  }
 } catch (err) {
     console.log(err);
 }
