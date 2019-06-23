@@ -96,7 +96,7 @@ const jobseeker_document = multer({
 
 module.exports = (app, express) =>{
  
-     app.use('/apps/uploads',express.static('../../../uploads/'))
+     app.use('/app/uploads',express.static('../../../uploads/'))
 
  /**** Job Seeker ****/
     // Get employer profile info
@@ -201,7 +201,8 @@ module.exports = (app, express) =>{
                             {where:{ JobseekerId: req.params.jobseekerId }});
                           console.log(`Everything went fine saved filepath: ${url} `);
                           res.status(200).send({
-                            'success': 'Every thing went fine'
+                            'success': 'Every thing went fine',
+                            'url':url
                           })
                     } catch(error){
                         res.status(500).send({
@@ -238,7 +239,8 @@ module.exports = (app, express) =>{
                         JobseekerProfile.update({resume: url},
                             {where: {JobseekerId: req.params.jobseekerId}})
                           res.status(200).send({
-                              'success': 'Every thing went fine'
+                              'success': 'Every thing went fine',
+                              'url':url
                           })
                      } catch(error){
                         res.status(500).send({
@@ -273,7 +275,8 @@ module.exports = (app, express) =>{
                         JobseekerProfile.update({coverletter: url},
                             {where: {JobseekerId: req.params.jobseekerId}})
                           res.status(200).send({
-                              'success': 'Every thing went fine'
+                              'success': 'Every thing went fine',
+                              'url':url
                           })
                     } catch(error){
                         res.status(500).send({
@@ -308,7 +311,8 @@ module.exports = (app, express) =>{
                         EmployerProfile.update({coverphoto: url},
                             {where: {EmployerId: req.params.employerId}})
                           res.status(200).send({
-                              'success': 'Every thing went fine'
+                              'success': 'Every thing went fine',
+                              'url':url
                           })
                     } catch(error){
                         res.status(500).send({
@@ -345,7 +349,8 @@ module.exports = (app, express) =>{
                             EmployerProfile.update({logo: url},
                                 {where: {EmployerId: req.params.employerId}})
                             res.status(200).send({
-                                'success': 'Every thing went fine'
+                                'success': 'Every thing went fine',
+                                'url':url
                             })
                         } catch(error){
                             res.status(500).send({
