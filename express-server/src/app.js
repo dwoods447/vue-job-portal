@@ -12,9 +12,11 @@ const path  = require('path')
 const app = express();
 // const fs = require('fs')
 app.use(morgan('tiny'));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(cors());
-app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')))
+app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')));
+app.use('/app/uploads/employers', express.static(path.join(__dirname, '../../uploads/employers')));
+app.use('/app/uploads/jobseekers', express.static(path.join(__dirname, '../../uploads/jobseekers')));
 // const employers = '../uploads/employers/employers/';
 // const jobseekers = './uploads/employers/jobseekers/';
 // //Create Uploads directory
