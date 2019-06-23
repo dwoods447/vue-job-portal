@@ -13,7 +13,9 @@ const directory = __dirname;
 
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(directory, '../../../uploads/employers/'))
+        const uploads = path.join(directory, '../../../uploads/employers/');
+        console.log(`Employer Storage File Path: ${uploads}`);
+        cb(null, uploads)
     },
     filename: function(req, file, cb){
         let date = new Date();
@@ -28,7 +30,10 @@ let employer_storage = multer.diskStorage({
 
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(directory, '../../../uploads/jobseekers/'))
+        const uploads = path.join(directory, '../../../uploads/jobseekers/');
+        console.log(`Jobseeker Storge File Path: ${uploads}`);
+        cb(null, uploads)
+
     },
     filename: function(req, file, cb){
         let date = new Date();
@@ -190,7 +195,7 @@ module.exports = (app /*express*/)  =>{
                     // Everything went fine
                    
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
                         JobseekerProfile.update({photo: url },
                             {where:{ JobseekerId: req.params.jobseekerId }});
@@ -228,7 +233,7 @@ module.exports = (app /*express*/)  =>{
                     // Everything went fine
                      // Everything went fine
                      const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                     const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
+                     const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                      try {
                         JobseekerProfile.update({resume: url},
                             {where: {JobseekerId: req.params.jobseekerId}})
@@ -263,7 +268,7 @@ module.exports = (app /*express*/)  =>{
                 }  else {
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
                         JobseekerProfile.update({coverletter: url},
                             {where: {JobseekerId: req.params.jobseekerId}})
@@ -298,7 +303,7 @@ module.exports = (app /*express*/)  =>{
                 }  else {
                     // Everything went fine
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
+                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
                         EmployerProfile.update({coverphoto: url},
                             {where: {EmployerId: req.params.employerId}})
@@ -335,7 +340,7 @@ module.exports = (app /*express*/)  =>{
                     }  else {
                         // Everything went fine
                         const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                        const url  = "https://vue-job-portal.herokuapp.com/"+ filepath;
+                        const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                         try {
                             EmployerProfile.update({logo: url},
                                 {where: {EmployerId: req.params.employerId}})
