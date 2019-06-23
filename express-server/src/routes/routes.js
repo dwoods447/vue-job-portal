@@ -8,7 +8,7 @@ const isEmployerAuthenticated = require('../policies/isEmployerAuthenticated.js'
 const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.js')
 const multer = require('multer');
 const path = require('path')
-const directory = __dirname.replace(/\//g, '');
+const directory = __dirname;
 
 
 let employer_storage = multer.diskStorage({
