@@ -88,7 +88,8 @@ const jobseeker_document = multer({
 
 
 module.exports = (app, express)  =>{
-  app.use('/uploads',express.static('uploads'))
+ 
+    // app.use('/uploads',express.static('uploads'))
 
  /**** Job Seeker ****/
     // Get employer profile info
