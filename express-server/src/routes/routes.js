@@ -13,7 +13,7 @@ const path = require('path')
 
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(__dirname, '/uploads/employers/'))
+        cb(null, path.join(__dirname, '../../../uploads/employers/'))
     },
     filename: function(req, file, cb){
         let date = new Date();
@@ -26,7 +26,7 @@ let employer_storage = multer.diskStorage({
 
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(__dirname, '/uploads/jobseekers/'))
+        cb(null, path.join(__dirname, '../../../uploads/jobseekers/'))
     },
     filename: function(req, file, cb){
         let date = new Date();
