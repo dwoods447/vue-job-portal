@@ -8,12 +8,12 @@ const isEmployerAuthenticated = require('../policies/isEmployerAuthenticated.js'
 const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.js')
 const multer = require('multer');
 const path = require('path')
-
+const directory = __dirname;
 
 
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(__dirname, '../../../uploads/employers/'))
+        cb(null, path.join(directory.replace(/\//g, ''), '../../../uploads/employers/'))
     },
     filename: function(req, file, cb){
         let date = new Date();
@@ -24,9 +24,11 @@ let employer_storage = multer.diskStorage({
 });
 
 
+       
+
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, path.join(__dirname, '../../../uploads/jobseekers/'))
+        cb(null, path.join(directory.replace(/\//g, ''), '../../../uploads/jobseekers/'))
     },
     filename: function(req, file, cb){
         let date = new Date();
