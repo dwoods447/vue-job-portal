@@ -15,7 +15,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')));
-app.use('/app/uploads', express.static(path.join(__dirname, '../../uploads')));
+app.use('*/app/uploads/*', express.static(path.join(__dirname, '../../uploads/')));
 
 // const employers = '../uploads/employers/employers/';
 // const jobseekers = './uploads/employers/jobseekers/';
