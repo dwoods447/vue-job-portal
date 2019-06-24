@@ -149,8 +149,8 @@ export default {
         this.categories = catsReturned.data.data;
     },
     async getJobTypes(){
-        const jobTypes = await EmployerService.getJobTypes()
-        this.jobTypes = jobTypes.data.data[0];
+        const jobTypes = (await EmployerService.getJobTypes()).data.data
+        this.jobTypes = jobTypes;
     },
 
      async updateJob(){
