@@ -70,7 +70,8 @@ const dict = {
                 required: 'Please enter a value'
             },
             confirm: {
-              required: 'Please enter a value'
+              required: 'Please enter a value',
+              confirmed: 'Passwords do not match'
             }
 
         }
@@ -118,6 +119,7 @@ export default {
         },
 
         async submitFormValues(){
+
            const res = await RegisterService.jobseekerRegister({
                   name: this.jobSeekerRegistration.name,
                   email: this.jobSeekerRegistration.email,
