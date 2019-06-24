@@ -9,7 +9,6 @@ const db = {}
 //     config.db.password,
 //     config.db.options
 // )
-
 const sequelize = new Sequelize(config.db.url, {
     dialect: 'postgres'
 })

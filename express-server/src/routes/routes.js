@@ -9,6 +9,15 @@ const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.j
 const multer = require('multer');
 const path = require('path')
 const directory = __dirname;
+const cloudinary = require('cloudinary').v2;
+
+//set your env variable CLOUDINARY_URL or set the following configuration
+cloudinary.config({
+    cloud_name: 'dnynuxbi6',
+    api_key: '174576997298891',
+    api_secret: 'fI9q36yisH2O1uTXuhVVT8_zckQ'
+}); 
+   
 
 
 let employer_storage = multer.diskStorage({
@@ -26,7 +35,10 @@ let employer_storage = multer.diskStorage({
 });
 
 
-       
+
+
+
+
 
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
@@ -197,12 +209,14 @@ module.exports = (app) =>{
                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                     const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
+                     
                         JobseekerProfile.update({photo: url },
                             {where:{ JobseekerId: req.params.jobseekerId }});
                           console.log(`Everything went fine saved filepath: ${url} `);
                           res.status(200).send({
                             'success': 'Every thing went fine',
-                            'url':url
+                            'url':url,
+                             
                           })
                     } catch(error){
                         res.status(500).send({
@@ -346,11 +360,13 @@ module.exports = (app) =>{
                         const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
                         const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                         try {
+                            const result = await cloudinary.uploader.upload(req.file.path);
                             EmployerProfile.update({logo: url},
                                 {where: {EmployerId: req.params.employerId}})
                             res.status(200).send({
                                 'success': 'Every thing went fine',
-                                'url':url
+                                'url':url,
+                                'cloudinary': result
                             })
                         } catch(error){
                             res.status(500).send({
