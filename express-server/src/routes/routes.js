@@ -13,7 +13,7 @@ const directory = __dirname;
 
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
-        const uploads = path.join(directory, '../../uploads/employers/');
+        const uploads = path.join(directory, '../../../uploads/');
         console.log(`Employer Storage File Path: ${uploads}`);
         cb(null, uploads)
     },
