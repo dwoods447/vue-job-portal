@@ -194,38 +194,39 @@ module.exports = (app) =>{
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else if (err){
                     // Unknown error
                     console.log(`There was a unknown error:${err}`);
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else {
                     // Everything went fine
                    
-                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
+                    // const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    // const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
-                     
-                        JobseekerProfile.update({photo: url },
-                            {where:{ JobseekerId: req.params.jobseekerId }});
-                          console.log(`Everything went fine saved filepath: ${url} `);
-                          res.status(200).send({
-                            'success': 'Every thing went fine',
-                            'url':url,
-                             
-                          })
+                      const result = await cloudinary.uploader.upload(req.file.path);
+                      if (result) {
+                       JobseekerProfile.update({photo: result.secure_url},
+                          {where:{ JobseekerId: req.params.jobseekerId }});
+                        console.log(`Everything went fine saved filepath: ${result.secure_url} `);
+                        res.status(200).send({
+                          'success': 'Every thing went fine',
+                          'url':result.secure_url,
+                          'cloudinary': result
+                           
+                        })
+                       }
                     } catch(error){
                         res.status(500).send({
-                            error: error
+                            'error': error
                         })
                     }
                    
                 } 
-                  
-              
             })
         })
 
@@ -236,28 +237,32 @@ module.exports = (app) =>{
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else if (err){
                     // Unknown error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else {
                     // Everything went fine
-                     // Everything went fine
-                     const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                     const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
+                    // local url:
+                    //  const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    //  const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                      try {
-                        JobseekerProfile.update({resume: url},
+                        const result = await cloudinary.uploader.upload(req.file.path);
+                        if(result){
+                          JobseekerProfile.update({resume: result.secure_url},
                             {where: {JobseekerId: req.params.jobseekerId}})
                           res.status(200).send({
                               'success': 'Every thing went fine',
-                              'url':url
+                              'url':result.secure_url,
+                              'cloudinary': result
                           })
+                        }
                      } catch(error){
                         res.status(500).send({
-                            error: error
+                            'error': error
                         })
                      }
                  
@@ -268,32 +273,37 @@ module.exports = (app) =>{
         })
         
         app.post('/jobseeker/:jobseekerId/coverletter/upload', function(req,  res){ 
-          jobseeker_document(req, res, function(err){
+          jobseeker_document(req, res, async function(err){
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else if (err){
                     // Unknown error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 }  else {
                     // Everything went fine
-                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
+                    // const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    // local url:
+                    // const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                     try {
-                        JobseekerProfile.update({coverletter: url},
-                            {where: {JobseekerId: req.params.jobseekerId}})
-                          res.status(200).send({
-                              'success': 'Every thing went fine',
-                              'url':url
-                          })
+                       const result = await cloudinary.uploader.upload(req.file.path);
+                       if(result){
+                        JobseekerProfile.update({coverletter: result.secure_url},
+                          {where: {JobseekerId: req.params.jobseekerId}})
+                        res.status(200).send({
+                            'success': 'Every thing went fine',
+                            'url':result.secure_url,
+                            'cloudinary': result
+                        })
+                       }
                     } catch(error){
                         res.status(500).send({
-                            error: err
+                            'error': error
                         })
                     }
                  
@@ -303,33 +313,39 @@ module.exports = (app) =>{
             })
         })
         app.post('/employer/:employerId/company/photo/upload', function(req,  res){ 
-            employer_upload(req, res, function(err){
+            employer_upload(req, res,  async function(err){
               console.log(`File: ${JSON.stringify(req.file)}`);
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 } else if (err){
                     // Unknown error
                     res.status(500).send({
-                        error: err
+                        'error': err
                     })
                 }  else {
                     // Everything went fine
-                    const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                    const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
+                    // const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                    // local url:
+                    // const url  = "https://vue-job-portal.herokuapp.com"+ filepath; 
                     try {
-                        EmployerProfile.update({coverphoto: url},
-                            {where: {EmployerId: req.params.employerId}})
-                          res.status(200).send({
-                              'success': 'Every thing went fine',
-                              'url':url
-                          })
+                      const result = await cloudinary.uploader.upload(req.file.path);
+                      if(result){
+                        EmployerProfile.update({coverphoto: result.secure_url},
+                          {where: {EmployerId: req.params.employerId}})
+                        res.status(200).send({
+                            'success': 'Every thing went fine',
+                            'url':result.secure_url,
+                            'cloudinary': result
+                            
+                        })
+                      }
                     } catch(error){
                         res.status(500).send({
-                            error: err
+                            'error': error
                         })
                     }
                   
@@ -346,18 +362,19 @@ module.exports = (app) =>{
                         console.log(`There was a multer error:${err}`);
                         // Multer Error
                         res.status(500).send({
-                            error: err
+                            'error': err
                         })
                     } else if (err){
                         // Unknown error
                         console.log(`There was a multer error:${err}`);
                         res.status(500).send({
-                            error: err
+                            'error': err
                         })
                     }  else {
                         // Everything went fine
-                        const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
-                        const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
+                        // const filepath = req.file.path.replace(/\\/g, "/").substring(req.file.path)
+                        // local url:
+                        // const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                         try {
                             const result = await cloudinary.uploader.upload(req.file.path);
                             if(result){
@@ -365,14 +382,14 @@ module.exports = (app) =>{
                                     {where: {EmployerId: req.params.employerId}})
                                 res.status(200).send({
                                     'success': 'Every thing went fine',
-                                    'url':url,
+                                    'url':result.secure_url,
                                     'cloudinary': result
                                 })
                             }
                            
                         } catch(error){
                             res.status(500).send({
-                                error: err
+                                'error': error
                             })
                         }
                     } 

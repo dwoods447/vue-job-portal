@@ -65,7 +65,7 @@
                     </v-select>
                   </v-flex>
                   <v-flex xs6 pa-1>
-                    <v-select outline label="Status" :items="statuses">
+                    <v-select outline label="Status" :items="statuses" v-model="status">
                     </v-select>
                   </v-flex>
               </v-layout>
@@ -209,7 +209,13 @@ export default {
         if (this.jobTitle) jobObj.jobTitle = this.jobTitle;
         if (this.location) jobObj.location = this.location;
         if (this.type)jobObj.type = this.type;
-        if (this.status) jobObj.active = this.status;
+        if (this.status === 'live'){
+           this.status = true;
+           jobObj.active = this.status;
+        } else{
+          this.status = false;
+          jobObj.active = this.status;
+        }
         if (this.description) jobObj.description = this.description;
         if (this.apply_date) jobObj.job_ending = this.apply_date;
         let employerId = this.$store.state.route.params.employerId;

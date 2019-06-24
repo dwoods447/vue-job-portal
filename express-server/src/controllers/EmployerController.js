@@ -3,8 +3,8 @@
  const {JobApplicant}  = require('../models/')
  const {Jobseeker}  = require('../models/')
  const {JobseekerProfile}  = require('../models/')
-const db = require('../models')
-
+ const db = require('../models')
+ const config = require('../config/config')
  module.exports  = {
      async getCategories(req, res){
             const categories  = await JobCategory.findAll();
@@ -14,7 +14,8 @@ const db = require('../models')
      },
      async getJobTypes(req, res){
          try {
-            const types = await db.sequelize.query("SELECT distinct type from jobs");
+            // const types = await db.sequelize.query("SELECT distinct type from jobs");
+             const types = await Job.aggregate('type', 'DISTINCT', { plain: false })
              res.send({
               data: types
             })    
@@ -43,7 +44,7 @@ const db = require('../models')
 
      async deleteJob(req, res){
       try{
-          const job = await Job.update({active: 0}, {where:{id: req.params.jobId}})
+          const job = await Job.update({active: false}, {where:{id: req.params.jobId}})
           if(job){
             res.send({
                 success: 'The job was removed.',
@@ -124,14 +125,27 @@ const db = require('../models')
             FROM  public."EmployerProfiles" INNER JOIN public."Employers" ON public."Employers"."id" = public."EmployerProfiles"."EmployerId"
             ORDER BY RANDOM() LIMIT 3
           */
+          if(config.db.url){
             const featuredCompanies = await  db.sequelize.query(`
             SELECT public."Employers"."id", company, website, coverphoto, description
             FROM  public."EmployerProfiles" INNER JOIN public."Employers" ON public."Employers"."id" = public."EmployerProfiles"."EmployerId"
             ORDER BY RANDOM() LIMIT 3
             `, { type: db.sequelize.QueryTypes.SELECT })
-         res.send({
-            data: featuredCompanies
-          })
+             res.send({
+              data: featuredCompanies
+            })
+          } else {
+            const featuredCompanies = await  db.sequelize.query(`
+            SELECT employers.id, employers.company, employerprofiles.website, employerprofiles.coverphoto,
+            employerprofiles.description
+            FROM  employerprofiles INNER JOIN employers ON employers.id = employerprofiles.EmployerId
+            ORDER BY RAND() LIMIT 3
+            `, { type: db.sequelize.QueryTypes.SELECT })
+             res.send({
+              data: featuredCompanies
+            })
+          }
+          
          } catch(err) {
           res.status(500).send({
             error: err

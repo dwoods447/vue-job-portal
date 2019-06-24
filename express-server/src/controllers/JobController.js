@@ -114,7 +114,7 @@ module.exports = {
                         [Op.like]: `%${req.params.search}%`
                       }
                     })),
-                  active : 1  
+                  active : true  
                 },
                 include: [{ all: true }]
             })
