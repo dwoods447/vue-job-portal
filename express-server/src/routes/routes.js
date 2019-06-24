@@ -39,7 +39,6 @@ let employer_storage = multer.diskStorage({
 
 
 
-
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
         const uploads = path.join(directory, '../../../uploads/jobseekers/');
@@ -339,10 +338,10 @@ module.exports = (app) =>{
             
             })
         })
-        app.post('/employer/:employerId/company/logo/upload', async function(req,  res){ 
+        app.post('/employer/:employerId/company/logo/upload',  function(req,  res){ 
                 // console.log(`Response: ${JSON.stringify(res)}`);
                  // console.log(`Response: ${JSON.stringify(employer_upload)}`);
-                 employer_upload(req, res, function(err){
+                  employer_upload(req, res, async function(err){
                     if(err instanceof multer.MulterError){
                         console.log(`There was a multer error:${err}`);
                         // Multer Error
