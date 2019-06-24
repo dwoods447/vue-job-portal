@@ -30,6 +30,7 @@
                             name="password"
                             label="Password"
                             v-model="jobSeekerRegistration.password"
+                            :error-messages="errors.collect('password')"
                            v-validate="'required'"
                             data-vv-name="password"
                             autocomplete="new-password"
