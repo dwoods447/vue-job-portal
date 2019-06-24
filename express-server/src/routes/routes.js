@@ -123,11 +123,11 @@ module.exports = (app) =>{
     // Check Job seeker application
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
     // Get all obs jobseeker applied for
-    app.get('/jobseeker/:jobseekerId/profile/applications', ProfileController.getJobAppliedFor)
+    app.get('/jobseeker/:jobseekerId/profile/applications', isJobseekerAuthenticated, ProfileController.getJobAppliedFor)
     // Add Job to favorites
     app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', isJobseekerAuthenticated,JobController.addJobToFavorites)
     // Remove Job from favorites
-    app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', JobController.removeJobFromFavorites)
+    app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', isJobseekerAuthenticated,JobController.removeJobFromFavorites)
     // Check if job is in jobseekers favorites
     app.get('/check/jobseeker/:jobseekerId/favorite/job/:jobId', JobController.checkFavoritedJob)
     // Get list of all jobs in job seeker favorites
