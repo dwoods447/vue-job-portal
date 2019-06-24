@@ -69,7 +69,7 @@
                   <div>
                    <v-layout row wrap>
                       <v-flex xs6>
-                           <v-list-tile v-if="!this.$store.state.isJobseekerLoggedIn">
+                           <v-list-tile v-if="!this.$store.state.isJobseekerLoggedIn && !this.$store.state.isEmployerLoggedIn">
                   <v-list-tile-content>
                     <v-list-tile-title><span style="color: red;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
                   </v-list-tile-content>

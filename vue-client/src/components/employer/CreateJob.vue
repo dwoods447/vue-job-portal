@@ -231,13 +231,12 @@ export default {
         }
     },
     async getCategories(){
-       const catsReturned = await EmployerService.getJobCategories();
-        this.categories = catsReturned.data.data;
+       const catsReturned = (await EmployerService.getJobCategories()).data.data;
+        this.categories = catsReturned;
     },
     async getJobTypes(){
         const jobTypes = (await EmployerService.getJobTypes()).data.data
         this.jobTypes = jobTypes;
-        console.log(`Job Types__:${JSON.stringify(jobTypes, null, 2)}`)
     },
 
     async getEmployerJobs(employerId){
