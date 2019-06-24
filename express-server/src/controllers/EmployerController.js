@@ -15,7 +15,7 @@
      async getJobTypes(req, res){
          try {
             // const types = await db.sequelize.query("SELECT distinct type from jobs");
-             const types = await Job.aggregate('type', 'type', { plain: false, distinct:true })
+             const types = await Job.aggregate('type', { plain: false, distinct: true })
              res.send({
               data: types
             })    
