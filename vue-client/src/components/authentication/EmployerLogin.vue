@@ -102,13 +102,15 @@ export default {
                 this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
           }
            if (response.status === 403) {
-              this.$store.dispatch('setSuccessMessageAction', null)
+              this.$store.dispatch('setSuccessMessageAction', null);
               this.invalidPassword = true;
               this.email = '';
               this.password = '';
           }
       } catch (error){
-         confirm(`An erorr occurred ${error}`)
+          // confirm(`An erorr occurred ${error}`);
+          this.$store.dispatch('setSuccessMessageAction', null);
+          this.invalidPassword = true;
       }
     },
     resetForm(){

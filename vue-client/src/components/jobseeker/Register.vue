@@ -26,10 +26,6 @@
                         name="email"
                         required
                       ></v-text-field>
-
-
-
-
                           <v-text-field
                             name="password"
                             label="Password"
@@ -46,7 +42,7 @@
                             v-validate="'required'"
                             data-vv-name="confirm"
                           ></v-text-field>
-
+                      <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a missing information</span></strong></div>
                       <v-btn @click="submit">submit</v-btn>
                       <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -87,7 +83,7 @@ export default {
     },
     data: function() {
         return {
-
+          missingCredentials: false,
           jobSeekerRegistration:{
             name: '',
             email:'',
@@ -99,9 +95,26 @@ export default {
     },
     methods: {
         async submit() {
-          if (this.jobSeekerRegistration.password && this.jobSeekerRegistration.confirmPassword){
-              if (this.jobSeekerRegistration.password === this.jobSeekerRegistration.confirmPassword){
-                const res = await RegisterService.jobseekerRegister({
+          if (this.jobSeekerRegistration.password === this.jobSeekerRegistration.confirmPassword){
+            this.$validator.validate().then(valid => {
+                if (!valid) {
+                // do stuff if not valid.
+                  this.missingCredentials = true;
+                } else {
+                  this.submitFormValues();
+                }
+           });
+         }
+        },
+        clear(){
+          this.name = '';
+          this.email = '';
+          this.password = '';
+          this.confirmPassword = '';
+        },
+
+        async submitFormValues(){
+           const res = await RegisterService.jobseekerRegister({
                   name: this.jobSeekerRegistration.name,
                   email: this.jobSeekerRegistration.email,
                   password: this.jobSeekerRegistration.password
@@ -116,14 +129,6 @@ export default {
                 if (res.status === 500){
                    confirm('There was an error trying to perform this action');
                 }
-              }
-          }
-        },
-        clear(){
-          this.name = '';
-          this.email = '';
-          this.password = '';
-          this.confirmPassword = '';
         }
     },
     computed: {

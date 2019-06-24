@@ -94,24 +94,24 @@ export default {
             if (response.status === 200){
               this.$store.dispatch('setJobseekerTokenAction', response.data.token)
               this.$store.dispatch('setJobseekerAction', response.data.jobseeker)
-              this.$store.dispatch('setSuccessMessageAction', null)
+              this.$store.dispatch('setSuccessMessageAction', null);
               this.$router.push({name: 'view.jobseeker.profile', params: {jobseekerId: this.$store.state.jobseeker.id}})
             }
           if (response.status === 403) {
-              this.$store.dispatch('setSuccessMessageAction', null)
-              console.log(`Password is invalid.`);
+              this.$store.dispatch('setSuccessMessageAction', null);
               this.invalidPassword = true;
               this.email = '';
               this.password = '';
             }
           } catch (error) {
-            confirm(`An error occurred ${error}`);
+            // confirm(`An error occurred ${error}`);
+            this.$store.dispatch('setSuccessMessageAction', null);
             this.invalidPassword = true;
        }
     },
     clearInvalid(){
         this.invalidPassword = false;
-        this.$store.dispatch('setSuccessMessageAction', null)
+        this.$store.dispatch('setSuccessMessageAction', null);
     },
     resetForm(){
       this.email = '';
