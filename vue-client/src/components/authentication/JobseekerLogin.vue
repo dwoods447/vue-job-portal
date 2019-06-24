@@ -99,12 +99,14 @@ export default {
             }
           if (response.status === 403) {
               this.$store.dispatch('setSuccessMessageAction', null)
+              console.log(`Password is invalid.`);
               this.invalidPassword = true;
               this.email = '';
               this.password = '';
             }
           } catch (error) {
-            confirm(`An erorr occurred ${error}`)
+            confirm(`An error occurred ${error}`);
+            this.invalidPassword = true;
        }
     },
     clearInvalid(){

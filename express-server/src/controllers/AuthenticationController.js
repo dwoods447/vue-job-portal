@@ -40,7 +40,7 @@ module.exports = {
            })
         }catch(error){
             res.status(400).send({
-                error: `This email is already in use! - ${error}`
+                'error': `This email is already in use! - ${error}`
             })
         }
        
@@ -63,7 +63,7 @@ module.exports = {
            })
         }catch(error){
             res.status(400).send({
-                error: `This email is already in use! - ${error}`
+                'error': `This email is already in use! - ${error}`
             })
         }
        
@@ -81,7 +81,7 @@ module.exports = {
          })
          if(!employer){
                res.status(403).send({
-                        error: 'This email or password is incorrect'
+                 'error': 'This email or password is incorrect'
               })     
            }
          // Check password   
@@ -89,11 +89,11 @@ module.exports = {
             const isPasswordValid = await employer.comparePassword(password)
             if(!isPasswordValid){
                 res.status(403).send({
-                error: 'This email or password is incorrect'
+                'error': 'This email or password is incorrect'
              })     
             }}catch(err){
                 res.status(403).send({
-                    error: 'This email or password is incorrect'
+                    'error': 'This email or password is incorrect'
                 })     
             }
       // If email and password is correct send back jwt token and employer info
@@ -115,7 +115,7 @@ module.exports = {
           })
             if(!jobseeker){
             res.status(403).send({
-                error: 'This email or password is incorrect'
+                'error': 'This email or password is incorrect'
             })     
             }
         // Check password
@@ -123,12 +123,12 @@ module.exports = {
         const isPasswordValid = await jobseeker.comparePassword(password)
             if(!isPasswordValid){
                 res.status(403).send({
-                    error: 'This email or password is incorrect'
+                    'error': 'This email or password is incorrect'
                 })     
             }
         }catch(err){
             res.status(403).send({
-                error: 'This email or password is incorrect'
+                'error': 'This email or password is incorrect'
             })     
         }
         // If email and password is correct send back jwt token and jobseeker info

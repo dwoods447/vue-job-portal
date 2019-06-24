@@ -282,8 +282,8 @@ export default {
   },
   created(){
     this.getProfileInfo();
-    this.checkJobsAppliedTo();
-    this.getFavoritedJobs();
+    setTimeout(this.checkJobsAppliedTo(), 500);
+    setTimeout(this.getFavoritedJobs(), 500);
   },
   mounted(){
    let $this = this;
