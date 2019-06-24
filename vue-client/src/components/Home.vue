@@ -139,7 +139,7 @@ export default {
           this.jobs = (await JobService.viewAllJobs()).data.data;
     },
     async searchJobs () {
-      if (this.search.length > 5) {
+      if (this.search.length > 3) {
           let loader = this.$loading.show({
                   // Optional parameters
                   container: this.fullPage ? null : this.$refs.formContainer,
