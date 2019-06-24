@@ -360,13 +360,16 @@ module.exports = (app) =>{
                         const url  = "https://vue-job-portal.herokuapp.com"+ filepath;
                         try {
                             const result = await cloudinary.uploader.upload(req.file.path);
-                            EmployerProfile.update({logo: url},
-                                {where: {EmployerId: req.params.employerId}})
-                            res.status(200).send({
-                                'success': 'Every thing went fine',
-                                'url':url,
-                                'cloudinary': result
-                            })
+                            if(result){
+                                EmployerProfile.update({logo: result.secure_url},
+                                    {where: {EmployerId: req.params.employerId}})
+                                res.status(200).send({
+                                    'success': 'Every thing went fine',
+                                    'url':url,
+                                    'cloudinary': result
+                                })
+                            }
+                           
                         } catch(error){
                             res.status(500).send({
                                 error: err
