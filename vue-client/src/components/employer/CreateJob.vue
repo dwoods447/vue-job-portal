@@ -21,7 +21,7 @@
                 </v-layout>
                 <v-layout row wrap>
                  <v-flex xs12>
-                    <v-select label="Job Type" outline :items="jobTypes" item-text="type"  v-model="type">
+                    <v-select label="Job Type" outline :items="jobTypes" item-text="DISTINCT"  v-model="type">
 
                     </v-select>
                  </v-flex>
