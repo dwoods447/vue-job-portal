@@ -96,8 +96,7 @@ export default {
     },
     methods: {
         async submit() {
-          if (this.jobSeekerRegistration.password === this.jobSeekerRegistration.confirmPassword){
-            this.$validator.validate().then(valid => {
+          this.$validator.validate().then(valid => {
                 if (!valid) {
                 // do stuff if not valid.
                   this.missingCredentials = true;
@@ -105,7 +104,6 @@ export default {
                   this.submitFormValues();
                 }
            });
-         }
         },
         clear(){
           this.name = '';
