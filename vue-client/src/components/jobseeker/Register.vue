@@ -34,16 +34,19 @@
                            v-validate="'required'"
                             data-vv-name="password"
                             autocomplete="new-password"
+                            ref="password"
                           ></v-text-field>
 
                           <v-text-field
                             name="confirm"
                             v-model="jobSeekerRegistration.confirmPassword"
                             label="Confirm Password"
-                            v-validate="'required'"
+                            v-validate="'required'|'confirmed:password'"
+                            :error-messages="errors.collect('confirm')"
                             data-vv-name="confirm"
                           ></v-text-field>
-                      <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a missing information</span></strong></div>
+                      <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter missing information</span></strong></div>
+                       <div style="padding: 1em;" v-if="passwordMatch"><strong><span style="color: red;">Passwords do not match</span></strong></div>
                       <v-btn @click="submit">submit</v-btn>
                       <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -85,6 +88,7 @@ export default {
     data: function() {
         return {
           missingCredentials: false,
+          passwordMatch: false,
           jobSeekerRegistration:{
             name: '',
             email:'',
@@ -96,6 +100,7 @@ export default {
     },
     methods: {
         async submit() {
+
           this.$validator.validate().then(valid => {
                 if (!valid) {
                 // do stuff if not valid.
