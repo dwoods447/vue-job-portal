@@ -189,7 +189,7 @@ module.exports = (app) =>{
    
    
           app.post('/jobseeker/:jobseekerId/jobseeker/photo/upload', function(req, res){
-            jobseeker_upload(req, res, function(err){
+            jobseeker_upload(req, res, async function(err){
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
@@ -232,7 +232,7 @@ module.exports = (app) =>{
 
 
         app.post('/jobseeker/:jobseekerId/resume/upload', function(req, res){
-          jobseeker_document(req, res, function(err){
+          jobseeker_document(req, res, async function(err){
                 if(err instanceof multer.MulterError){
                     console.log(`There was a multer error:${err}`);
                     // Multer Error
