@@ -1,3 +1,7 @@
+
+
+
+
 <template>
       <v-container>
         <v-layout row wrap>
@@ -41,7 +45,7 @@
                             name="confirm"
                             v-model="jobSeekerRegistration.confirmPassword"
                             label="Confirm Password"
-                            v-validate="'required'|'confirmed:password'"
+                            v-validate="'required|confirmed:password'"
                             :error-messages="errors.collect('confirm')"
                             data-vv-name="confirm"
                           ></v-text-field>
