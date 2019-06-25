@@ -27,8 +27,9 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-               <div v-if="this.$store.state.route.params"><strong><span style="color: green;">{{ this.$store.state.route.params.message}}</span></strong></div>
-                <br/>
+                  <div v-if="this.$store.state.route.params"><strong><span style="color: green;">{{ this.$store.state.route.params.message}}</span></strong></div>
+               </v-card-actions>
+              <v-card-actions>
                 <div><strong>Email:</strong> <span style="color:green">rfairfoot9@tiny.cc</span> <br/><strong>Password:</strong>   <span style="color:green">password</span></div>
                 <div style="padding: 1em;" v-if="invalidPassword"><strong><span style="color: red;">Incorrect Username and/or Password</span></strong></div>
                  <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a Username and Password</span></strong></div>
