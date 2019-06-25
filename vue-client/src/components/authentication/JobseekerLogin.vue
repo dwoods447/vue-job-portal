@@ -119,7 +119,6 @@ export default {
       this.invalidPassword = false;
       this.missingCredentials = false;
       this.emptyCredentials = false;
-      this.$store.dispatch('setSuccessMessageAction', null);
     }
   },
   computed: {

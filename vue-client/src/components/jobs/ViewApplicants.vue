@@ -2,7 +2,7 @@
   <div>
      <v-container>
         <h1>View Applicants:</h1>
-       <v-layout row wrap>
+       <v-layout row wrap v-if="applicants">
             <v-flex xs12 v-for="applicant in applicants" :key="applicant.id" style="max-width: 1200px; margin: 10px auto;">
               <v-toolbar color="primary">
                   <h2><span class="white--text">{{ applicant.Jobseeker.name }} - applying for <span>{{applicant.Job.type}}</span> </span>&nbsp;<strong><span class="white--text"> <span style="text-decoration: underl">{{applicant.Job.jobTitle}}</span> position</span></strong></h2>
@@ -37,6 +37,9 @@
               </table>
               </v-card>
             </v-flex>
+       </v-layout>
+       <v-layout row wrap v-if="!applicants">
+            No Applicants at this time. Check back later.
        </v-layout>
      </v-container>
   </div>

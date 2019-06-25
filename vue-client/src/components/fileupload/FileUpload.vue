@@ -121,7 +121,6 @@ export default {
               // Upload File
                this.message = '';
               const fileUploadSuccesFull = (await ProfileService.uploadCompanyLogo(this.$store.state.route.params.employerId, this.selectedFile)).data
-              console.log(JSON.stringify(fileUploadSuccesFull, null, 2));
               if (fileUploadSuccesFull.error) {
                 this.uploadError = true;
                  this.uploadSuccess = false;
@@ -140,7 +139,6 @@ export default {
               this.uploadError = true;
               this.uploadSuccess = false;
               this.message = 'There was an error uploading the file.'
-              console.log(JSON.stringify(error, null, 2));
             }
         }
         if (this.upload_name === 'company_photo') {
