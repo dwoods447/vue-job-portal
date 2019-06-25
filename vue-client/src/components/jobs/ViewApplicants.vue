@@ -1,7 +1,7 @@
 <template>
   <div>
      <v-container>
-        <h1>View Applicants:</h1>
+        <h1 style="text-align:center;">View Applicants:</h1>
        <v-layout row wrap v-if="noApplicants">
          <v-flex>
            <h2>No Applicants at this time. Check back later.</h2>
