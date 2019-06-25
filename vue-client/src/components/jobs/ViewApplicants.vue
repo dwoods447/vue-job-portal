@@ -76,7 +76,6 @@ export default {
           console.log('No applicants yet');
           this.noApplicants = true;
         }
-
      }
   }
 }

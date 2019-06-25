@@ -96,12 +96,10 @@ export default {
             password:'',
             confirmPassword:''
           }
-
         }
     },
     methods: {
         async submit() {
-
           this.$validator.validate().then(valid => {
                 if (!valid) {
                 // do stuff if not valid.
@@ -117,9 +115,7 @@ export default {
           this.password = '';
           this.confirmPassword = '';
         },
-
         async submitFormValues(){
-
               try {
                 const res = await RegisterService.jobseekerRegister({
                   name: this.jobSeekerRegistration.name,
@@ -128,7 +124,7 @@ export default {
                 })
                 if (res.status === 200){
                    this.$store.dispatch('setSuccessMessageAction', res.data.message)
-                   this.$router.push({name: 'jobseeker.login'});
+                   this.$router.push({name: 'jobseeker.login', params: {message: res.data.message}});
                 }
                 if (res.status === 403){
                     confirm('You are unauthorized to peform this action');
@@ -136,10 +132,9 @@ export default {
                 if (res.status === 500){
                    confirm('There was an error trying to perform this action');
                 }
-              } catch(error){
+              } catch (error) {
                   confirm(`There was an error trying to register: ${error}`);
               }
-
         }
     },
     computed: {

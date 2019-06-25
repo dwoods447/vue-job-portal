@@ -212,7 +212,7 @@ export default {
         if (this.status === 'live'){
            this.status = true;
            jobObj.active = this.status;
-        } else{
+        } else {
           this.status = false;
           jobObj.active = this.status;
         }

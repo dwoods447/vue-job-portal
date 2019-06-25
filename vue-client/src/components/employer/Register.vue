@@ -130,7 +130,7 @@ export default {
         },
 
         async submitFormValues(){
-              try{
+              try {
                 const res = await RegisterService.employerRegister({
                   company: this.employerRegistration.companyName,
                   email: this.employerRegistration.email,
@@ -138,8 +138,7 @@ export default {
                   password: this.employerRegistration.password
                 })
                 if (res.status === 200){
-                      this.$store.dispatch('setSuccessMessageAction', res.data.message)
-                      this.$router.push({name: 'employer.login'});
+                      this.$router.push({name: 'employer.login', params: {message: res.data.message}});
                }
                if (res.status === 403) {
                    confirm('You are unauthorized to peform this action');

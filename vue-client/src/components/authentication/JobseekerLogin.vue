@@ -27,8 +27,8 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
+                <div v-if="this.$store.state.route.params"><strong><span style="color: green;">{{ this.$store.state.route.params.message}}</span></strong></div>
                 <div><strong>Email:</strong> <span style="color:green">hdelacourt4@histats.com</span> <br/><strong>Password:</strong>   <span style="color:green">password</span></div>
-                 <div v-if="this.$store.state.successMessage"><strong><span style="color: green;">{{ this.$store.state.successMessage}}</span></strong></div>
                  <div style="padding: 1em;" v-if="invalidPassword"><strong><span style="color: red;">Incorrect Username and/or Password</span></strong></div>
                   <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter a Username and Password</span></strong></div>
                 <v-spacer></v-spacer>
@@ -94,24 +94,20 @@ export default {
             if (response.status === 200){
               this.$store.dispatch('setJobseekerTokenAction', response.data.token)
               this.$store.dispatch('setJobseekerAction', response.data.jobseeker)
-              this.$store.dispatch('setSuccessMessageAction', null);
               this.$router.push({name: 'view.jobseeker.profile', params: {jobseekerId: this.$store.state.jobseeker.id}})
             }
           if (response.status === 403) {
-              this.$store.dispatch('setSuccessMessageAction', null);
               this.invalidPassword = true;
               this.email = '';
               this.password = '';
             }
           } catch (error) {
             // confirm(`An error occurred ${error}`);
-            this.$store.dispatch('setSuccessMessageAction', null);
             this.invalidPassword = true;
        }
     },
     clearInvalid(){
         this.invalidPassword = false;
-        this.$store.dispatch('setSuccessMessageAction', null);
     },
     resetForm(){
       this.email = '';
