@@ -71,6 +71,10 @@ export default {
         if (applicants) {
           this.noApplicants = false;
           this.applicants = applicants;
+          console.log('We have applicants');
+        } else {
+          console.log('No applicants yet');
+          t his.noApplicants = true;
         }
 
      }
