@@ -68,7 +68,7 @@ export default {
         const employerId = this.$store.state.route.params.employerId
         const applicants = (await JobService.getEmployerJobApplicants(employerId)).data.data;
         console.log(`Applicants: ${JSON.stringify(applicants)}`)
-        if (applicants) {
+        if (applicants.length > 0) {
           this.noApplicants = false;
           this.applicants = applicants;
           console.log('We have applicants');
