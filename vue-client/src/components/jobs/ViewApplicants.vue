@@ -67,6 +67,7 @@ export default {
         if (applicants) {
           this.applicants = applicants;
         }
+        console.log(JSON.stringify(`Applicants: ${this.applicants}`))
      }
   }
 }
