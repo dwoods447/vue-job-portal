@@ -64,19 +64,19 @@ import { Validator } from 'vee-validate';
 const dict = {
         custom: {
             email: {
-                required: 'Please enter a value'
+                required: 'Please enter your email'
             },
             company: {
-              required: 'Please enter a value'
+              required: 'Please enter your company name'
             },
             representative: {
-              required: 'Please enter a value'
+              required: 'Please enter your name'
             },
             password:{
-                required: 'Please enter a value'
+                required: 'Please enter your password'
             },
             confirm: {
-              required: 'Please enter a value',
+              required: 'Please re-enter your password',
               confirmed: 'Passwords do not match'
             }
 
