@@ -2,7 +2,7 @@
   <div>
      <v-container>
         <h1>View Applicants:</h1>
-       <v-layout row wrap v-if="applicants === null">
+       <v-layout row wrap v-if="!applicants">
             <h2>No Applicants at this time. Check back later.</h2>
        </v-layout>
        <v-layout row wrap v-if="applicants">
