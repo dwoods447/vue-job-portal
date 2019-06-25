@@ -9,7 +9,6 @@
                     <h2>Jobseeker Registration</h2>
                     <v-card-actions class="justify-center">
                     <form style="width: 50%;" autocomplete="off">
-
                       <v-text-field
                         v-model="jobSeekerRegistration.name"
                         name="name"
@@ -20,7 +19,6 @@
                         data-vv-name="name"
                         required
                       ></v-text-field>
-
                       <v-text-field
                         v-model="jobSeekerRegistration.email"
                         v-validate="'required|email'"
@@ -30,25 +28,23 @@
                         name="email"
                         required
                       ></v-text-field>
-                          <v-text-field
+                      <v-text-field
                             name="password"
                             label="Password"
                             v-model="jobSeekerRegistration.password"
                             :error-messages="errors.collect('password')"
                            v-validate="'required'"
-                            data-vv-name="password"
                             autocomplete="new-password"
                             ref="password"
-                          ></v-text-field>
-
-                          <v-text-field
+                      ></v-text-field>
+                      <v-text-field
                             name="confirm"
                             v-model="jobSeekerRegistration.confirmPassword"
                             label="Confirm Password"
                             v-validate="'required|confirmed:password'"
                             :error-messages="errors.collect('confirm')"
-                            data-vv-name="confirm"
-                          ></v-text-field>
+                            data-vv-name="password"
+                      ></v-text-field>
                       <div style="padding: 1em;" v-if="missingCredentials"><strong><span style="color: red;">Please enter missing information</span></strong></div>
                        <div style="padding: 1em;" v-if="passwordMatch"><strong><span style="color: red;">Passwords do not match</span></strong></div>
                       <v-btn @click="submit">submit</v-btn>
