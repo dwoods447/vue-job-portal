@@ -120,7 +120,8 @@ export default {
 
         async submitFormValues(){
 
-           const res = await RegisterService.jobseekerRegister({
+              try {
+                const res = await RegisterService.jobseekerRegister({
                   name: this.jobSeekerRegistration.name,
                   email: this.jobSeekerRegistration.email,
                   password: this.jobSeekerRegistration.password
@@ -135,6 +136,10 @@ export default {
                 if (res.status === 500){
                    confirm('There was an error trying to perform this action');
                 }
+              } catch(error){
+                  confirm(`There was an error trying to register: ${error}`);
+              }
+
         }
     },
     computed: {

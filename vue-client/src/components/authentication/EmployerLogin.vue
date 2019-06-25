@@ -56,7 +56,7 @@ const dict = {
 Validator.localize('en', dict);
 export default {
   created () {
-
+   this.resetForm();
   },
   mounted () {
 
@@ -116,6 +116,9 @@ export default {
     resetForm(){
       this.email = '';
       this.password = '';
+      this.invalidPassword = false;
+      this.emptyCredentials = false;
+      this.$store.dispatch('setSuccessMessageAction', null);
     }
   },
   computed: {

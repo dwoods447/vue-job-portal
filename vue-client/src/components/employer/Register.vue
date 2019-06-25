@@ -5,30 +5,26 @@
                     <h2>Employer Registration</h2>
                     <v-card-actions class="justify-center">
                     <form style="width: 50%;" autocomplete="off">
-
-                      <v-text-field
-                        v-model="employerRegistration.companyName"
-                        name="company"
-                        v-validate="'required|max:35'"
-                        :counter="35"
-                        :error-messages="errors.collect('company')"
-                        label="Company Name"
-                        data-vv-name="company"
-                        required
-                      ></v-text-field>
-
-                      <v-text-field
-                        v-model="employerRegistration.email"
-                        v-validate="'required|email'"
-                        :error-messages="errors.collect('email')"
-                        label="E-mail"
-                        data-vv-name="email"
-                        name="email"
-                        required
-                      ></v-text-field>
-
-
-                        <v-text-field
+                          <v-text-field
+                            v-model="employerRegistration.companyName"
+                            name="company"
+                            v-validate="'required|max:75'"
+                            :counter="35"
+                            :error-messages="errors.collect('company')"
+                            label="Company Name"
+                            data-vv-name="company"
+                            required
+                          ></v-text-field>
+                          <v-text-field
+                            v-model="employerRegistration.email"
+                            v-validate="'required|email'"
+                            :error-messages="errors.collect('email')"
+                            label="E-mail"
+                            data-vv-name="email"
+                            name="email"
+                            required
+                          ></v-text-field>
+                          <v-text-field
                           v-model="employerRegistration.representative"
                           v-validate="'required'"
                           label="Your Name"
@@ -37,25 +33,23 @@
                           name="representative"
                           required
                         ></v-text-field>
-
-
                           <v-text-field
                             name="password"
                             label="Password"
                             v-model="employerRegistration.password"
-                           v-validate="'required'"
-                            data-vv-name="password"
+                            v-validate="'required'"
+                            :error-messages="errors.collect('password')"
                             autocomplete="new-password"
+                            ref="password"
                           ></v-text-field>
-
                           <v-text-field
                             name="confirm"
                             v-model="employerRegistration.confirmPassword"
                             label="Confirm Password"
-                            v-validate="'required'"
-                            data-vv-name="confirm"
+                            v-validate="'required|confirmed:password'"
+                            :error-messages="errors.collect('confirm')"
+                            data-vv-name="password"
                           ></v-text-field>
-
                       <v-btn @click="submit">submit</v-btn>
                       <v-btn @click="clear">clear</v-btn>
                     </form>
@@ -82,7 +76,8 @@ const dict = {
                 required: 'Please enter a value'
             },
             confirm: {
-              required: 'Please enter a value'
+              required: 'Please enter a value',
+              confirmed: 'Passwords do not match'
             }
 
         }
@@ -101,6 +96,8 @@ export default {
     },
     data: function() {
         return {
+          missingCredentials: false,
+          passwordMatch: false,
           employerRegistration:{
             companyName: '',
             representative: '',
@@ -114,8 +111,26 @@ export default {
     },
     methods: {
         async submit() {
-          if (this.employerRegistration.password && this.employerRegistration.confirmPassword){
-              if (this.employerRegistration.password === this.employerRegistration.confirmPassword){
+            this.$validator.validate().then(valid => {
+                if (!valid) {
+                // do stuff if not valid.
+                  this.missingCredentials = true;
+                } else {
+                  this.submitFormValues();
+                }
+           });
+        },
+
+        clear(){
+          this.employerRegistration.companyName = '';
+          this.employerRegistration.representative = '';
+          this.employerRegistration.email = '';
+          this.employerRegistration.password = '';
+          this.employerRegistration.confirmPassword = '';
+        },
+
+        async submitFormValues(){
+              try{
                 const res = await RegisterService.employerRegister({
                   company: this.employerRegistration.companyName,
                   email: this.employerRegistration.email,
@@ -132,16 +147,9 @@ export default {
                if (res.status === 500) {
                   confirm('There was an error trying to perform this action');
                }
-            }
-          }
-        },
-
-        clear(){
-          this.employerRegistration.companyName = '';
-          this.employerRegistration.representative = '';
-          this.employerRegistration.email = '';
-          this.employerRegistration.password = '';
-          this.employerRegistration.confirmPassword = '';
+              } catch (error) {
+                  confirm(`There was an error trying to register: ${error}`);
+              }
         }
 
     },
