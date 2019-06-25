@@ -66,12 +66,13 @@ export default {
 
      async getApplicants(){
         const employerId = this.$store.state.route.params.employerId
-        const applicants = (await JobService.getEmployerJobApplicants(employerId)).data.data
+        const applicants = (await JobService.getEmployerJobApplicants(employerId)).data.data;
+        console.log(JSON.stringify(`Applicants: ${this.applicants}`))
         if (applicants) {
           this.noApplicants = false;
           this.applicants = applicants;
         }
-        console.log(JSON.stringify(`Applicants: ${this.applicants}`))
+
      }
   }
 }
