@@ -13,8 +13,8 @@
             v-on="on"
             flat
           >
-            <span v-if="!$store.state.isEmployerLoggedIn" style="color: #fff;">Employer</span>
-            <span  v-if="$store.state.isEmployerLoggedIn && $store.state.employer" style="color: #fff;">{{$store.state.employer.company}}</span>
+            <span v-if="!$store.state.isEmployerLoggedIn" style="color: #fff;">Employer&nbsp;<v-icon dark>arrow_drop_down</v-icon></span>
+            <span  v-if="$store.state.isEmployerLoggedIn && $store.state.employer" style="color: #fff;">{{$store.state.employer.company}}&nbsp;<v-icon dark>arrow_drop_down</v-icon></span>
           </v-btn>
         </template>
         <v-list>
@@ -44,8 +44,8 @@
             v-on="on"
             flat
           >
-          <span v-if="!$store.state.isJobseekerLoggedIn" style="color: #fff;">Jobseeker</span>
-          <span  v-if="$store.state.isJobseekerLoggedIn && $store.state.jobseeker" style="color: #fff;">{{$store.state.jobseeker.name}}</span>
+          <span v-if="!$store.state.isJobseekerLoggedIn" style="color: #fff;">Jobseeker&nbsp;<v-icon dark>arrow_drop_down</v-icon></span>
+          <span  v-if="$store.state.isJobseekerLoggedIn && $store.state.jobseeker" style="color: #fff;">{{$store.state.jobseeker.name}}&nbsp;<v-icon dark>arrow_drop_down</v-icon></span>
           </v-btn>
         </template>
         <v-list>
