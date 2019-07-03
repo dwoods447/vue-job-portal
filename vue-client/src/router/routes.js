@@ -11,6 +11,7 @@ import EmployerPostJob from '../components/employer/CreateJob'
 import EditEmployerJob from '../components/employer/EditJob'
 import ViewApplicants from '../components/jobs/ViewApplicants.vue'
 import store from '../store'
+
 const routes = [
   {path: '/', component: Home, name:'home'},
   {path: '/employer/login', component: EmployerLogin, name:'employer.login'},
@@ -25,7 +26,7 @@ const routes = [
       if (store.state.isEmployerLoggedIn) {
         next()
       } else {
-        next({name: 'employer.login'})
+        next({name: 'employer.login'});
       }
     }
   },
@@ -48,10 +49,15 @@ const routes = [
     component:  EmployerPostJob,
     name:'employer.post.job',
     beforeEnter: (to, from, next) => {
+      const intenedURL = 'employer.post.job'
       if (store.state.isEmployerLoggedIn) {
         next()
       } else {
-        next({name: 'employer.login'})
+         if (intenedURL) {
+          next({name: 'employer.login', query: {redirect: intenedURL}})
+         } else {
+          next({name: 'employer.login'})
+         }
       }
     }
   },
@@ -83,10 +89,15 @@ const routes = [
     component: ViewApplicants,
     name:'view.job.applicants',
     beforeEnter: (to, from, next) => {
+      const intendedURL = 'view.job.applicants';
       if (store.state.isEmployerLoggedIn) {
         next()
       } else {
-        next({name: 'employer.login'})
+        if (intendedURL) {
+         next({name: 'employer.login', query:{redirect: intendedURL}});
+       } else {
+         next({name: 'employer.login'})
+       }
       }
     }
   }

@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import VeeValidate from 'vee-validate'
 import Vuetify from 'vuetify'
+import VueScrollTo from 'vue-scrollto'
 import store from './store'
 import {sync} from 'vuex-router-sync'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
@@ -18,7 +19,7 @@ Vue.use(Vuetify, {
   iconfont: 'md, mdi, fa, fa4'
 })
 Vue.use(VeeValidate)
-
+Vue.use(VueScrollTo)
 Vue.config.productionTip = false
 sync(store, router) // done. Returns an unsync callback fn
 

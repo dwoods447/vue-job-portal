@@ -11,8 +11,28 @@
       <h4 class="subheading blue--text"><strong>Applicants create a Jobseeker Profile, and Submit your application today!</strong></h4>
         <h4 class="subheading blue--text"><strong>Employers create a Employer Profile, and Post a job, Find the perfect Applicant</strong></h4>
     </v-layout>
+      <a style="width: 180px; display:block; margin-top:-100px;background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px" href="https://unsplash.com/@anthonydelanoix?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Anthony DELANOIX"><span style="display:inline-block;padding:2px 3px;"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-2px;fill:white" viewBox="0 0 32 32"><title>unsplash-logo</title><path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z"></path></svg></span><span style="display:inline-block;padding:2px 3px">Anthony DELANOIX</span></a>
       </v-parallax>
-      <a style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px" href="https://unsplash.com/@anthonydelanoix?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Anthony DELANOIX"><span style="display:inline-block;padding:2px 3px"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-2px;fill:white" viewBox="0 0 32 32"><title>unsplash-logo</title><path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z"></path></svg></span><span style="display:inline-block;padding:2px 3px">Anthony DELANOIX</span></a>
+     <v-container fluid style="background-color: #103856;">
+         <v-layout row>
+               <h2 style="margin: 0 auto; text-align: center; color: #fff;"> WHAT ARE YOU <span>LOOKING FOR?</span></h2>
+          </v-layout>
+        <v-layout row>
+          <div style="width: 25%; margin: 0 auto;">
+            <v-layout row>
+              <v-flex md4 xs12>
+                      <a href="javascript:void(0);" v-scroll-to="'#jobs'" style="text-decoration: none;"><v-btn color="success" style="text-decoration: none;">Jobs</v-btn></a>
+                  </v-flex>
+                  <v-flex md4 xs12>
+                      <router-link :to="{name:'view.job.applicants', params:{employerId: 10}}" style="text-decoration: none;"><v-btn color="primary"> Resumes</v-btn></router-link>
+                  </v-flex>
+                  <v-flex md4 xs12>
+                    <router-link :to="{name:'employer.post.job', params:{employerId: 10}}" style="text-decoration: none;"><v-btn color="danger">Post Jobs</v-btn></router-link>
+                  </v-flex>
+              </v-layout>
+          </div>
+      </v-layout>
+     </v-container>
 
       <v-container fluid grid-list-md  ref="formContainer">
         <v-layout row wrap>
@@ -34,7 +54,7 @@
                     wrap
                     >
                       <template v-slot:item="props">
-                          <v-flex xs12  class="job-container">
+                          <v-flex xs12  class="job-container" id="jobs">
                               <v-toolbar color="primary" class="mobile-toolbar">
                                 <div v-if="props.item.Employer.EmployerProfile">
                                   <img :src="props.item.Employer.EmployerProfile.logo" style="margin-left: -25px; display: block; padding: 1em; border-radius:50%;"/>

@@ -91,13 +91,14 @@ export default {
     async sendCredentials(){
       try {
         const response = await AuthenticationSerivce.employerLogin({
-            email: this.email,
-            password: this.password
+            email: this.email.trim(),
+            password: this.password.trim()
           })
           if (response.status === 200) {
+              console.log(`Redirecting to ${JSON.stringify(this.$store.state.route.query.redirect)}`);
                 this.$store.dispatch('setEmployerTokenAction', response.data.token);
                 this.$store.dispatch('setEmployerAction', response.data.employer);
-                this.$router.push({name: 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
+                this.$router.push({name: this.$store.state.route.query.redirect || 'view.employer.profile', params: {employerId: this.$store.state.employer.id}})
           }
            if (response.status === 403) {
               this.invalidPassword = true;
