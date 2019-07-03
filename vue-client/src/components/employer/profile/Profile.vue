@@ -218,7 +218,7 @@ export default {
         // Check response and if updated employer object is retured
         if (updatedEmployer) {
            // If updated employer object is returned then call getProfileInfo function to pull down updated info
-            this.this.alertSubmit = false;
+            this.alertSubmit = false;
             this.getProfileInfo();
         } else {
           // Alert user there was no info returned
