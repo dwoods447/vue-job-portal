@@ -1,18 +1,23 @@
-const fs = require('fs')
-const path = require('path')
-const Sequelize = require('sequelize')
-const config = require('../config/config.js')
-const db = {}
-// const sequelize = new Sequelize(
-//     config.db.database,
-//     config.db.user,
-//     config.db.password,
-//     config.db.options
-// )
-const sequelize = new Sequelize(config.db.url, {
-    dialect: 'postgres'
-})
-    
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const config = require('../config/config.js');
+const db = {};
+let sequelize;
+if(config.db.url){
+    sequelize = new Sequelize(config.db.url, {
+      dialect: 'postgres'
+    })
+} else {
+  sequelize = new Sequelize(
+    config.db.database,
+    config.db.user,
+    config.db.password,
+    {dialect: 'mysql'}
+  )
+}
+
+ 
 fs.readdirSync(__dirname)
 .filter((file)=>
     file !== 'index.js'

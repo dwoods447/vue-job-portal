@@ -1,8 +1,5 @@
 <template>
   <v-container>
-    <!-- <v-layout row wrap>
-
-    </v-layout> -->
      <v-layout row wrap>
     <v-flex lg3 md3 xs12  class="section-container">
         <file-upload
@@ -11,6 +8,7 @@
          upload_label="Choose Photo"
          upload_name="profilephoto"
          profileType="jobseeker"
+         allowedTypes=".jpeg .jpg .png .gif"
          :profileID="this.$store.state.route.params.jobseekerId"
          >
       </file-upload>
@@ -21,6 +19,7 @@
          upload_label="Choose File"
          upload_name="resume"
          profileType="jobseeker"
+         allowedTypes=".pdf .doc .docx"
          :profileID="this.$store.state.route.params.jobseekerId"
          >
       </file-upload>
@@ -31,6 +30,7 @@
          upload_label="Choose File"
          upload_name="coverletter"
          profileType="jobseeker"
+         allowedTypes=".pdf .doc .docx"
          :profileID="this.$store.state.route.params.jobseekerId"
          >
       </file-upload>
@@ -107,10 +107,14 @@
                  textarea
                  label="Short Bio"
                  v-model="joBSeeker.bio"
-                 value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+                 value=""
                ></v-textarea>
+
              </v-flex>
-             <v-flex 12>
+              <v-flex xs12>
+               <p>Max Length 130 Characters</p>
+              </v-flex>
+             <v-flex xs12>
                 <v-btn flat color="orange" @click="updateProfile" ref="updateJobSeeker">Update</v-btn>
              </v-flex>
 
@@ -165,14 +169,14 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Resume: <a :href="this.$store.state.currentJobSeeker.resume" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.resume }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Resume: <a :href="this.$store.state.currentJobSeeker.resume" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.resume | shortenURL }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Cover Letter: <a :href="this.$store.state.currentJobSeeker.coverletter" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter }}</span></a></v-list-tile-title>
+                <v-list-tile-title>Cover Letter: <a :href="this.$store.state.currentJobSeeker.coverletter" v-if="this.$store.state.currentJobSeeker"><span>{{ this.$store.state.currentJobSeeker.coverletter | shortenURL }}</span></a></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -184,7 +188,7 @@
                       <v-list-tile-title>Bio:</v-list-tile-title>
                      </v-list-tile-content>
                 </v-list-tile>
-                    <p v-if="this.$store.state.currentJobSeeker" style="padding: 1em;"> {{this.$store.state.currentJobSeeker.bio}}</p>
+                    <p v-if="this.$store.state.currentJobSeeker" style="padding: 1em;"> {{this.$store.state.currentJobSeeker.bio | shortenString}}...</p>
              </div>
           </v-card>
           <br/>
@@ -281,9 +285,15 @@ export default {
     'file-upload': FileUpload
   },
   created(){
+    let $this = this;
     this.getProfileInfo();
-    setTimeout(this.checkJobsAppliedTo(), 500);
-    setTimeout(this.getFavoritedJobs(), 500);
+    setTimeout(function(){
+      $this.checkJobsAppliedTo();
+    }, 500);
+      this.getProfileInfo();
+    setTimeout(function(){
+       $this.getFavoritedJobs();
+    }, 500);
   },
   mounted(){
    let $this = this;
@@ -324,6 +334,24 @@ export default {
     },
      formateDate(date){
       return moment(date).format('MMMM Do YYYY');
+    },
+    shortenString(string){
+     if (string && string !== null) {
+      if (string.length > 120) {
+          return string.substring(0, (string.length / 2)) + '...'
+        }
+     } else {
+        return string
+     }
+    },
+    shortenURL(url){
+      if (url && url !== null) {
+       if (url.length > 75) {
+          return url.substring(0, (url.length / 2)) + '...'
+        } else {
+          return url;
+        }
+      }
     }
   },
   methods: {

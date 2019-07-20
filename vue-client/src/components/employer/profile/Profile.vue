@@ -8,6 +8,7 @@
          upload_label="Choose Logo"
          upload_name="company_logo"
          profileType="employer"
+          allowedTypes=".jpeg .jpg .png .gif"
          :profileID="this.$store.state.route.params.employerId"
          >
       </file-upload>
@@ -18,6 +19,7 @@
       upload_label="Choose Photo"
       upload_name="company_photo"
       profileType="employer"
+       allowedTypes=".jpeg .jpg .png .gif"
       :profileID="this.$store.state.route.params.employerId"
       ></file-upload>
     </v-flex>
@@ -81,7 +83,7 @@
 
             <v-list-tile>
               <v-list-tile-content>
-                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.slogan !== null">{{this.$store.state.currentEmployer.slogan | shortenString}}...</span></v-list-tile-title>
+                <v-list-tile-title>Slogan: <span v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.slogan !== null">{{this.$store.state.currentEmployer.slogan }}</span></v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -92,7 +94,7 @@
                       <v-list-tile-title>Company Description:</v-list-tile-title>
                      </v-list-tile-content>
                 </v-list-tile>
-                    <p v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.description !== null" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}...</p>
+                    <p v-if="this.$store.state.currentEmployer && this.$store.state.currentEmployer.description !== null" style="padding: 1em;"> {{this.$store.state.currentEmployer.description | shortenString }}</p>
              </div>
           </v-card>
           <br/>
@@ -125,7 +127,6 @@
             </v-list-tile>
             <v-divider></v-divider>
             </div>
-
             </v-flex>
             </v-layout>
           </v-card>
@@ -167,17 +168,21 @@ export default {
 
   filters: {
     shortenString(string){
-      if (string && string !== null) {
-        return string.substring(0, (string.length / 12))
-       } else {
-         return '';
-      }
+     if (string && string !== null) {
+      if (string.length > 120) {
+          return string.substring(0, (string.length / 2)) + '...'
+        }
+     } else {
+        return string
+     }
     },
     shortenURL(url){
-       if (url && url !== null) {
-        return url.substring(0, (url.length / 14))
-       } else {
-         return '';
+      if (url && url !== null) {
+       if (url.length > 75) {
+          return url.substring(0, (url.length / 2)) + '...'
+        } else {
+          return url;
+        }
       }
     }
   },

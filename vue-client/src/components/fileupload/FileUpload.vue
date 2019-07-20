@@ -13,12 +13,6 @@
             v-model="url"
           ></v-img>
         </div>
-        <!-- <div v-if="noURL && file_type !== 'document'">
-        <v-img
-          src="https://placehold.it/300x300"
-          aspect-ratio="2.75"
-        ></v-img>
-        </div> -->
         <v-card-actions>
           <form @submit.prevent="onSubmit" enctype="multipart/form-data">
             <label>{{ upload_label }}</label>
@@ -27,9 +21,14 @@
           </form>
         </v-card-actions>
          <v-card-actions>
+            <div>
+              <h5>Allowed file types: {{allowedTypes}}</h5>
+            </div>
+             &nbsp;
             <div v-if="uploadError">
               <h5 style="color:red;">{{message}}</h5>
             </div>
+             &nbsp;
              <div v-if="uploadSuccess">
               <h5 style="color:green;">{{message}}</h5>
             </div>
@@ -46,7 +45,7 @@ import LoadingOverlay from 'vue-loading-overlay'
 Vue.use(LoadingOverlay)
 
 export default {
-  props:['upload_header', 'file_type', 'upload_label', 'upload_name', 'profileID', 'profileType'],
+  props:['upload_header', 'file_type', 'upload_label', 'upload_name', 'profileID', 'profileType', 'allowedTypes'],
   created(){
     this.getImageUrl(this.upload_name);
   },
@@ -163,7 +162,7 @@ export default {
               this.message = 'There was an error uploading the file.'
            }
         }
-        if (this.upload_name === 'profilephoto'){
+        if (this.upload_name === 'profilephoto') {
           try {
             this.message = '';
             const fileUploadSuccesFull = (await ProfileService.uploadJobseekerPhoto(this.$store.state.route.params.jobseekerId, this.selectedFile)).data

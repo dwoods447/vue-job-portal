@@ -71,7 +71,7 @@
                       <v-flex xs6>
                            <v-list-tile v-if="!this.$store.state.isJobseekerLoggedIn && !this.$store.state.isEmployerLoggedIn">
                   <v-list-tile-content>
-                    <v-list-tile-title><span style="color: red;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
+                    <v-list-tile-title><span style="color: red; font-size: 0.911em;"><strong>To Apply Please Login In</strong></span></v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
@@ -96,12 +96,9 @@
                   </v-list-tile-content>
                 </v-list-tile>
                 <v-divider></v-divider>
-
-
                       </v-flex>
                        <v-flex xs6>
-                          <div style="padding: 0.5em;" v-if="this.$store.state.isJobseekerLoggedIn">
-
+                          <div style="padding: 0.1em;" v-if="this.$store.state.isJobseekerLoggedIn">
                                <span v-if="isFavorited"><a href="#"  @click.prevent="unFavorite" class="favorites">
                                  <v-icon color="red darken-2">fas fa-heart</v-icon>
                               </a>&nbsp;&nbsp;Remove from Favorites</span>

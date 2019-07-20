@@ -4,8 +4,8 @@ const JobController = require('../controllers/JobController');
 const EmployerController = require('../controllers/EmployerController');
 const { EmployerProfile } = require('../models')
 const { JobseekerProfile } = require('../models')
-const isEmployerAuthenticated = require('../policies/isEmployerAuthenticated.js')
-const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.js')
+// const isEmployerAuthenticated = require('../policies/isEmployerAuthenticated.js')
+// const isJobseekerAuthenticated = require('../policies/isJobseekerAuthenticated.js')
 const multer = require('multer');
 const path = require('path')
 const directory = __dirname;
@@ -119,15 +119,15 @@ module.exports = (app) =>{
     // Send jobseeker registration info
     app.post('/jobseeker/register', AuthenticationController.jobseekerRegister)
     // Apply for a job
-    app.post('/jobseeker/:jobseekerId/job/:jobId/apply', isJobseekerAuthenticated, JobController.applyforJob)
+    app.post('/jobseeker/:jobseekerId/job/:jobId/apply',  JobController.applyforJob)
     // Check Job seeker application
     app.get('/check/jobseeker/:jobseekerId/job/:jobId/application', JobController.checkJobSeekerApplication)
     // Get all obs jobseeker applied for
-    app.get('/jobseeker/:jobseekerId/profile/applications', isJobseekerAuthenticated, ProfileController.getJobAppliedFor)
+    app.get('/jobseeker/:jobseekerId/profile/applications',  ProfileController.getJobAppliedFor)
     // Add Job to favorites
-    app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', isJobseekerAuthenticated,JobController.addJobToFavorites)
+    app.get('/jobseeker/:jobseekerId/favorite/job/:jobid', JobController.addJobToFavorites)
     // Remove Job from favorites
-    app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', isJobseekerAuthenticated,JobController.removeJobFromFavorites)
+    app.get('/jobseeker/:jobseekerId/favorite/remove/job/:jobid', JobController.removeJobFromFavorites)
     // Check if job is in jobseekers favorites
     app.get('/check/jobseeker/:jobseekerId/favorite/job/:jobId', JobController.checkFavoritedJob)
     // Get list of all jobs in job seeker favorites
@@ -150,9 +150,9 @@ module.exports = (app) =>{
     // Get job types
     app.get('/job/types', EmployerController.getJobTypes)
     // Create job
-    app.post('/employer/create/job', isEmployerAuthenticated, EmployerController.createJob)
+    app.post('/employer/create/job',  EmployerController.createJob)
     // Delete job doesnt delete from db just makes inactive
-    app.post('/employer/delete/job/:jobId', isEmployerAuthenticated, EmployerController.deleteJob)
+    app.post('/employer/delete/job/:jobId', EmployerController.deleteJob)
     // Update job information
     app.post('/employer/update/job', EmployerController.updateJob)
     // Get all jobs that belong to employer
