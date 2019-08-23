@@ -1,5 +1,5 @@
 <template>
-     <div>
+     <div >
       <v-parallax src="https://images.unsplash.com/photo-1423655156442-ccc11daa4e99?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80">
       <v-layout
       align-left
@@ -39,7 +39,7 @@
            <v-flex xs12 style="max-width: 1200px; margin: 0 auto;">
                 <h2>Search Jobs</h2>
                 <v-text-field outline label="Search..." append-icon ="search"
-                 @keyup="searchJobs" v-model="search">
+                  v-model="search">
                 </v-text-field>
             </v-flex>
         </v-layout>
@@ -127,6 +127,7 @@ import Vue from 'vue'
 import JobService from '../services/JobService'
 import EmployerService from '../services/EmployerService'
 import LoadingOverlay from 'vue-loading-overlay'
+import _ from 'lodash'
 Vue.use(LoadingOverlay)
 export default {
   created () {
@@ -160,18 +161,7 @@ export default {
     },
     async searchJobs () {
       if (this.search.length > 3) {
-          let loader = this.$loading.show({
-                  // Optional parameters
-                  container: this.fullPage ? null : this.$refs.formContainer,
-                  canCancel: true,
-                  onCancel: this.onCancel,
-          });
-          this.jobs = (await JobService.searchJob(this.search)).data.data
-          if (this.jobs) {
-             loader.hide()
-          } else {
-              loader.hide()
-          }
+         console.log(`Search Method`)
       }
       if (this.search.length < 4) {
           this.getAllJobs();
@@ -179,6 +169,28 @@ export default {
     }
   },
   computed: {
+
+  },
+  watch: {
+     search: _.debounce(async function(value){
+      console.log(`Search value ${value}`);
+      if (value.length > 4) {
+           let loader = this.$loading.show({
+                  // Optional parameters
+                  container: this.fullPage ? null : this.$refs.formContainer,
+                  canCancel: true,
+                  onCancel: this.onCancel,
+          });
+          this.jobs = (await JobService.searchJob(this.search)).data.data;
+          console.log(JSON.stringify(this.jobs));
+          if (this.jobs) {
+             loader.hide()
+          } else {
+              loader.hide()
+          }
+      }
+    })
+
 
   }
 }
