@@ -173,8 +173,8 @@ export default {
   },
   watch: {
      search: _.debounce(async function(value){
-      console.log(`Search value ${value}`);
-      if (value.length > 4) {
+      if (value.length > 2) {
+        console.log(`Search value ${value}`);
            let loader = this.$loading.show({
                   // Optional parameters
                   container: this.fullPage ? null : this.$refs.formContainer,
@@ -182,7 +182,6 @@ export default {
                   onCancel: this.onCancel,
           });
           this.jobs = (await JobService.searchJob(this.search)).data.data;
-          // console.log(JSON.stringify(this.jobs));
           if (this.jobs) {
              loader.hide()
           } else {
