@@ -182,7 +182,7 @@ export default {
                   onCancel: this.onCancel,
           });
           this.jobs = (await JobService.searchJob(this.search)).data.data;
-          console.log(JSON.stringify(this.jobs));
+          // console.log(JSON.stringify(this.jobs));
           if (this.jobs) {
              loader.hide()
           } else {
