@@ -463,7 +463,7 @@ export default {
 
     async checkJobsAppliedTo(){
        let jobseekerId = this.$store.state.route.params.jobseekerId;
-           const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId));
+           const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
            if (applications) {
              this.jobApplications = applications;
            }
