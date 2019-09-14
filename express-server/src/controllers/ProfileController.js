@@ -118,13 +118,13 @@ module.exports = {
       try {
           const { jobseekerId } = req.params;
         const applications = await JobApplicant.findAll({
-            include: [{ model: Job }],
-            where: {JobseekerId: jobseekerId}
+            where: {JobseekerId: jobseekerId},
+            include: [{ model: Job }]
           });
           res.json(applications);
       } catch(err){
-        res.send({
-          error:  `There was an error: ${err}`
+        res.status(500).json({
+          message:  `There was an error: ${err}`
         })
       }
      
