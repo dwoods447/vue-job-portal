@@ -289,11 +289,11 @@ export default {
     this.getProfileInfo();
     setTimeout(function(){
       $this.checkJobsAppliedTo();
-    }, 500);
+    }, 2500);
       this.getProfileInfo();
     setTimeout(function(){
        $this.getFavoritedJobs();
-    }, 500);
+    }, 2500);
   },
   mounted(){
    let $this = this;
@@ -462,15 +462,11 @@ export default {
     },
 
     async checkJobsAppliedTo(){
-      if (this.$store.state.route.params) {
-        let jobseekerId = this.$store.state.route.params.jobseekerId;
-        if (jobseekerId) {
-           const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data.data;
+       let jobseekerId = this.$store.state.route.params.jobseekerId;
+           const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId));
            if (applications) {
              this.jobApplications = applications;
            }
-        }
-      }
     },
 
     async getFavoritedJobs(){
