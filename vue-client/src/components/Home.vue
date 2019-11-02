@@ -161,7 +161,6 @@ export default {
     },
     async searchJobs () {
       if (this.search.length > 3) {
-         console.log(`Search Method`)
       }
       if (this.search.length < 4) {
           this.getAllJobs();
@@ -174,7 +173,6 @@ export default {
   watch: {
      search: _.debounce(async function(value){
       if (value.length > 2) {
-        console.log(`Search value ${value}`);
            let loader = this.$loading.show({
                   // Optional parameters
                   container: this.fullPage ? null : this.$refs.formContainer,

@@ -17,20 +17,6 @@ app.use(cors());
 app.use('/', express.static(path.join(__dirname, '../../vue-client/dist')));
 app.use('*/app/uploads/*', express.static(path.join(__dirname, '../../uploads/')));
 
-// const employers = '../uploads/employers/employers/';
-// const jobseekers = './uploads/employers/jobseekers/';
-// //Create Uploads directory
-// try {
-//   if (!fs.existsSync(employers)){
-//     fs.mkdirSync(employers);
-//   }
-//   if(!jobseekers){
-//     fs.mkdirSync(jobseekers);
-//   }
-// } catch (err) {
-//     console.log(err);
-// }
-
 require('./JobSeekerPassport')
 require('./EmployerPassport')
 require('../src/routes/routes.js')(app, express)

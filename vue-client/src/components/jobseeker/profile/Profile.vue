@@ -465,7 +465,6 @@ export default {
        if (this.$store.state.route.params) {
         let jobseekerId = this.$store.state.route.params.jobseekerId;
            const applications = (await ProfileService.checkJobsAppliedTo(jobseekerId)).data;
-           console.log(`Applications Returned: ${JSON.stringify(applications, null, 2)}`);
            if (applications) {
              this.jobApplications = applications;
            }

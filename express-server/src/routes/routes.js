@@ -23,7 +23,6 @@ cloudinary.config({
 let employer_storage = multer.diskStorage({
     destination: function(req, file, cb){
         const uploads = path.join(directory, '../../../uploads/');
-        console.log(`Employer Storage File Path: ${uploads}`);
         cb(null, uploads)
     },
     filename: function(req, file, cb){
@@ -42,7 +41,6 @@ let employer_storage = multer.diskStorage({
 let jobseeker_storage = multer.diskStorage({
     destination: function(req, file, cb){
         const uploads = path.join(directory, '../../../uploads/jobseekers/');
-        console.log(`Jobseeker Storge File Path: ${uploads}`);
         cb(null, uploads)
 
     },
@@ -50,7 +48,6 @@ let jobseeker_storage = multer.diskStorage({
         let date = new Date();
         let time = date.getTime();
         let filename = date.toISOString().replace(/:/g, '-')+'_'+time+'_'+ file.originalname;
-        console.log(`Filename: ${filename}`);
         cb(null,  filename)
     }
 });
@@ -191,14 +188,12 @@ module.exports = (app) =>{
           app.post('/jobseeker/:jobseekerId/jobseeker/photo/upload', function(req, res){
             jobseeker_upload(req, res, async function(err){
                 if(err instanceof multer.MulterError){
-                    console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
                         'error': err
                     })
                 } else if (err){
                     // Unknown error
-                    console.log(`There was a unknown error:${err}`);
                     res.status(500).send({
                         'error': err
                     })
@@ -212,7 +207,6 @@ module.exports = (app) =>{
                       if (result) {
                        JobseekerProfile.update({photo: result.secure_url},
                           {where:{ JobseekerId: req.params.jobseekerId }});
-                        console.log(`Everything went fine saved filepath: ${result.secure_url} `);
                         res.status(200).send({
                           'success': 'Every thing went fine',
                           'url':result.secure_url,
@@ -234,7 +228,6 @@ module.exports = (app) =>{
         app.post('/jobseeker/:jobseekerId/resume/upload', function(req, res){
           jobseeker_document(req, res, async function(err){
                 if(err instanceof multer.MulterError){
-                    console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
                         'error': err
@@ -275,7 +268,6 @@ module.exports = (app) =>{
         app.post('/jobseeker/:jobseekerId/coverletter/upload', function(req,  res){ 
           jobseeker_document(req, res, async function(err){
                 if(err instanceof multer.MulterError){
-                    console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
                         'error': err
@@ -314,9 +306,7 @@ module.exports = (app) =>{
         })
         app.post('/employer/:employerId/company/photo/upload', function(req,  res){ 
             employer_upload(req, res,  async function(err){
-              console.log(`File: ${JSON.stringify(req.file)}`);
                 if(err instanceof multer.MulterError){
-                    console.log(`There was a multer error:${err}`);
                     // Multer Error
                     res.status(500).send({
                         'error': err
@@ -355,18 +345,15 @@ module.exports = (app) =>{
             })
         })
         app.post('/employer/:employerId/company/logo/upload',  function(req,  res){ 
-                // console.log(`Response: ${JSON.stringify(res)}`);
-                 // console.log(`Response: ${JSON.stringify(employer_upload)}`);
                   employer_upload(req, res, async function(err){
                     if(err instanceof multer.MulterError){
-                        console.log(`There was a multer error:${err}`);
                         // Multer Error
                         res.status(500).send({
                             'error': err
                         })
                     } else if (err){
                         // Unknown error
-                        console.log(`There was a multer error:${err}`);
+    
                         res.status(500).send({
                             'error': err
                         })
