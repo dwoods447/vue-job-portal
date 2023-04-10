@@ -1,1 +1,4 @@
 /express-server/node_modules/*
+/express-server/.env
+/vue-client/.env
+node_modules
